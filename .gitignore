@@ -6,7 +6,6 @@ playwright-report
 .DS_Store
 *.tsbuildinfo
 coverage
-docs/demo/*.webm
 public/scroll.json
 
 # AI agents: local-only files; shared agent config stays tracked
