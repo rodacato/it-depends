@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { SHOTS } from './shots';
 
 test.use({ locale: 'es-MX', reducedMotion: 'reduce' });
 
@@ -20,7 +21,7 @@ test('section drawing of the monolith stays legible on a crowded site', async ({
   await page.getByTestId('hit-mercadito-app').click();
   await expect(page.getByTestId('section-detail')).toBeVisible();
   await page.waitForTimeout(300);
-  await page.screenshot({ path: 'docs/screenshots/es/15-section-monolith.png' });
+  await page.screenshot({ path: `${SHOTS}/es/15-section-monolith.png` });
   await page.getByTestId('detail-close').click();
   await expect(page.getByTestId('section-detail')).toBeHidden();
 });
