@@ -132,7 +132,7 @@
       "press": "Aquí el comité insistiría:",
       "senseiPending": "El sensei está leyendo tu ADR…",
       "senseiTitle": "Notas del sensei:",
-      "standalone": "Revisión independiente: una rúbrica fija lee tu ADR. Dentro de Dojo, lo lee un sensei.",
+      "standalone": "Una rúbrica fija lee tu ADR, aquí y dentro de Dojo. Cuando Dojo ofrezca un sensei, sus notas aparecerán junto al tablero.",
       "closing": "No había una respuesta correcta. Había una mejor argumentada.",
       "readNext": "QUÉ LEER DESPUÉS",
       "editAdr": "Corregir el ADR",
