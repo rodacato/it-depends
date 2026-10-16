@@ -12,6 +12,7 @@ import type { AdrEvaluation, HostBridge, HostSession } from '../host/HostBridge'
 import { AdrPanel } from './AdrPanel';
 import { BriefingPanel } from './BriefingPanel';
 import { CompareView } from './CompareView';
+import { CompletePanel } from './CompletePanel';
 import { ConfirmReset, CoverPanel } from './CoverPanel';
 import { useI18n } from './i18n';
 import { IssuedPanel } from './IssuedPanel';
@@ -65,6 +66,7 @@ export function Campaign({ bridge, session, progress, setProgress, setLocale, da
   const [sensei, setSensei] = useState<AdrEvaluation | null | 'pending'>(null);
   const [rewind, setRewind] = useState<RewindState | null>(null);
   const [confirmReset, setConfirmReset] = useState(false);
+  const [finished, setFinished] = useState(false);
 
   const timeline = useMemo(
     () => simulate(campaign, progress.decisions, { seed: progress.seed, untilQuarter: window.end }),
@@ -303,7 +305,7 @@ export function Campaign({ bridge, session, progress, setProgress, setLocale, da
             onSubmit={submitAdr}
           />
         )}
-        {phase === 'review' && !rewind && (
+        {phase === 'review' && !rewind && !finished && (
           <ReviewPanel
             key={`review-${chapter.id}`}
             chapter={chapter}
@@ -313,8 +315,19 @@ export function Campaign({ bridge, session, progress, setProgress, setLocale, da
             embedded={session.mode === 'embedded'}
             hasNext={hasNext}
             onNext={nextSheet}
+            onFinish={() => setFinished(true)}
             onRestore={() => startRewind(chapter.id, letter)}
             onEditAdr={openAdr}
+          />
+        )}
+        {finished && phase === 'review' && !rewind && (
+          <CompletePanel
+            key="complete"
+            rows={rows}
+            start={campaign.company.initialForces}
+            end={snapshotAt(timeline, window.end).forces}
+            onClose={() => setFinished(false)}
+            onNewCampaign={() => setConfirmReset(true)}
           />
         )}
         {rewind && !rewind.comparing && (

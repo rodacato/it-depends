@@ -31,7 +31,9 @@ export interface ChapterScene {
   late: DelayedConsequence[];
 }
 
-const MAX_CLOUDS = 6;
+// Clouds mark what this revision changed; growth and congestion already show as height and red traffic.
+const MAX_CLOUDS = 4;
+const MAX_LEADERS = 3;
 
 // Title block revision rows live at fixed sheet coordinates; leader lines point at them.
 export const TITLE_BLOCK = { x: 1000, y: 618, w: 384, h: 246, tableTop: 722, rowHeight: 13 } as const;
@@ -47,11 +49,12 @@ export function buildScene(timeline: Timeline, window: ChapterWindow, order: Slo
   const changes = changesBetween(timeline, window.start, window.end);
   const letter = snapshotAt(timeline, window.end).revisions.at(-1)?.letter ?? '';
 
+  const fromThisRevision = (id: string) =>
+    changes.byAnchor[id]!.some((e) => e.origin.kind === 'option' && e.origin.revision === letter && (e.timing === 'immediate' || e.timing === 'delayed'));
   const priority = [
     ...changes.added,
-    ...Object.keys(changes.byAnchor).filter((id) => changes.byAnchor[id]!.some((e) => e.origin.kind !== 'drift' && e.origin.kind !== 'noise')),
-    ...changes.stressed,
-    ...changes.grown,
+    ...Object.keys(changes.byAnchor).filter(fromThisRevision),
+    ...Object.keys(changes.byAnchor).filter((id) => changes.byAnchor[id]!.some((e) => e.origin.kind === 'option' || e.origin.kind === 'event')),
   ];
   const clouds: CloudMark[] = [];
   for (const id of priority) {
@@ -69,6 +72,7 @@ export function buildScene(timeline: Timeline, window: ChapterWindow, order: Slo
   }
   const leaders: LeaderMark[] = [];
   for (const [key, items] of byAnchor) {
+    if (leaders.length >= MAX_LEADERS) break;
     const [anchor, revision] = key.split('|') as [string, string];
     const rect = final.bounds[anchor];
     if (!rect) continue;

@@ -101,7 +101,8 @@
       "congestion": "Congestion at {name}. It was always going to be a Friday.",
       "late": "Arrived late, from Rev {rev}: a change at {name}. Follow the red line.",
       "writeAdr": "Write the ADR",
-      "inspection": "Site inspection"
+      "inspection": "Site inspection",
+      "more": "+{n} more entries in the site log."
     },
     "adr": {
       "kicker": "ADR {n} · {title}",
@@ -137,7 +138,7 @@
       "editAdr": "Revise the ADR",
       "restore": "Restore the site before Rev {letter} and choose differently?",
       "next": "Open Sheet {n}",
-      "noNext": "Sheet {n} is still on the drafting table"
+      "finish": "Close the drawing set"
     },
     "rewind": {
       "kicker": "REWIND · REV {letter}",
@@ -188,6 +189,13 @@
       "load": "≈ {load} orders/day · {pct}% of capacity",
       "back": "Back to the site plan",
       "hint": "Click to open the section drawing. Esc to come back."
+    },
+    "complete": {
+      "kicker": "DRAWING SET ISSUED · {n} REVISIONS",
+      "title": "Three years, one city, your revisions",
+      "voice": "Every cloud on these sheets was a decision with a reason written next to it. Some of the reasons aged well.",
+      "rewind": "Any revision can still be restored from the title block: choose differently and watch both cities grow side by side.",
+      "close": "Back to the sheet"
     }
   }
 }

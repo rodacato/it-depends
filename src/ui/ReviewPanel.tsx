@@ -13,12 +13,13 @@ interface Props {
   embedded: boolean;
   hasNext: boolean;
   onNext: () => void;
+  onFinish: () => void;
   onRestore: () => void;
   onEditAdr: () => void;
 }
 
 // No verdict, no score: the board says what the ADR already answers and where it would push.
-export function ReviewPanel({ chapter, letter, results, sensei, embedded, hasNext, onNext, onRestore, onEditAdr }: Props) {
+export function ReviewPanel({ chapter, letter, results, sensei, embedded, hasNext, onNext, onFinish, onRestore, onEditAdr }: Props) {
   const { t } = useI18n();
   const base = `chapters.${chapter.id}`;
   const met = new Set(results.filter((r) => r.met).map((r) => r.criterionId));
@@ -88,9 +89,15 @@ export function ReviewPanel({ chapter, letter, results, sensei, embedded, hasNex
         <button type="button" className="link mono red" onClick={onRestore} data-testid="restore">
           {t('ui.review.restore', { letter })}
         </button>
-        <button type="button" className="ink-button lbl" onClick={onNext} disabled={!hasNext} data-testid="next-sheet">
-          {hasNext ? t('ui.review.next', { n: chapter.number + 1 }) : t('ui.review.noNext', { n: chapter.number + 1 })}
-        </button>
+        {hasNext ? (
+          <button type="button" className="ink-button lbl" onClick={onNext} data-testid="next-sheet">
+            {t('ui.review.next', { n: chapter.number + 1 })}
+          </button>
+        ) : (
+          <button type="button" className="ink-button lbl" onClick={onFinish} data-testid="finish">
+            {t('ui.review.finish')}
+          </button>
+        )}
       </div>
     </Vellum>
   );

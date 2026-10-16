@@ -11,7 +11,7 @@ export const FLOOR_HEIGHT = 7;
 export const CLIENT_GATE: Point = [52, 360];
 
 const DISTRICT_SLOTS: Rect[] = [
-  { x: 250, y: 214, w: 340, h: 296 },
+  { x: 226, y: 214, w: 384, h: 296 },
   { x: 632, y: 214, w: 300, h: 296 },
   { x: 250, y: 552, w: 340, h: 196 },
   { x: 632, y: 552, w: 300, h: 196 },
@@ -185,13 +185,16 @@ export function layoutCity(
     if (!d) continue;
     if (c.kind === 'service' || c.kind === 'module') {
       const pad = full.pads[district]?.indexOf(c.id) ?? 0;
-      const rows = d.h >= 280 ? [d.y + 112, d.y + 196] : [d.y + 92];
+      const tall = d.h >= 280;
+      const rows = tall ? [d.y + 112, d.y + 196] : [d.y + 100];
+      const span = columnar(full, district, tall) ? d.w * 0.6 : d.w;
       const col = pad % 2;
       const row = Math.min(rows.length - 1, Math.floor(pad / 2));
-      const padW = (d.w - 64) / 2;
+      const padW = (span - 64) / 2;
+      const rowH = tall ? 62 : 46;
       const w = c.kind === 'service' ? padW : padW * 0.78;
-      const h = c.kind === 'service' ? 62 : 46;
-      const footprint = { x: d.x + 24 + col * (padW + 16), y: rows[row]! + (62 - h), w, h };
+      const h = c.kind === 'service' ? rowH : rowH * 0.74;
+      const footprint = { x: d.x + 24 + col * (padW + 16), y: rows[row]! + (rowH - h), w, h };
       const floors = floorsFor(load);
       model.buildings.push({ id: c.id, kind: c.kind, footprint, floors });
       const top = footprint.y - floors * FLOOR_HEIGHT;
@@ -200,13 +203,15 @@ export function layoutCity(
     } else if (c.kind === 'database') {
       const k = full.basins[district]?.indexOf(c.id) ?? 0;
       const n = Math.max(2, full.basins[district]?.length ?? 1);
-      const rx = Math.min(64, d.w / (2 * n) - 10);
-      const cx = d.x + (d.w / n) * (k + 0.5);
-      const cy = d.y + d.h - 66;
+      const stacked = columnar(full, district, d.h >= 280);
+      const rx = stacked ? Math.min(46, d.w * 0.15) : Math.min(64, d.w / (2 * n) - 10);
+      const ry = stacked ? 14 : 20;
+      const cx = stacked ? d.x + d.w * 0.82 : d.x + (d.w / n) * (k + 0.5);
+      const cy = stacked ? d.y + 84 + k * 62 : d.y + d.h - 66;
       const level = Math.max(0.12, 1 - Math.max(0, stress - 0.4) * 0.9);
-      model.reservoirs.push({ id: c.id, cx, cy, rx, ry: 20, level });
-      model.bounds[c.id] = { x: cx - rx, y: cy - 20, w: rx * 2, h: 40 + 26 };
-      model.anchors[c.id] = [cx - rx, cy + 36];
+      model.reservoirs.push({ id: c.id, cx, cy, rx, ry, level });
+      model.bounds[c.id] = { x: cx - rx, y: cy - ry, w: rx * 2, h: ry * 2 + 26 };
+      model.anchors[c.id] = [cx - rx, cy + ry + 14];
     } else {
       const k = full.depots[district]?.indexOf(c.id) ?? 0;
       const rect = { x: d.x + 24 + (k % 2) * 150, y: d.y + 34, w: 64, h: 14 };
@@ -230,6 +235,12 @@ export function layoutCity(
 
   addCracks(model, topology, forces);
   return model;
+}
+
+// Crowded or short districts keep buildings on the left 60% and stack reservoirs in a column on the right.
+function columnar(order: SlotOrder, district: string, tall: boolean): boolean {
+  const basins = order.basins[district]?.length ?? 0;
+  return (!tall && basins > 0) || (order.pads[district]?.length ?? 0) > 2 || basins > 2;
 }
 
 function portOf(model: CityModel, id: string, side: 'in' | 'out' | 'top' | 'bottom'): Point | null {
@@ -278,14 +289,14 @@ function addCracks(model: CityModel, topology: Topology, forces: Forces): void {
     );
     const pressure = Math.max(0, shareDistricts.size - 1) * (forces.complexity / 100);
     if (pressure <= 0.05) continue;
-    const length = 12 + pressure * 120;
+    const length = Math.min(90, 12 + pressure * 60);
     model.cracks.push({ id: `crack-${r.id}`, points: crackPath([r.cx + r.rx - 4, r.cy], length, hashString(r.id), 0.3) });
   }
   for (const b of model.buildings) {
     const stress = model.stress[b.id] ?? 0;
     if (stress < 1) continue;
     const f = b.footprint;
-    model.cracks.push({ id: `crack-${b.id}`, points: crackPath([f.x + f.w * 0.3, f.y + f.h], 20 + (stress - 1) * 60, hashString(b.id), 1.1) });
+    model.cracks.push({ id: `crack-${b.id}`, points: crackPath([f.x + f.w * 0.3, f.y + f.h], Math.min(60, 20 + (stress - 1) * 30), hashString(b.id), 1.1) });
   }
 }
 

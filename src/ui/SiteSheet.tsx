@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import type { CityModel } from '../city/layout';
 import { lerp } from '../city/geometry';
 import type { ChapterWindow } from '../engine/queries';
@@ -7,6 +7,7 @@ import { snapshotAt, traceForce } from '../engine/queries';
 import type { ForceId, Forces } from '../engine/schema';
 import { FORCE_IDS } from '../engine/schema';
 import type { Timeline } from '../engine/simulate';
+import { IDENTITY_CAMERA } from '../city/CityRenderer';
 import { AssumptionTag } from './AssumptionTag';
 import { CityCanvas } from './CityCanvas';
 import { CityLabels } from './CityLabels';
@@ -19,6 +20,8 @@ import { SheetChrome } from './SheetChrome';
 import type { RevisionRow } from './TitleBlock';
 import { TitleBlock } from './TitleBlock';
 import { TimelapseStamp } from './TimelapseStamp';
+import { SectionDetail } from './SectionDetail';
+import { cameraFor, useCamera } from './useCamera';
 
 interface Props {
   label: string;
@@ -46,7 +49,28 @@ export function SiteSheet(p: Props) {
   const { t, has } = i18n;
   const [hovered, setHovered] = useState<string | null>(null);
   const [force, setForce] = useState<ForceId | null>(null);
-  const frame = useMemo(() => composeFrame(p.scene, p.playhead, p.preview?.model ?? null, hovered), [p.scene, p.playhead, p.preview, hovered]);
+  const [zoomed, setZoomed] = useState<string | null>(null);
+  const frame = useMemo(() => composeFrame(p.scene, p.playhead, p.preview?.model ?? null, zoomed ? null : hovered), [p.scene, p.playhead, p.preview, hovered, zoomed]);
+  // Semantic zoom: the camera eases into the component's district, then the building opens into a section.
+  const zoomTarget = useMemo(() => {
+    if (!zoomed) return IDENTITY_CAMERA;
+    const m = frame.target;
+    const district = m.districts.find((d) => {
+      const b = m.bounds[zoomed];
+      return b && b.x >= d.rect.x - 1 && b.x <= d.rect.x + d.rect.w && b.y + b.h >= d.rect.y && b.y <= d.rect.y + d.rect.h;
+    });
+    const rect = district?.rect ?? m.bounds[zoomed];
+    return rect ? cameraFor(rect) : IDENTITY_CAMERA;
+  }, [zoomed, frame.target]);
+  const { camera, arrived } = useCamera(zoomTarget, p.reducedMotion);
+  const sectionOpen = zoomed !== null && arrived;
+  useEffect(() => {
+    if (!zoomed) return;
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setZoomed(null);
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [zoomed]);
+  const place = (x: number, y: number): [number, number] => [x * camera.scale + camera.x, y * camera.scale + camera.y];
 
   const start = snapshotAt(p.timeline, p.window.start);
   const end = snapshotAt(p.timeline, p.window.end);
@@ -81,7 +105,7 @@ export function SiteSheet(p: Props) {
     <Sheet label={p.label}>
       <div className="paper" aria-hidden="true" />
       <SheetChrome caption={p.caption} />
-      <CityCanvas frame={frame} reducedMotion={p.reducedMotion} />
+      <CityCanvas frame={frame} camera={camera} reducedMotion={p.reducedMotion} />
       <CityLabels
         preview={frame.preview}
         base={frame.base}
@@ -91,8 +115,24 @@ export function SiteSheet(p: Props) {
         cloudProgress={frame.clouds.map((c) => c.progress)}
         hovered={hovered}
         onHover={setHovered}
-        interactive={p.interactive && p.playhead.kind !== 'playing'}
+        onSelect={(id) => {
+          setHovered(null);
+          setZoomed(id);
+        }}
+        interactive={p.interactive && p.playhead.kind !== 'playing' && !zoomed}
+        camera={camera}
       />
+      {sectionOpen && zoomed && (
+        <svg className="detail-layer" viewBox="0 0 1440 900" width={1440} height={900}>
+          <SectionDetail
+            snapshot={p.playhead.kind === 'start' ? start : end}
+            componentId={zoomed}
+            changed={p.playhead.kind !== 'start' && p.scene.clouds.some((c) => c.componentId === zoomed)}
+            letter={p.scene.clouds[0]?.letter ?? ''}
+            onClose={() => setZoomed(null)}
+          />
+        </svg>
+      )}
       <ForceStrip forces={forces} from={from} preview={p.preview?.forces ?? null} hovered={force} onHover={setForce} />
       <TitleBlock
         sheet={p.sheetNumber}
@@ -107,12 +147,13 @@ export function SiteSheet(p: Props) {
       />
       {p.playhead.kind === 'playing' && <TimelapseStamp state={p.playhead.state} startQuarter={p.window.start} quarters={p.window.end - p.window.start} />}
       {p.children}
-      {hovered && hoveredBounds && (
+      {hovered && hoveredBounds && !zoomed && (
         <AssumptionTag
-          x={hoveredBounds.x + hoveredBounds.w + 22}
-          y={hoveredBounds.y}
+          x={place(hoveredBounds.x + hoveredBounds.w + 22, 0)[0]}
+          y={place(0, hoveredBounds.y)[1]}
           title={t('ui.tag.componentTitle', { name: name(hovered) })}
           effects={hoveredEffects}
+          hint={t('ui.detail.hint')}
           empty={t('ui.tag.load', { load: i18n.number(end.loads[hovered]?.load ?? 0), pct: Math.round((end.loads[hovered]?.stress ?? 0) * 100) })}
         />
       )}

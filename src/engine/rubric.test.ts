@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { campaign } from '../content';
+import { campaign } from '../test/campaign';
 import { emptyAdr, evaluateAdr } from './rubric';
 
 const terms = (key: string) =>

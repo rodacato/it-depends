@@ -46,6 +46,18 @@ export interface CityFrame {
   crackProgress: number;
 }
 
+// Camera over the city, in sheet units: a point p is drawn at p * scale + (x, y).
+export interface Camera {
+  x: number;
+  y: number;
+  scale: number;
+}
+
+export const IDENTITY_CAMERA: Camera = { x: 0, y: 0, scale: 1 };
+
+// The part of the sheet the city may occupy; zoomed linework is clipped to it.
+export const CITY_VIEW = { x: 38, y: 64, w: 958, h: 704 } as const;
+
 export interface RendererOptions {
   reducedMotion: boolean;
   maxParticles?: number;
@@ -66,6 +78,9 @@ const DEFAULT_MAX_PARTICLES = 3000;
 // Draws the city from engine-derived models only. It never reads simulation state directly.
 export class CityRenderer {
   private app: Application;
+  private root = new Container();
+  private clip = new Container();
+  private clipMask = new Graphics();
   private world = new Container();
   private survey = new Graphics();
   private lines = new Graphics();
@@ -95,7 +110,9 @@ export class CityRenderer {
       this.traffic.addParticle(p);
     }
     this.world.addChild(this.survey, this.lines, this.traffic, this.overlay);
-    app.stage.addChild(this.world);
+    this.clip.addChild(this.world);
+    this.root.addChild(this.clip, this.clipMask);
+    app.stage.addChild(this.root);
     this.drawSurvey();
     this.resizeObserver = new ResizeObserver(() => this.fit());
     this.resizeObserver.observe(host);
@@ -131,6 +148,19 @@ export class CityRenderer {
     if (trafficChanged) this.rebuildTraffic(frame);
   }
 
+  setCamera(camera: Camera): void {
+    this.world.position.set(camera.x, camera.y);
+    this.world.scale.set(camera.scale);
+    const zoomed = camera.scale !== 1 || camera.x !== 0 || camera.y !== 0;
+    this.clipMask.clear();
+    if (zoomed) {
+      this.clipMask.rect(CITY_VIEW.x, CITY_VIEW.y, CITY_VIEW.w, CITY_VIEW.h).fill(0xffffff);
+      this.clip.mask = this.clipMask;
+    } else {
+      this.clip.mask = null;
+    }
+  }
+
   particleCount(): number {
     return this.movers.length;
   }
@@ -140,7 +170,7 @@ export class CityRenderer {
     const h = this.host.clientHeight;
     if (!w || !h) return;
     this.app.renderer.resize(w, h);
-    this.world.scale.set(w / SHEET.w, h / SHEET.h);
+    this.root.scale.set(w / SHEET.w, h / SHEET.h);
   }
 
   private drawSurvey(): void {

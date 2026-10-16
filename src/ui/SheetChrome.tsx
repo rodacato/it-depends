@@ -48,14 +48,14 @@ export function SheetChrome({ caption }: { caption: string }) {
         </g>
       ))}
       <text x={60} y={58} className="mono caption">{caption}</text>
-      <g transform="translate(954 716)" className="north">
+      <g transform="translate(1362 584)" className="north">
         <circle r={20} />
         <circle r={16} className="inner" />
         <path d="M0,-18 L7,8 L0,3 Z" className="solid" />
         <path d="M0,-18 L-7,8 L0,3 Z" />
         <text y={-26} textAnchor="middle" className="lbl">N</text>
       </g>
-      <g transform="translate(770 736)" className="scale">
+      <g transform="translate(1012 590)" className="scale">
         <text y={-8} className="mono">{t('ui.city.scale')}</text>
         {[0, 1, 2, 3].map((i) => (
           <rect key={i} x={i * 32} y={0} width={32} height={6} className={i % 2 ? '' : 'solid'} />

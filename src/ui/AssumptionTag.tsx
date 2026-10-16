@@ -26,11 +26,12 @@ interface Props {
   title: string;
   effects: AppliedEffect[];
   empty?: string;
+  hint?: string;
   testId?: string;
 }
 
 // Every number on the sheet traces to a written assumption and a source.
-export function AssumptionTag({ x, y, title, effects, empty, testId }: Props) {
+export function AssumptionTag({ x, y, title, effects, empty, hint, testId }: Props) {
   const i18n = useI18n();
   const { t } = i18n;
   const left = Math.min(Math.max(48, x), 1440 - 360);
@@ -66,6 +67,7 @@ export function AssumptionTag({ x, y, title, effects, empty, testId }: Props) {
         ))}
       </ul>
       {effects.length > 5 && <p className="mono more">{t('ui.tag.more', { n: effects.length - 5 })}</p>}
+      {hint && <p className="mono hint">{hint}</p>}
     </motion.aside>
   );
 }

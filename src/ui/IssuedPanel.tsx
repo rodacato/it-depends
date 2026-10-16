@@ -36,7 +36,7 @@ export function IssuedPanel({ campaign, chapter, optionId, rationale, letter, mo
           <div className="log">
             <div className="mono k">{t('ui.issued.news')}</div>
             <ul className="mono">
-              {incidents.map((i) => (
+              {incidents.slice(0, 4).map((i) => (
                 <li key={i.id}>
                   <span className="q">{t('ui.issued.quarterShort', { q: ((i.quarter + 3) % 4) + 1 })}</span>{' '}
                   {i.kind === 'event' && i.eventId ? eventText(i.eventId) : t('ui.issued.congestion', { name: name(i.anchor ?? '') })}
@@ -47,21 +47,22 @@ export function IssuedPanel({ campaign, chapter, optionId, rationale, letter, mo
                   {t('ui.issued.late', { rev: l.revision, name: name(l.componentId) })}
                 </li>
               ))}
+              {incidents.length > 4 && <li className="q">{t('ui.issued.more', { n: incidents.length - 4 })}</li>}
             </ul>
           </div>
         )}
+        {inspections.map((ins) => (
+          <div key={ins.id} className="pinned inspection" data-testid="inspection">
+            <b className="lbl">{t('ui.issued.inspection')}</b>
+            <p className="mono">{t(`chapters.${ins.chapterId}.inspections.${ins.id}`)}</p>
+          </div>
+        ))}
         <div className="actions">
           <button type="button" className="ink-button lbl" onClick={onWriteAdr} data-testid="write-adr">
             {t('ui.issued.writeAdr')}
           </button>
         </div>
       </Vellum>
-      {inspections.map((ins, i) => (
-        <Vellum key={ins.id} x={1022} y={430 + i * 70} w={360} rotate={0.9} className="inspection" from="right" testId="inspection">
-          <b className="lbl">{t('ui.issued.inspection')}</b>
-          <p className="mono">{t(`chapters.${ins.chapterId}.inspections.${ins.id}`)}</p>
-        </Vellum>
-      ))}
     </>
   );
 }

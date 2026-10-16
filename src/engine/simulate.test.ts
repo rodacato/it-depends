@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { campaign } from '../content';
+import { campaign } from '../test/campaign';
 import { changesBetween, delayedConsequences, forecastOption, traceForce } from './queries';
 import { simulate } from './simulate';
 import { applyTopologyChanges } from './topology';

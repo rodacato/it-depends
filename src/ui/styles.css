@@ -890,6 +890,18 @@ label.rationale input {
   color: var(--red);
 }
 
+.pinned {
+  margin: 10px -8px 0 6px;
+  padding: 8px 12px 6px;
+  background: rgba(237, 235, 227, 0.97);
+  border: 1px solid rgba(90, 90, 90, 0.3);
+  transform: rotate(1.2deg);
+}
+
+.pinned p {
+  margin: 2px 0 0 !important;
+}
+
 .inspection b {
   font-size: 14px;
   letter-spacing: 0.06em;
@@ -1033,6 +1045,59 @@ label.rationale input {
   color: var(--blue);
 }
 
+/* campaign complete */
+
+.complete .history {
+  list-style: none;
+  margin: 6px 0 8px;
+  padding: 0;
+  columns: 2;
+  column-gap: 24px;
+  font-size: 10px;
+}
+
+.complete .history li {
+  display: grid;
+  grid-template-columns: 18px 52px 1fr;
+  gap: 4px;
+  padding: 2px 0;
+  break-inside: avoid;
+}
+
+.complete .history b {
+  color: var(--red);
+  font-size: 13px;
+}
+
+.complete .history .q {
+  color: var(--graphite);
+}
+
+.complete .forces {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+  border-top: 1px solid var(--blue);
+  border-bottom: 1px solid var(--blue);
+  padding: 6px 0;
+  margin: 0 0 8px;
+  font-size: 10px;
+}
+
+.complete .forces dt {
+  color: var(--graphite);
+  font-size: 8.5px;
+}
+
+.complete .forces dd {
+  margin: 2px 0 0;
+}
+
+.complete .closing {
+  font-size: 19px !important;
+  margin: 6px 0 !important;
+}
+
 /* cover */
 
 .cover h1 {
@@ -1112,6 +1177,129 @@ label.rationale input {
 .tag .src {
   color: var(--graphite);
   font-size: 9px;
+}
+
+/* semantic zoom: section detail */
+
+.detail-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+}
+
+.section-detail .detail-ground {
+  fill: var(--blue);
+  stroke: none;
+}
+
+.section-detail .pen {
+  fill: none;
+  stroke: var(--line);
+  stroke-width: 1.3;
+  stroke-dasharray: 1 1;
+  animation: pen-draw 0.9s var(--mechanical) both;
+}
+
+.section-detail rect.pen[fill] {
+  fill: var(--blue);
+}
+
+.section-detail .pen.thin {
+  stroke-width: 0.7;
+  stroke-opacity: 0.7;
+}
+
+.section-detail .pen.dim {
+  stroke-opacity: 0.45;
+}
+
+.section-detail .pen.focus {
+  stroke-width: 2;
+}
+
+.section-detail .pen.hot {
+  stroke: var(--red);
+}
+
+.section-detail .pen.border {
+  stroke-width: 1.8;
+}
+
+.section-detail .pen.grade {
+  stroke-width: 2.4;
+}
+
+.section-detail .pen.property {
+  stroke-dasharray: 18 5 3 5;
+  animation: none;
+}
+
+.section-detail .pen.water,
+.section-detail .train {
+  animation-delay: 0.4s;
+}
+
+.section-detail .earth {
+  fill: url(#detail-hatch);
+}
+
+.section-detail text {
+  fill: var(--line);
+  animation: letter 0.5s linear 0.35s both;
+}
+
+.section-detail .title {
+  font-size: 22px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.section-detail .name {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.section-detail .mono {
+  font-size: 10px;
+}
+
+.section-detail .dim {
+  fill-opacity: 0.72;
+}
+
+.section-detail .red {
+  fill: var(--red);
+}
+
+.section-detail .detail-delta path {
+  fill: var(--blue);
+  stroke: var(--red);
+  stroke-width: 1.6;
+}
+
+.section-detail .detail-delta text {
+  fill: var(--red);
+  font-size: 12px;
+}
+
+.ink-button.small {
+  font-size: 12px;
+  padding: 4px 10px 3px;
+}
+
+.tag .hint {
+  margin-top: 6px;
+  color: var(--graphite);
+  font-style: italic;
+}
+
+@keyframes pen-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
 }
 
 /* time-lapse stamp */
@@ -1269,7 +1457,9 @@ label.rationale input {
 
 @media (prefers-reduced-motion: reduce) {
   .city-labels .lettering,
-  .state-screen .pen-border {
+  .state-screen .pen-border,
+  .section-detail .pen,
+  .section-detail text {
     animation: none;
   }
 }

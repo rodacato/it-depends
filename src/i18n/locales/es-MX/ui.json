@@ -101,7 +101,8 @@
       "congestion": "Congestión en {name}. Iba a ser un viernes, siempre.",
       "late": "Llegó tarde, desde la Rev {rev}: un cambio en {name}. Sigue la línea roja.",
       "writeAdr": "Escribir el ADR",
-      "inspection": "Inspección de obra"
+      "inspection": "Inspección de obra",
+      "more": "+{n} entradas más en la bitácora."
     },
     "adr": {
       "kicker": "ADR {n} · {title}",
@@ -137,7 +138,7 @@
       "editAdr": "Corregir el ADR",
       "restore": "¿Restaurar la obra antes de la Rev {letter} y elegir distinto?",
       "next": "Abrir la lámina {n}",
-      "noNext": "La lámina {n} sigue en la mesa de dibujo"
+      "finish": "Cerrar el juego de planos"
     },
     "rewind": {
       "kicker": "REBOBINAR · REV {letter}",
@@ -188,6 +189,13 @@
       "load": "≈ {load} pedidos/día · {pct}% de su capacidad",
       "back": "Volver al plano del predio",
       "hint": "Haz clic para abrir el corte. Esc para volver."
+    },
+    "complete": {
+      "kicker": "JUEGO DE PLANOS EMITIDO · {n} REVISIONES",
+      "title": "Tres años, una ciudad, tus revisiones",
+      "voice": "Cada nube en estas láminas fue una decisión con su razón escrita al lado. Algunas razones envejecieron bien.",
+      "rewind": "Cualquier revisión se puede restaurar desde el cuadro de rotulación: elige distinto y mira crecer ambas ciudades lado a lado.",
+      "close": "Volver a la lámina"
     }
   }
 }

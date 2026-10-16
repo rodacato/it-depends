@@ -1,3 +1,5 @@
+import type { Camera } from '../city/CityRenderer';
+import { CITY_VIEW } from '../city/CityRenderer';
 import type { CityModel } from '../city/layout';
 import { CLIENT_GATE, SHEET } from '../city/layout';
 import type { CloudMark } from './scene';
@@ -12,19 +14,29 @@ interface Props {
   cloudProgress: number[];
   hovered: string | null;
   onHover: (id: string | null) => void;
+  onSelect: (id: string) => void;
   interactive: boolean;
+  camera: Camera;
 }
 
 // Lettering and hit areas over the canvas. Real software names, never a city vocabulary to translate.
-export function CityLabels({ preview, base, target, growth, clouds, cloudProgress, hovered, onHover, interactive }: Props) {
+export function CityLabels({ preview, base, target, growth, clouds, cloudProgress, hovered, onHover, onSelect, interactive, camera }: Props) {
   const { t, has } = useI18n();
   const name = (id: string) => (has(`components.${id}.name`) ? t(`components.${id}.name`) : id);
-  const role = (id: string, kind: string) => (has(`components.${id}.role`) ? t(`components.${id}.role`) : t(`kinds.${kind}`));
+  const clip = (s: string) => (s.length > 30 ? `${s.slice(0, 29)}…` : s);
+  const role = (id: string, kind: string) => clip(has(`components.${id}.role`) ? t(`components.${id}.role`) : t(`kinds.${kind}`));
   const isNew = (id: string) => !(id in base.bounds);
   const shown = (id: string) => !isNew(id) || growth > 0.45;
 
   return (
     <svg className="city-labels" viewBox={`0 0 ${SHEET.w} ${SHEET.h}`} width={SHEET.w} height={SHEET.h}>
+      <defs>
+        <clipPath id="city-view">
+          <rect x={CITY_VIEW.x} y={CITY_VIEW.y} width={CITY_VIEW.w} height={CITY_VIEW.h} />
+        </clipPath>
+      </defs>
+      <g clipPath={camera.scale !== 1 ? 'url(#city-view)' : undefined}>
+      <g transform={`translate(${camera.x} ${camera.y}) scale(${camera.scale})`}>
       <text x={CLIENT_GATE[0] + 8} y={CLIENT_GATE[1] - 16} className="lbl" fontSize={13}>
         {name('clients')}
       </text>
@@ -98,8 +110,14 @@ export function CityLabels({ preview, base, target, growth, clouds, cloudProgres
             onPointerLeave={() => onHover(null)}
             onFocus={() => onHover(id)}
             onBlur={() => onHover(null)}
+            onClick={() => onSelect(id)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') onSelect(id);
+            }}
           />
         ))}
+      </g>
+      </g>
     </svg>
   );
 }
