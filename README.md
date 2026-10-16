@@ -1,5 +1,11 @@
 # It Depends
 
+[![CI · Test](https://github.com/rodacato/it-depends/actions/workflows/ci.yml/badge.svg)](https://github.com/rodacato/it-depends/actions/workflows/ci.yml)
+[![Site · Pages](https://github.com/rodacato/it-depends/actions/workflows/site-pages.yml/badge.svg)](https://github.com/rodacato/it-depends/actions/workflows/site-pages.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
+**Play it in your browser: [rodacato.github.io/it-depends](https://rodacato.github.io/it-depends/)**
+
 An interactive course on software architecture decision-making, played as a campaign.
 
 You are the architect of **Mercadito**, a marketplace with payments, for three years: from three founders and one database to an 80-engineer regulated fintech. Its system is drawn as a living city on cyanotype blueprint paper. You make a decision, the drawing time-lapses forward, the city grows, and red-pencil revision clouds sketch themselves around what changed. Some consequences arrive late, and a red leader line points back to the revision that caused them. The title block in the corner is your ADR log.

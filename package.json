@@ -4,6 +4,12 @@
   "private": true,
   "description": "An interactive course on software architecture decision-making, played as a campaign on a living blueprint.",
   "license": "MIT",
+  "homepage": "https://rodacato.github.io/it-depends/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rodacato/it-depends.git"
+  },
+  "bugs": "https://github.com/rodacato/it-depends/issues",
   "type": "module",
   "scripts": {
     "dev": "vite",
