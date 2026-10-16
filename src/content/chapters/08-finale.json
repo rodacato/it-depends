@@ -85,7 +85,10 @@
             "sources": [
               "hard-parts",
               "fsa"
-            ]
+            ],
+            "onlyIf": {
+              "lacks": "payments-service"
+            }
           },
           {
             "id": "platform-headcount",
@@ -116,7 +119,10 @@
             "sources": [
               "kleppmann-ddia",
               "helland-beyond-transactions"
-            ]
+            ],
+            "onlyIf": {
+              "lacks": "ledger-db"
+            }
           },
           {
             "id": "platform-clear-owner",
@@ -531,6 +537,25 @@
               "bezos-doors",
               "model"
             ]
+          },
+          {
+            "id": "buy-retire-own-service",
+            "target": {
+              "force": "velocity"
+            },
+            "delta": -4,
+            "timing": {
+              "kind": "immediate"
+            },
+            "anchor": "payments-service",
+            "assumption": "assumptions.finale.buyRetireOwnService",
+            "sources": [
+              "bezos-doors",
+              "model"
+            ],
+            "onlyIf": {
+              "has": "ledger-db"
+            }
           },
           {
             "id": "buy-margin-diligence",

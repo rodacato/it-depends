@@ -16,12 +16,12 @@
       "readNext": "A closing shelf for the whole drawing set: Nygard for the ADR you just wrote; Richards and Ford, then The Hard Parts, for trade-off analysis; Team Topologies for the team you may have just created; Building Evolutionary Architectures for the fitness functions that keep any of this honest; the SRE book for error budgets; Wardley for what to build and what to buy; and back to the one-way door letter where it started.",
       "options": {
         "platform-team": {
-          "title": "Carve payments into a platform team, with its own service and ledger",
+          "title": "Give payments to a platform team, with its own service and ledger",
           "optimizes": "One accountable owner, a ledger the auditor can read, payments off everyone else's plate.",
-          "costs": "A quarter of reorg and migration, a cutover window, and a new team on the payroll. Hard to walk back."
+          "costs": "A quarter of reorg and a new team on the payroll; if payments still lives in the monolith, a migration with a cutover window as well. Hard to walk back."
         },
         "strangle-payments": {
-          "title": "Strangle payments out of the monolith, guarded by fitness functions",
+          "title": "Strangle what is left of payments out of the monolith, guarded by fitness functions",
           "optimizes": "No big bang under supervision; each step small, tested and reversible.",
           "costs": "The regulator gets a roadmap, not a unit. Two code paths for a while, and the payoff arrives after the board meeting."
         },
@@ -33,7 +33,7 @@
         "buy-platform": {
           "title": "Buy a licensed payments platform and become its customer",
           "optimizes": "Borrow their licence, controls and audit history; a much smaller thing to operate.",
-          "costs": "A take rate on every payment, their roadmap, a long contract. You stay accountable for a vendor you do not run. The vendor sits off this sheet (the site has no room for another); payments-service here is only the thin adapter to it."
+          "costs": "A take rate on every payment, their roadmap, a long contract. You stay accountable for a vendor you do not run. If you built your own payments service, retiring it is part of the price too. The vendor sits off this sheet (the site has no room for another); payments-service here is only the thin adapter to it."
         }
       },
       "events": {
@@ -58,7 +58,7 @@
   },
   "assumptions": {
     "finale": {
-      "platformMoveEatsQuarter": "Forming a payments team, moving people and migrating the ledger consumes most of a quarter for the engineers involved and slows everyone who depends on them.",
+      "platformMoveEatsQuarter": "Forming a payments team, moving people and handing it the code and the on-call consumes most of a quarter for the engineers involved and slows everyone who depends on them.",
       "platformNewSeam": "A service with its own ledger adds a network boundary, a data migration and a contract that every caller must respect.",
       "platformHeadcount": "A platform team of six to eight people plus its own infrastructure and on-call costs noticeably more than payments spread thinly across the monolith.",
       "platformCutoverRisk": "Moving balances from the shared database to a new ledger needs a dual-write or reconciliation window, and money is where such windows bite.",
@@ -69,7 +69,7 @@
       "strangleSlowTax": "Routing, shadow traffic and parallel checks slow every payments change a little for as long as the strangling lasts.",
       "strangleFitnessFunctions": "Automated checks on dependencies, ledger balances and latency cost engineering time to build and CI time to run.",
       "strangleTwoPaths": "For several quarters some payments take the old path and some the new one, and both must stay correct.",
-      "strangleStillEveryones": "Until the extraction finishes, payments code still lives in the monolith, and every team touching it still needs to understand it.",
+      "strangleStillEveryones": "Until the extraction finishes, the payment logic still in the monolith (refunds, disputes, charging rules) belongs to every team that touches it, and all of them need to understand it.",
       "strangleSeamsPay": "Once the seams are in place and guarded, the monolith loses its most entangled module and complexity drops measurably.",
       "strangleOpenFinding": "A regulator's requirement with only a roadmap behind it reads as an open finding in diligence, and the terms reflect it.",
       "freezeStopsFeatures": "Two quarters of no structural change and a reliability focus leave little capacity for the roadmap the board approved.",
@@ -85,6 +85,7 @@
       "buyDataMigration": "Historical payments, refunds and disputes must be migrated or reconciled across two systems during the switch.",
       "buyTakeRate": "The platform charges a percentage of every payment, which at Year 3 volume is larger than the team it replaces.",
       "buyLockIn": "After two quarters the contract, the data and the integration make leaving expensive, and renewal terms reflect that.",
+      "buyRetireOwnService": "Retiring a service and ledger of your own means migrating their balances and moving the people who ran them: the door in Chapter 1 was one-way after all.",
       "buyMarginDiligence": "Investors read a vendor's take rate on every payment as permanently lower gross margin and price the round accordingly.",
       "seriesBCloses": "The Series B adds about two years of runway at the current burn."
     }
