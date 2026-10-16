@@ -1,0 +1,184 @@
+{
+  "ui": {
+    "meta": {
+      "title": "It Depends",
+      "description": "An interactive course on software architecture decisions, played as a campaign on a living blueprint."
+    },
+    "locales": {
+      "en": "EN",
+      "es-MX": "ES"
+    },
+    "loading": "Unrolling the drawing set…",
+    "errors": {
+      "webgl": "This sheet needs WebGL to draw the city. Everything else still works: briefings, gauges, ADRs and the review board.",
+      "damaged": "The saved drawing set was water-damaged. A fresh sheet has been issued.",
+      "crash": "The sheet tore.",
+      "crashBody": "Something failed while drawing. Your progress is saved up to the last issued revision.",
+      "reload": "Reload the drawing set"
+    },
+    "sheetLabel": "Sheet {n}: the Mercadito site plan",
+    "caption": "IT DEPENDS · MERCADITO · SHEET {n} OF {total} · {quarter}",
+    "quarter": "Q{q} · YEAR {y}",
+    "city": {
+      "publicRoad": "ROAD · public HTTP API",
+      "district": "DISTRICT · {name}",
+      "notOurs": "OFF-SITE · NOT OURS",
+      "atCapacity": "AT CAPACITY",
+      "inspect": "Inspect {name}",
+      "scale": "SCALE · ORDERS / DAY",
+      "proposed": "proposed · pencil"
+    },
+    "forces": {
+      "caption": "FORCES · RELATIVE 0–100, NOT MEASUREMENTS",
+      "velocity": "TEAM VELOCITY",
+      "complexity": "COMPLEXITY",
+      "cost": "COST",
+      "reliability": "RELIABILITY",
+      "cognitiveLoad": "COGNITIVE LOAD",
+      "inspect": "{name}: {value} of 100. Show what moved it.",
+      "tagTitle": "{name} · why it moved",
+      "tagEmpty": "Nothing moved this force here."
+    },
+    "context": {
+      "teamSize": "team size",
+      "ordersPerDay": "orders/day",
+      "runwayMonths": "runway (months)"
+    },
+    "timing": {
+      "immediate": "immediate · Rev {rev}",
+      "delayed": "arrived late · Rev {rev}",
+      "conditional": "triggered by an event · Rev {rev}",
+      "drift": "company growth",
+      "event": "event on site",
+      "noise": "demand variation",
+      "congestion": "congestion"
+    },
+    "tag": {
+      "assumption": "Assumption:",
+      "source": "SRC",
+      "more": "+{n} more. Hover the force gauges for the rest.",
+      "componentTitle": "{name} · what changed",
+      "load": "No change this revision. Load ≈ {load} orders/day, {pct}% of capacity. Each floor is roughly a doubling of traffic."
+    },
+    "briefing": {
+      "kicker": "SHEET {n} OF {total} · {quarter} · {concept}",
+      "team": "Team",
+      "teamValue": "{n} engineers",
+      "traffic": "Traffic",
+      "trafficValue": "~{n} orders/day",
+      "runway": "Runway",
+      "runwayValue": "{n} months",
+      "rules": "Rules",
+      "contextHint": "Same dilemma, other context:",
+      "contextToday": "Mercadito, today",
+      "optimizes": "OPTIMIZES",
+      "costs": "COSTS",
+      "previewing": "pencilled in on site ↙",
+      "variantNote": "Weights shown for an {name}. The city stays Mercadito's; watch the gauge ghosts move.",
+      "because": "Because",
+      "rationalePlaceholder": "one sentence, in your own words",
+      "rationaleHint": "One sentence. The review board will ask.",
+      "issue": "Issue Rev {letter}",
+      "disagreement": "WHERE EXPERTS DISAGREE"
+    },
+    "regulation": {
+      "none": "none. Yet.",
+      "light": "light",
+      "audited": "audited yearly",
+      "licensed": "licensed, supervised"
+    },
+    "timelapse": {
+      "stamp": "TIME-LAPSE: {months} MONTHS",
+      "month": "MONTH {m}/{total}",
+      "skip": "Skip to the revision"
+    },
+    "issued": {
+      "kicker": "REV {letter} ISSUED · TIME-LAPSE: {months} MONTHS",
+      "cloudsOne": "One revision cloud. Hover it for the assumption behind it.",
+      "clouds": "{n} revision clouds. Hover any of them for the assumption behind it.",
+      "news": "SITE LOG",
+      "quarterShort": "Q{q}",
+      "congestion": "Congestion at {name}. It was always going to be a Friday.",
+      "late": "Arrived late, from Rev {rev}: a change at {name}. Follow the red line.",
+      "writeAdr": "Write the ADR",
+      "inspection": "Site inspection"
+    },
+    "adr": {
+      "kicker": "ADR {n} · {title}",
+      "status": "Status: accepted · Rev {letter} · {quarter}",
+      "nygard": "Format after Michael Nygard, plus two lines he would forgive.",
+      "fields": {
+        "context": "Context",
+        "decision": "Decision",
+        "consequences": "Consequences",
+        "givenUp": "What we gave up",
+        "revisit": "When to revisit"
+      },
+      "hints": {
+        "context": "What forces were at play? Team, traffic, money, time.",
+        "decision": "What did you decide, and how hard is it to undo?",
+        "consequences": "What gets better, and what gets worse?",
+        "givenUp": "The option you did not take, and what it would have bought you.",
+        "revisit": "A condition someone could notice: a number, a date, an event."
+      },
+      "progress": "{n} of {total} sections drafted",
+      "submit": "Send to the review board"
+    },
+    "review": {
+      "kicker": "REVIEW BOARD · REV {letter}",
+      "title": "The review board has three questions about Rev {letter}.",
+      "answered": "Answered in your ADR:",
+      "press": "The board would press here:",
+      "senseiPending": "The sensei is reading your ADR…",
+      "senseiTitle": "The sensei's notes:",
+      "standalone": "Standalone review: a fixed rubric reads your ADR. Embedded in Dojo, a sensei reads it instead.",
+      "closing": "There was no right answer. There was a better-argued one.",
+      "readNext": "WHAT TO READ NEXT",
+      "editAdr": "Revise the ADR",
+      "restore": "Restore the site before Rev {letter} and choose differently?",
+      "next": "Open Sheet {n}",
+      "noNext": "Sheet {n} is still on the drafting table"
+    },
+    "rewind": {
+      "kicker": "REWIND · REV {letter}",
+      "title": "Restore the site before Rev {letter}",
+      "pick": "Choose differently. The original stays on file; you will see both cities grow side by side.",
+      "cancel": "Leave it as issued",
+      "compare": "Draw both cities",
+      "compareTitle": "Same company, one different decision",
+      "replay": "Replay both",
+      "keep": "Keep Rev {letter} as issued",
+      "adopt": "Adopt the alternate",
+      "left": "Rev {letter} · as issued",
+      "right": "Rev {letter}′ · alternate"
+    },
+    "cover": {
+      "kicker": "SHEET 0 · COVER · DRAWING SET FOR MERCADITO",
+      "title": "It Depends",
+      "subtitle": "A course in architecture decisions, drawn as a city that grows for three years.",
+      "opening": "Sheet 1 of 8. Q1, Year 1. Three engineers, one database, zero regrets. So far.",
+      "howTo": "Each sheet is a quarter in the company's life. Hover an option to see it pencilled in, write one sentence of why, then watch the consequences arrive, some of them late.",
+      "newCampaign": "New campaign",
+      "continue": "Continue: Sheet {n}",
+      "begin": "Open Sheet 1",
+      "confirmReset": "Tear up every revision and start a new campaign?",
+      "confirmNo": "Keep my drawings",
+      "confirmYes": "Yes, new campaign"
+    },
+    "titleBlock": {
+      "project": "MERCADITO · PLATFORM SITE PLAN",
+      "sheet": "SHEET",
+      "sheetOf": "{n} OF {total}",
+      "quarter": "QUARTER",
+      "language": "LANGUAGE",
+      "rev": "REV",
+      "issued": "ISSUED",
+      "description": "DESCRIPTION · ADR",
+      "empty": "No revisions issued. The site is waiting on you.",
+      "restoreHint": "Restore Rev {letter} and choose differently",
+      "footer": "DRAWN: YOU · CHECKED: REVIEW BOARD",
+      "newCampaign": "NEW CAMPAIGN"
+    },
+    "quarterShort": "Q{q} Y{y}"
+  }
+}

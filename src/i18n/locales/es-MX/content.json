@@ -12,16 +12,46 @@
     "vendor": "proveedor · fuera del predio"
   },
   "components": {
-    "mercadito-app": { "name": "mercadito-app", "role": "monolito" },
-    "shared-postgres": { "name": "Postgres compartido", "role": "una base de datos para todo" },
-    "hosted-checkout": { "name": "checkout alojado", "role": "página de pago del proveedor" },
-    "payments-module": { "name": "módulo de pagos", "role": "PaymentsPort, un adaptador" },
-    "card-processor": { "name": "procesador de tarjetas", "role": "API del proveedor" },
-    "payments-service": { "name": "payments-service", "role": "servicio propio" },
-    "ledger-db": { "name": "ledger DB", "role": "base de datos propia de pagos" },
-    "payment-events": { "name": "cola payment-events", "role": "entrega asíncrona" },
-    "card-network": { "name": "red de tarjetas", "role": "conexión directa con el adquirente" },
-    "clients": { "name": "clientes web + móvil", "role": "el mundo exterior" }
+    "mercadito-app": {
+      "name": "mercadito-app",
+      "role": "monolito"
+    },
+    "shared-postgres": {
+      "name": "Postgres compartido",
+      "role": "una base de datos para todo"
+    },
+    "hosted-checkout": {
+      "name": "checkout alojado",
+      "role": "página de pago del proveedor"
+    },
+    "payments-module": {
+      "name": "módulo de pagos",
+      "role": "PaymentsPort, un adaptador"
+    },
+    "card-processor": {
+      "name": "procesador de tarjetas",
+      "role": "API del proveedor"
+    },
+    "payments-service": {
+      "name": "payments-service",
+      "role": "servicio propio"
+    },
+    "ledger-db": {
+      "name": "ledger DB",
+      "role": "base de datos propia de pagos"
+    },
+    "payment-events": {
+      "name": "cola payment-events",
+      "role": "entrega asíncrona"
+    },
+    "card-network": {
+      "name": "red de tarjetas",
+      "role": "conexión directa con el adquirente"
+    },
+    "clients": {
+      "name": "clientes web + móvil",
+      "role": "el mundo exterior"
+    }
   },
   "districts": {
     "storefront": "tienda",
@@ -93,6 +123,7 @@
   },
   "chapters": {
     "reversibility": {
+      "short": "REVERSIBILIDAD",
       "title": "El checkout tiene que cobrar",
       "concept": "Reversibilidad: puertas de un sentido y de dos sentidos, y el último momento responsable.",
       "voice": "Tres ingenieros, una base de datos, cero arrepentimientos. Por ahora.",

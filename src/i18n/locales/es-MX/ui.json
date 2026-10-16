@@ -1,0 +1,184 @@
+{
+  "ui": {
+    "meta": {
+      "title": "It Depends",
+      "description": "Un curso interactivo sobre decisiones de arquitectura de software, jugado como campaña sobre un plano vivo."
+    },
+    "locales": {
+      "en": "EN",
+      "es-MX": "ES"
+    },
+    "loading": "Desenrollando el juego de planos…",
+    "errors": {
+      "webgl": "Esta lámina necesita WebGL para dibujar la ciudad. Todo lo demás funciona: briefings, indicadores, ADRs y el comité de revisión.",
+      "damaged": "El juego de planos guardado se mojó. Se emitió una lámina nueva.",
+      "crash": "La lámina se rompió.",
+      "crashBody": "Algo falló al dibujar. Tu progreso está guardado hasta la última revisión emitida.",
+      "reload": "Recargar el juego de planos"
+    },
+    "sheetLabel": "Lámina {n}: plano del predio de Mercadito",
+    "caption": "IT DEPENDS · MERCADITO · LÁMINA {n} DE {total} · {quarter}",
+    "quarter": "T{q} · AÑO {y}",
+    "city": {
+      "publicRoad": "CALLE · API HTTP pública",
+      "district": "DISTRITO · {name}",
+      "notOurs": "FUERA DEL PREDIO · NO ES NUESTRO",
+      "atCapacity": "A CAPACIDAD",
+      "inspect": "Inspeccionar {name}",
+      "scale": "ESCALA · PEDIDOS / DÍA",
+      "proposed": "propuesto · a lápiz"
+    },
+    "forces": {
+      "caption": "FUERZAS · RELATIVAS 0–100, NO SON MEDICIONES",
+      "velocity": "VELOCIDAD DEL EQUIPO",
+      "complexity": "COMPLEJIDAD",
+      "cost": "COSTO",
+      "reliability": "CONFIABILIDAD",
+      "cognitiveLoad": "CARGA COGNITIVA",
+      "inspect": "{name}: {value} de 100. Mostrar qué la movió.",
+      "tagTitle": "{name} · por qué se movió",
+      "tagEmpty": "Nada movió esta fuerza aquí."
+    },
+    "context": {
+      "teamSize": "tamaño del equipo",
+      "ordersPerDay": "pedidos/día",
+      "runwayMonths": "runway (meses)"
+    },
+    "timing": {
+      "immediate": "inmediato · Rev {rev}",
+      "delayed": "llegó tarde · Rev {rev}",
+      "conditional": "disparado por un evento · Rev {rev}",
+      "drift": "crecimiento de la empresa",
+      "event": "evento en obra",
+      "noise": "variación de demanda",
+      "congestion": "congestión"
+    },
+    "tag": {
+      "assumption": "Supuesto:",
+      "source": "FUENTE",
+      "more": "+{n} más. Pasa el cursor por los indicadores de fuerzas para ver el resto.",
+      "componentTitle": "{name} · qué cambió",
+      "load": "Sin cambios en esta revisión. Carga ≈ {load} pedidos/día, {pct}% de su capacidad. Cada piso es más o menos el doble de tráfico."
+    },
+    "briefing": {
+      "kicker": "LÁMINA {n} DE {total} · {quarter} · {concept}",
+      "team": "Equipo",
+      "teamValue": "{n} ingenieros",
+      "traffic": "Tráfico",
+      "trafficValue": "~{n} pedidos/día",
+      "runway": "Runway",
+      "runwayValue": "{n} meses",
+      "rules": "Reglas",
+      "contextHint": "Mismo dilema, otro contexto:",
+      "contextToday": "Mercadito, hoy",
+      "optimizes": "OPTIMIZA",
+      "costs": "CUESTA",
+      "previewing": "trazado a lápiz en la obra ↙",
+      "variantNote": "Pesos para una {name}. La ciudad sigue siendo Mercadito; mira moverse las marcas fantasma de los indicadores.",
+      "because": "Porque",
+      "rationalePlaceholder": "una oración, con tus palabras",
+      "rationaleHint": "Una oración. El comité de revisión va a preguntar.",
+      "issue": "Emitir Rev {letter}",
+      "disagreement": "DONDE LOS EXPERTOS NO COINCIDEN"
+    },
+    "regulation": {
+      "none": "ninguna. Todavía.",
+      "light": "ligera",
+      "audited": "auditada cada año",
+      "licensed": "con licencia, supervisada"
+    },
+    "timelapse": {
+      "stamp": "TIME-LAPSE: {months} MESES",
+      "month": "MES {m}/{total}",
+      "skip": "Saltar a la revisión"
+    },
+    "issued": {
+      "kicker": "REV {letter} EMITIDA · TIME-LAPSE: {months} MESES",
+      "cloudsOne": "Una nube de revisión. Pasa el cursor para ver el supuesto detrás.",
+      "clouds": "{n} nubes de revisión. Pasa el cursor por cualquiera para ver el supuesto detrás.",
+      "news": "BITÁCORA DE OBRA",
+      "quarterShort": "T{q}",
+      "congestion": "Congestión en {name}. Iba a ser un viernes, siempre.",
+      "late": "Llegó tarde, desde la Rev {rev}: un cambio en {name}. Sigue la línea roja.",
+      "writeAdr": "Escribir el ADR",
+      "inspection": "Inspección de obra"
+    },
+    "adr": {
+      "kicker": "ADR {n} · {title}",
+      "status": "Estado: aceptado · Rev {letter} · {quarter}",
+      "nygard": "Formato de Michael Nygard, más dos líneas que él perdonaría.",
+      "fields": {
+        "context": "Contexto",
+        "decision": "Decisión",
+        "consequences": "Consecuencias",
+        "givenUp": "A qué renunciamos",
+        "revisit": "Cuándo revisarla"
+      },
+      "hints": {
+        "context": "¿Qué fuerzas estaban en juego? Equipo, tráfico, dinero, tiempo.",
+        "decision": "¿Qué decidiste, y qué tan difícil es deshacerlo?",
+        "consequences": "¿Qué mejora y qué empeora?",
+        "givenUp": "La opción que no tomaste, y lo que te habría comprado.",
+        "revisit": "Una condición que alguien pueda notar: un número, una fecha, un evento."
+      },
+      "progress": "{n} de {total} secciones redactadas",
+      "submit": "Enviar al comité de revisión"
+    },
+    "review": {
+      "kicker": "COMITÉ DE REVISIÓN · REV {letter}",
+      "title": "El comité de revisión tiene tres preguntas sobre la Rev {letter}.",
+      "answered": "Respondido en tu ADR:",
+      "press": "Aquí el comité insistiría:",
+      "senseiPending": "El sensei está leyendo tu ADR…",
+      "senseiTitle": "Notas del sensei:",
+      "standalone": "Revisión independiente: una rúbrica fija lee tu ADR. Dentro de Dojo, lo lee un sensei.",
+      "closing": "No había una respuesta correcta. Había una mejor argumentada.",
+      "readNext": "QUÉ LEER DESPUÉS",
+      "editAdr": "Corregir el ADR",
+      "restore": "¿Restaurar la obra antes de la Rev {letter} y elegir distinto?",
+      "next": "Abrir la lámina {n}",
+      "noNext": "La lámina {n} sigue en la mesa de dibujo"
+    },
+    "rewind": {
+      "kicker": "REBOBINAR · REV {letter}",
+      "title": "Restaurar la obra antes de la Rev {letter}",
+      "pick": "Elige distinto. La original queda en archivo; verás crecer ambas ciudades lado a lado.",
+      "cancel": "Dejarla como se emitió",
+      "compare": "Dibujar ambas ciudades",
+      "compareTitle": "Misma empresa, una decisión distinta",
+      "replay": "Repetir ambas",
+      "keep": "Conservar la Rev {letter} emitida",
+      "adopt": "Adoptar la alternativa",
+      "left": "Rev {letter} · como se emitió",
+      "right": "Rev {letter}′ · alternativa"
+    },
+    "cover": {
+      "kicker": "LÁMINA 0 · PORTADA · JUEGO DE PLANOS PARA MERCADITO",
+      "title": "It Depends",
+      "subtitle": "Un curso de decisiones de arquitectura, dibujado como una ciudad que crece durante tres años.",
+      "opening": "Lámina 1 de 8. T1, Año 1. Tres ingenieros, una base de datos, cero arrepentimientos. Por ahora.",
+      "howTo": "Cada lámina es un trimestre en la vida de la empresa. Pasa el cursor por una opción para verla trazada a lápiz, escribe una oración de por qué, y mira llegar las consecuencias, algunas tarde.",
+      "newCampaign": "Nueva campaña",
+      "continue": "Continuar: lámina {n}",
+      "begin": "Abrir la lámina 1",
+      "confirmReset": "¿Romper todas las revisiones y empezar una campaña nueva?",
+      "confirmNo": "Conservar mis planos",
+      "confirmYes": "Sí, campaña nueva"
+    },
+    "titleBlock": {
+      "project": "MERCADITO · PLANO DEL PREDIO DE LA PLATAFORMA",
+      "sheet": "LÁMINA",
+      "sheetOf": "{n} DE {total}",
+      "quarter": "TRIMESTRE",
+      "language": "IDIOMA",
+      "rev": "REV",
+      "issued": "EMITIDA",
+      "description": "DESCRIPCIÓN · ADR",
+      "empty": "Sin revisiones emitidas. La obra te está esperando.",
+      "restoreHint": "Restaurar la Rev {letter} y elegir distinto",
+      "footer": "DIBUJÓ: TÚ · REVISÓ: COMITÉ DE REVISIÓN",
+      "newCampaign": "NUEVA CAMPAÑA"
+    },
+    "quarterShort": "T{q} A{y}"
+  }
+}

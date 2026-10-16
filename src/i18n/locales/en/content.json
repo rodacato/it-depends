@@ -12,16 +12,46 @@
     "vendor": "vendor · off-site"
   },
   "components": {
-    "mercadito-app": { "name": "mercadito-app", "role": "monolith" },
-    "shared-postgres": { "name": "shared Postgres", "role": "one database for everything" },
-    "hosted-checkout": { "name": "hosted checkout", "role": "vendor's payment page" },
-    "payments-module": { "name": "payments module", "role": "PaymentsPort, one adapter" },
-    "card-processor": { "name": "card processor", "role": "vendor API" },
-    "payments-service": { "name": "payments-service", "role": "own service" },
-    "ledger-db": { "name": "ledger DB", "role": "payments' own database" },
-    "payment-events": { "name": "payment-events queue", "role": "async hand-off" },
-    "card-network": { "name": "card network", "role": "direct acquirer link" },
-    "clients": { "name": "web + mobile clients", "role": "the outside world" }
+    "mercadito-app": {
+      "name": "mercadito-app",
+      "role": "monolith"
+    },
+    "shared-postgres": {
+      "name": "shared Postgres",
+      "role": "one database for everything"
+    },
+    "hosted-checkout": {
+      "name": "hosted checkout",
+      "role": "vendor's payment page"
+    },
+    "payments-module": {
+      "name": "payments module",
+      "role": "PaymentsPort, one adapter"
+    },
+    "card-processor": {
+      "name": "card processor",
+      "role": "vendor API"
+    },
+    "payments-service": {
+      "name": "payments-service",
+      "role": "own service"
+    },
+    "ledger-db": {
+      "name": "ledger DB",
+      "role": "payments' own database"
+    },
+    "payment-events": {
+      "name": "payment-events queue",
+      "role": "async hand-off"
+    },
+    "card-network": {
+      "name": "card network",
+      "role": "direct acquirer link"
+    },
+    "clients": {
+      "name": "web + mobile clients",
+      "role": "the outside world"
+    }
   },
   "districts": {
     "storefront": "storefront",
@@ -93,6 +123,7 @@
   },
   "chapters": {
     "reversibility": {
+      "short": "REVERSIBILITY",
       "title": "Checkout needs to take money",
       "concept": "Reversibility: one-way and two-way doors, and the last responsible moment.",
       "voice": "Three engineers, one database, zero regrets. So far.",

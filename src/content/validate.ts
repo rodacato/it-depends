@@ -69,7 +69,7 @@ export function checkCampaign(campaign: Campaign, locales: LocaleBundle[]): stri
     if (ch.quarter + ch.timelapseQuarters > company.totalQuarters) problems.push(`${where}: time-lapse runs past the campaign`);
     previousEnd = ch.quarter + ch.timelapseQuarters;
     const base = `chapters.${ch.id}`;
-    for (const k of ['title', 'concept', 'voice', 'dilemma', 'readNext']) requireText(`${base}.${k}`, where);
+    for (const k of ['title', 'short', 'concept', 'voice', 'briefing', 'dilemma', 'disagreement', 'readNext']) requireText(`${base}.${k}`, where);
     requireSources(ch.readNext, `${where} readNext`);
     const variantIds = new Set(ch.contextVariants.map((v) => v.id));
     for (const v of ch.contextVariants) requireText(`${base}.variants.${v.id}`, where);
