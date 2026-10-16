@@ -24,7 +24,6 @@ export function useCamera(target: Camera, reduced: boolean): { camera: Camera; a
   useEffect(() => {
     if (reduced) {
       current.current = target;
-      setCamera(target);
       return;
     }
     from.current = current.current;
@@ -40,6 +39,7 @@ export function useCamera(target: Camera, reduced: boolean): { camera: Camera; a
     frame = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(frame);
   }, [target, reduced]);
-  const arrived = Math.abs(camera.scale - target.scale) < 1e-3 && Math.abs(camera.x - target.x) < 0.5 && Math.abs(camera.y - target.y) < 0.5;
-  return { camera, arrived };
+  const shown = reduced ? target : camera;
+  const arrived = Math.abs(shown.scale - target.scale) < 1e-3 && Math.abs(shown.x - target.x) < 0.5 && Math.abs(shown.y - target.y) < 0.5;
+  return { camera: shown, arrived };
 }
