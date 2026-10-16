@@ -1,0 +1,110 @@
+{
+  "id": "build-vs-buy",
+  "number": 6,
+  "quarter": 8,
+  "timelapseQuarters": 1,
+  "dilemma": {
+    "id": "stop-the-fraud",
+    "options": [
+      {
+        "id": "build-risk",
+        "topology": [
+          { "op": "addDistrict", "district": { "id": "risk" } },
+          { "op": "addComponent", "component": { "id": "fraud-service", "kind": "service", "district": "risk", "loadShare": 0.6, "capacity": 9000 } },
+          { "op": "addComponent", "component": { "id": "risk-db", "kind": "database", "district": "risk", "loadShare": 0.6, "capacity": 12000 } },
+          { "op": "addConnection", "connection": { "id": "fraud-check", "kind": "road", "from": "mercadito-app", "to": "fraud-service" } },
+          { "op": "addConnection", "connection": { "id": "risk-data", "kind": "pipe", "from": "fraud-service", "to": "risk-db" } }
+        ],
+        "effects": [
+          { "id": "build-takes-a-team", "target": { "force": "velocity" }, "delta": -10, "byVariant": { "regulated-fintech": -4 }, "timing": { "kind": "immediate" }, "anchor": "fraud-service", "assumption": "assumptions.buildVsBuy.buildTakesATeam", "sources": ["wardley-maps", "model"] },
+          { "id": "build-new-district", "target": { "force": "complexity" }, "delta": 6, "byVariant": { "regulated-fintech": 3 }, "timing": { "kind": "immediate" }, "anchor": "risk-db", "assumption": "assumptions.buildVsBuy.buildNewDistrict", "sources": ["hard-parts"] },
+          { "id": "build-salaries", "target": { "force": "cost" }, "delta": 10, "byVariant": { "regulated-fintech": 4 }, "timing": { "kind": "immediate" }, "anchor": "fraud-service", "assumption": "assumptions.buildVsBuy.buildSalaries", "sources": ["model"] },
+          { "id": "build-new-domain", "target": { "force": "cognitiveLoad" }, "delta": 8, "byVariant": { "regulated-fintech": 3 }, "timing": { "kind": "immediate" }, "anchor": "fraud-service", "assumption": "assumptions.buildVsBuy.buildNewDomain", "sources": ["team-topologies"] },
+          { "id": "build-cold-start", "target": { "force": "reliability" }, "delta": -4, "timing": { "kind": "immediate" }, "anchor": "risk-db", "assumption": "assumptions.buildVsBuy.buildColdStart", "sources": ["wardley-maps", "model"] },
+          { "id": "build-learns-the-marketplace", "target": { "force": "reliability" }, "delta": 9, "timing": { "kind": "delayed", "afterQuarters": 2 }, "anchor": "fraud-service", "assumption": "assumptions.buildVsBuy.buildLearnsMarketplace", "sources": ["wardley-maps", "model"] },
+          { "id": "build-evidence-own-controls", "target": { "force": "cost" }, "delta": 6, "byVariant": { "regulated-fintech": 2 }, "timing": { "kind": "conditional", "eventId": "audit-requirement" }, "anchor": "risk-db", "assumption": "assumptions.buildVsBuy.buildEvidenceOwnControls", "sources": ["pci-dss", "model"] },
+          { "id": "build-no-invoice-to-reprice", "target": { "force": "cost" }, "delta": -2, "timing": { "kind": "conditional", "eventId": "vendor-price-change" }, "anchor": "fraud-service", "assumption": "assumptions.buildVsBuy.buildNoInvoiceToReprice", "sources": ["model"] }
+        ]
+      },
+      {
+        "id": "buy-scoring",
+        "topology": [
+          { "op": "addComponent", "component": { "id": "fraud-vendor", "kind": "vendor", "loadShare": 0.6, "capacity": 100000 } },
+          { "op": "addConnection", "connection": { "id": "fraud-api", "kind": "road", "from": "mercadito-app", "to": "fraud-vendor" } }
+        ],
+        "effects": [
+          { "id": "buy-live-in-weeks", "target": { "force": "velocity" }, "delta": 5, "timing": { "kind": "immediate" }, "anchor": "fraud-vendor", "assumption": "assumptions.buildVsBuy.buyLiveInWeeks", "sources": ["wardley-maps", "boring-tech"] },
+          { "id": "buy-consortium-data", "target": { "force": "reliability" }, "delta": 6, "timing": { "kind": "immediate" }, "anchor": "fraud-vendor", "assumption": "assumptions.buildVsBuy.buyConsortiumData", "sources": ["wardley-maps"] },
+          { "id": "buy-checkout-dependency", "target": { "force": "complexity" }, "delta": 2, "timing": { "kind": "immediate" }, "anchor": "fraud-vendor", "assumption": "assumptions.buildVsBuy.buyCheckoutDependency", "sources": ["hard-parts"] },
+          { "id": "buy-black-box", "target": { "force": "cognitiveLoad" }, "delta": 2, "timing": { "kind": "immediate" }, "anchor": "fraud-vendor", "assumption": "assumptions.buildVsBuy.buyBlackBox", "sources": ["apsd"] },
+          { "id": "buy-fee-per-order", "target": { "force": "cost" }, "delta": 8, "byVariant": { "regulated-fintech": 14 }, "timing": { "kind": "delayed", "afterQuarters": 1 }, "anchor": "fraud-vendor", "assumption": "assumptions.buildVsBuy.buyFeePerOrder", "sources": ["model"] },
+          { "id": "buy-locked-in-at-renewal", "target": { "force": "cost" }, "delta": 8, "byVariant": { "regulated-fintech": 12 }, "timing": { "kind": "conditional", "eventId": "vendor-price-change" }, "anchor": "fraud-vendor", "assumption": "assumptions.buildVsBuy.buyLockedInAtRenewal", "sources": ["wardley-maps", "model"] },
+          { "id": "buy-attestation-helps", "target": { "force": "cost" }, "delta": 2, "timing": { "kind": "conditional", "eventId": "audit-requirement" }, "anchor": "fraud-vendor", "assumption": "assumptions.buildVsBuy.buyAttestationHelps", "sources": ["pci-dss", "model"] }
+        ]
+      },
+      {
+        "id": "hybrid-rules",
+        "topology": [
+          { "op": "addDistrict", "district": { "id": "risk" } },
+          { "op": "addComponent", "component": { "id": "fraud-rules", "kind": "module", "district": "risk", "loadShare": 0.6, "capacity": 9000 } },
+          { "op": "addComponent", "component": { "id": "fraud-vendor", "kind": "vendor", "loadShare": 0.6, "capacity": 100000 } },
+          { "op": "addConnection", "connection": { "id": "fraud-check", "kind": "road", "from": "mercadito-app", "to": "fraud-rules" } },
+          { "op": "addConnection", "connection": { "id": "fraud-api", "kind": "road", "from": "fraud-rules", "to": "fraud-vendor" } }
+        ],
+        "effects": [
+          { "id": "hybrid-rules-take-a-pair", "target": { "force": "velocity" }, "delta": -3, "timing": { "kind": "immediate" }, "anchor": "fraud-rules", "assumption": "assumptions.buildVsBuy.hybridRulesTakeAPair", "sources": ["model"] },
+          { "id": "hybrid-score-plus-local", "target": { "force": "reliability" }, "delta": 7, "timing": { "kind": "immediate" }, "anchor": "fraud-rules", "assumption": "assumptions.buildVsBuy.hybridScorePlusLocal", "sources": ["wardley-maps"] },
+          { "id": "hybrid-seam", "target": { "force": "complexity" }, "delta": 5, "timing": { "kind": "immediate" }, "anchor": "fraud-rules", "assumption": "assumptions.buildVsBuy.hybridSeam", "sources": ["hard-parts", "apsd"] },
+          { "id": "hybrid-two-things-to-run", "target": { "force": "cognitiveLoad" }, "delta": 6, "byVariant": { "regulated-fintech": 2 }, "timing": { "kind": "immediate" }, "anchor": "fraud-rules", "assumption": "assumptions.buildVsBuy.hybridTwoThingsToRun", "sources": ["team-topologies"] },
+          { "id": "hybrid-filtered-fee", "target": { "force": "cost" }, "delta": 5, "byVariant": { "regulated-fintech": 9 }, "timing": { "kind": "delayed", "afterQuarters": 1 }, "anchor": "fraud-vendor", "assumption": "assumptions.buildVsBuy.hybridFilteredFee", "sources": ["model"] },
+          { "id": "hybrid-rules-compound", "target": { "force": "velocity" }, "delta": 3, "timing": { "kind": "delayed", "afterQuarters": 2 }, "anchor": "fraud-rules", "assumption": "assumptions.buildVsBuy.hybridRulesCompound", "sources": ["wardley-maps", "evolutionary"] },
+          { "id": "hybrid-leverage-at-renewal", "target": { "force": "cost" }, "delta": 4, "timing": { "kind": "conditional", "eventId": "vendor-price-change" }, "anchor": "fraud-vendor", "assumption": "assumptions.buildVsBuy.hybridLeverageAtRenewal", "sources": ["wardley-maps", "model"] },
+          { "id": "hybrid-two-control-sets", "target": { "force": "cost" }, "delta": 4, "timing": { "kind": "conditional", "eventId": "audit-requirement" }, "anchor": "fraud-rules", "assumption": "assumptions.buildVsBuy.hybridTwoControlSets", "sources": ["pci-dss", "model"] }
+        ]
+      }
+    ]
+  },
+  "events": [
+    {
+      "id": "vendor-price-change",
+      "trigger": { "kind": "scheduled", "quarter": 9 },
+      "effects": [
+        { "id": "vendors-reprice", "target": { "force": "cost" }, "delta": 2, "timing": { "kind": "immediate" }, "assumption": "assumptions.buildVsBuy.vendorsReprice", "sources": ["wardley-maps", "model"] }
+      ]
+    },
+    {
+      "id": "audit-requirement",
+      "trigger": { "kind": "scheduled", "quarter": 9 },
+      "regulation": "audited",
+      "anchor": "mercadito-app",
+      "effects": [
+        { "id": "audit-fieldwork", "target": { "force": "cost" }, "delta": 3, "timing": { "kind": "immediate" }, "anchor": "mercadito-app", "assumption": "assumptions.buildVsBuy.auditFieldwork", "sources": ["pci-dss", "model"] },
+        { "id": "audit-change-control", "target": { "force": "velocity" }, "delta": -2, "timing": { "kind": "immediate" }, "anchor": "mercadito-app", "assumption": "assumptions.buildVsBuy.auditChangeControl", "sources": ["accelerate", "model"] }
+      ]
+    }
+  ],
+  "inspections": [{ "id": "chargeback-spreadsheet", "atOffset": 1, "anchor": "mercadito-app", "minStress": 0 }],
+  "review": {
+    "questions": [
+      { "id": "what-differentiates", "criteria": ["names-evolution", "grounded-context"] },
+      { "id": "hidden-costs", "criteria": ["names-hidden-cost", "names-given-up"] },
+      { "id": "when-switch", "criteria": ["revisit-trigger"] }
+    ]
+  },
+  "rubric": [
+    { "id": "grounded-context", "field": "context", "check": { "kind": "mentionsAny", "termsKey": "terms.context" } },
+    { "id": "names-evolution", "field": "decision", "check": { "kind": "mentionsAny", "termsKey": "terms.buildVsBuy.evolution" } },
+    { "id": "names-hidden-cost", "field": "consequences", "check": { "kind": "mentionsAny", "termsKey": "terms.buildVsBuy.hiddenCost" } },
+    { "id": "names-given-up", "field": "givenUp", "check": { "kind": "minWords", "n": 6 } },
+    { "id": "revisit-trigger", "field": "revisit", "check": { "kind": "hasCondition" } }
+  ],
+  "readNext": ["wardley-maps", "boring-tech", "team-topologies"],
+  "contextVariants": [
+    {
+      "id": "regulated-fintech",
+      "context": { "teamSize": 80, "ordersPerDay": 20000, "runwayMonths": 36, "regulation": "licensed" },
+      "forces": { "velocity": 40, "complexity": 60, "cost": 58, "reliability": 70, "cognitiveLoad": 62 },
+      "capacityScale": 2
+    }
+  ]
+}

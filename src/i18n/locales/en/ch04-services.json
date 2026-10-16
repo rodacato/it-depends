@@ -1,0 +1,113 @@
+{
+  "chapters": {
+    "services": {
+      "short": "SERVICES",
+      "title": "Twelve engineers, one deploy",
+      "concept": "Modular monolith or services: team size, Conway's law, and when to split.",
+      "voice": "Three teams, one main branch, and a merge queue with opinions.",
+      "briefing": "Twelve engineers in three loose teams now share one codebase and one deploy. Orders run to a couple of thousand a day, and every Thursday someone's release waits on someone else's migration. The org chart has started drawing the architecture; the question is whether you hold the pencil.",
+      "dilemma": "Do you draw harder lines inside the monolith, cut one piece out, or cut it into many?",
+      "disagreement": "Experts disagree here. Fowler argues for starting with a monolith and splitting once the boundaries have proven themselves; Tilkov argues that a monolith rarely splits cleanly later, so you should design the pieces from the start. Both have case studies, and both say team size changes the answer.",
+      "readNext": "Read Fowler's MonolithFirst and Tilkov's reply side by side, then the Team Topologies chapters on cognitive load and Conway's law. The disagreement is the lesson.",
+      "variants": {
+        "regulated-fintech": "80-engineer regulated fintech"
+      },
+      "options": {
+        "modular-monolith": {
+          "title": "Modular monolith: enforce boundaries inside mercadito-app",
+          "optimizes": "One deploy, one database, and boundaries you can still move cheaply.",
+          "costs": "A quarter of refactoring before it pays; rules that hold only as long as people keep them."
+        },
+        "orders-service": {
+          "title": "Split orders into its own service, owned by one team",
+          "optimizes": "One team ships orders on its own schedule; the architecture follows the org chart on purpose.",
+          "costs": "A network call where a function call was, a queue to run, and a slower quarter while it is cut out."
+        },
+        "microservices": {
+          "title": "Microservices: orders, catalog and notifications, all at once",
+          "optimizes": "Every team its own deployable, eventually.",
+          "costs": "Four systems for twelve people, the microservice premium paid up front, and a reliability dip while everyone learns."
+        }
+      },
+      "events": {
+        "key-engineer-leaves": "Monday, 09:30. The engineer who knew why orders work the way they do hands in notice. Two weeks."
+      },
+      "inspections": {
+        "everything-ends-at-postgres": "Site inspection: whatever the boxes say, every pipe on site still ends at the same Postgres. The boundary is drawn above ground only."
+      },
+      "review": {
+        "who-owns-what": "Which team owns which part of the system after this decision, and does the drawing match the org chart?",
+        "what-it-costs": "What got worse, and what did you give up to get the rest?",
+        "when-split": "What would tell you it is time to split further, or to merge back?"
+      },
+      "rubric": {
+        "grounded-context": "The context names the constraints that actually shaped the choice (team size, traffic, runway, deploy pain).",
+        "names-ownership": "The decision says who owns what: teams, boundaries, modules or services.",
+        "names-tradeoff": "The consequences name at least one force that got worse, not only the ones that got better.",
+        "names-given-up": "What was given up is written down in a full sentence.",
+        "revisit-trigger": "The revisit trigger is a condition someone could notice, such as a team count or a deploy queue, not a hope."
+      }
+    }
+  },
+  "assumptions": {
+    "services": {
+      "mmBoundaryWork": "Naming modules and enforcing their boundaries with a dependency checker takes about a third of a quarter from a team that would otherwise ship features.",
+      "mmFewerCollisions": "Once orders code stops reaching into catalog tables, teams step on each other measurably less: fewer merge conflicts and fewer cross-team review requests within a quarter.",
+      "mmClearSeams": "Explicit module boundaries remove some accidental coupling that nobody intended in the first place.",
+      "mmDiscipline": "Module boundaries inside one codebase hold only while people respect them; every engineer has to know the rules, and review has to enforce them. At 80 engineers that is a full-time job.",
+      "mmOneDeploy": "One deployable means one thing to monitor and roll back. With twelve people that is simpler; with eighty, one bad change from any team takes everything down with it.",
+      "mmBiggerBox": "Running the monolith on bigger machines to absorb the load costs more each month, but less than operating new services.",
+      "mmReadableWithoutThem": "When a key engineer leaves, the knowledge lives in one codebase that others already read daily. It still hurts, a little.",
+      "splitExtraction": "Cutting orders out of the monolith, strangler-style, costs most of a quarter of the owning team's time before the new service carries real traffic.",
+      "splitTeamOwnsIt": "A team that owns one service end to end deploys it independently and more often, which shows up in lead time within a quarter. The bigger the company, the bigger the gain.",
+      "splitNetwork": "A network call, a queue and a contract replace what used to be a function call. Retries, timeouts and versioning arrive with it.",
+      "splitInfrastructure": "A new service needs its own pipeline, environments, dashboards and on-call rotation, paid every month.",
+      "splitNewFailures": "A new service adds new ways to fail: timeouts, a backed-up queue, a message handled twice. At larger scale, the same split isolates failures instead.",
+      "splitTwoSystems": "Twelve people now carry two systems and the contract between them. At 80 engineers it runs the other way: each team carries one service instead of the whole monolith.",
+      "splitSharedDatabase": "The service still writes to the shared Postgres. Two deployables changing one schema is coupling the boxes do not show.",
+      "splitContractWalksOut": "When the engineer who designed the orders contract leaves, the contract stays and the reasons behind it do not. The new owners relearn it from incidents.",
+      "msBigBang": "Splitting three services at once with twelve engineers stops most feature work for the quarter.",
+      "msAutonomy": "Independent deploys raise delivery speed once teams are large and stable enough to own a service each; with three teams and four services, the gain is small.",
+      "msDistributed": "Four deployables, a queue and a shared database: distributed tracing, contracts and partial failures become everyday work.",
+      "msPlatform": "Each service needs a pipeline, environments, monitoring and on-call. Most of that platform is paid before it pays back.",
+      "msReliabilityDip": "During the first quarter of running several services, incidents rise while teams learn which calls can fail and how.",
+      "msSystemsPerHead": "Four systems across twelve people means every engineer carries more than one service in their head, plus the contracts between them.",
+      "msRunway": "The extra infrastructure and the slowed delivery cost about a month of runway at Year 2 burn.",
+      "msOrphanedService": "With more systems than teams, losing one key engineer leaves a service nobody fully understands. The next incident there takes longer to fix.",
+      "tacitKnowledgeLeaves": "Losing a senior engineer with tacit knowledge of orders costs the team about a quarter of ramp-up for whoever inherits the work.",
+      "modularReservoirDry": "Every order still lives in the shared database; boundaries in the code do not split the load on the data.",
+      "sharedDbCoupling": "A separate service on a shared database is a distributed monolith: the outage is shared, and so is the investigation."
+    }
+  },
+  "components": {
+    "orders-module": {
+      "name": "orders module",
+      "role": "enforced boundary, same deploy"
+    },
+    "orders-service": {
+      "name": "orders-service",
+      "role": "owned by one team"
+    },
+    "orders-queue": {
+      "name": "orders queue",
+      "role": "order events"
+    },
+    "catalog-service": {
+      "name": "catalog-service",
+      "role": "products and listings"
+    },
+    "notifications-service": {
+      "name": "notifications-service",
+      "role": "emails and pushes"
+    }
+  },
+  "districts": {
+    "orders": "orders",
+    "catalog": "catalog"
+  },
+  "terms": {
+    "services": {
+      "ownership": "team, owner, own, conway, boundary, boundaries, module, service, deploy, split, extract, monolith, contract, org chart, responsib"
+    }
+  }
+}

@@ -1,0 +1,98 @@
+{
+  "components": {
+    "pricing-engine": {
+      "name": "pricing engine",
+      "role": "configurable rules, one DSL"
+    },
+    "catalog-module": {
+      "name": "catalog module",
+      "role": "variants, bundles, regions; one interface"
+    },
+    "catalog-saas": {
+      "name": "catalog SaaS",
+      "role": "vendor PIM, their data model"
+    }
+  },
+  "assumptions": {
+    "complexity": {
+      "engineConfigNotCode": "Once the engine exists, variants, bundles and regional prices become rows of configuration; the next pricing request ships without a deploy.",
+      "engineAccidental": "A rule language, its evaluator, precedence and an admin screen are complexity the business never asked for. Three real cases did not need a general solution.",
+      "engineBuildTime": "Building the engine takes about two of five engineers for most of the quarter.",
+      "engineRuleCollisions": "Within a quarter, two rules match the same product and the cheaper one wins by accident. Wrong prices reach real checkouts before anyone notices.",
+      "engineNobodyReadsRules": "Six months on, the rules table is the real pricing code, and nobody can say what a given product will cost without running it.",
+      "engineHiresLearnDsl": "After the seed round, every new hire has to learn an in-house rule language that exists nowhere else and has no debugger.",
+      "catalogSlowerNow": "Modelling variants, bundles and regional prices explicitly takes most of the quarter; sellers wait about six weeks longer than with a SaaS.",
+      "catalogEssentialOnly": "Three cases written as three cases add only the complexity the problem already had.",
+      "catalogEngineeringTime": "The quarter spent on the module is roughly the same salary spent as the engine; it just buys less flexibility.",
+      "catalogDeepInterface": "One small interface (price this cart for this region) hides three cases; callers learn one call, not three models.",
+      "catalogCasesTested": "Explicit cases are easy to test one by one; pricing regressions drop within a quarter.",
+      "catalogCheapToChange": "Because the cases are named in code, changing one of them is a local edit. Two quarters on, pricing changes are faster than in either alternative.",
+      "catalogFourthCase": "With seed money comes a sales team, and sales promises a fourth case (wholesale tiers) that the module does not have yet. Someone has to write it.",
+      "saasShipsNow": "A catalog SaaS supports variants and bundles out of the box; integration is a few weeks, not a quarter.",
+      "saasSubscription": "The subscription is priced per SKU and per seat; at a few hundred orders a day it is a visible line on the bill.",
+      "saasAnnualContract": "The vendor wants the first year paid up front, about a month of runway.",
+      "saasTheirModel": "The team stops owning the catalog model; sellers configure products in the vendor's screens, not in tickets to engineering.",
+      "saasGlueAndLockIn": "Sync jobs, webhooks and a translation layer between their product model and your orders. Every month of data in their format makes leaving more expensive.",
+      "saasStalePrices": "Prices live in two places. Within a quarter, a webhook is missed and a seller's new price shows in the vendor's screen but not at checkout.",
+      "saasPriceChange": "When the vendor reprices, a commodity becomes a negotiation you have no leverage in: the bill rises and migrating costs more than paying.",
+      "seedRunway": "The seed round closes and adds about eighteen months of runway at the current burn.",
+      "saasBlackFridayLimits": "The catalog vendor rate-limits at peak; product pages degrade exactly when traffic is highest.",
+      "engineKeyEngineer": "The in-house rule language was tacit knowledge; the person who leaves took the grammar with them."
+    }
+  },
+  "terms": {
+    "complexity": {
+      "essence": "essential, essence, accidental, abstraction, deep, shallow, interface, generic, general, configur, rule, engine, case, variant, bundle, regional, model, hide, hiding, simple, flexib, vendor, lock-in, buy"
+    }
+  },
+  "chapters": {
+    "complexity": {
+      "short": "COMPLEXITY",
+      "title": "Sellers want variants, bundles and regional prices",
+      "concept": "Essential vs accidental complexity, and the real price of each abstraction.",
+      "voice": "Every abstraction is a loan. Some come with a fair rate.",
+      "briefing": "Q3 of Year 1. Five engineers, a few hundred orders a day, and a stack of seller requests: sizes and colours, three-for-two bundles, a different price in Monterrey. The problem has three real cases. How many the solution has is up to you.",
+      "dilemma": "How much of this complexity belongs to the problem, and how much are you about to add?",
+      "disagreement": "Experts disagree here. Some say three cases are the moment to generalise, before the fourth arrives; others say the right abstraction only shows itself after the cases, and a deep module beats a flexible one. Brooks would ask which part is essence and which part is yours.",
+      "readNext": "Read Brooks on essence and accident, then Ousterhout's chapter on deep modules, then place your catalog on a Wardley map and ask whether it has become a commodity.",
+      "variants": {
+        "regulated-fintech": "80-engineer regulated fintech"
+      },
+      "options": {
+        "pricing-engine": {
+          "title": "A configurable pricing and rules engine",
+          "optimizes": "Any future pricing idea becomes configuration, not a deploy.",
+          "costs": "A rule language nobody asked for; in six months nobody can read the rules."
+        },
+        "catalog-module": {
+          "title": "Model the three cases in a deep catalog module",
+          "optimizes": "Only the essential complexity; cheap to change once it exists.",
+          "costs": "Most of the quarter; sellers wait, and the fourth case is code, not config."
+        },
+        "catalog-saas": {
+          "title": "Buy a catalog SaaS (PIM)",
+          "optimizes": "Variants and bundles this month, built by someone else.",
+          "costs": "A subscription, prices living in two places, and a data model that is theirs."
+        }
+      },
+      "events": {
+        "seed-round": "Monday, 09:00. The seed round has closed. Eighteen more months, and a board that would like to see them used."
+      },
+      "inspections": {
+        "three-ways-to-price": "Site inspection: asked which price a bundle gets in Monterrey, three engineers gave two answers. Not a bug yet. A question, written in the margin."
+      },
+      "review": {
+        "essential-or-accidental": "Which part of what you built is essential to selling things, and which part did you add?",
+        "who-pays-later": "What did you give up, and who pays for it a year from now?",
+        "when-revisit": "What would make you revisit this, and how would you know?"
+      },
+      "rubric": {
+        "grounded-context": "The context names the constraints that actually shaped the choice (team, orders, runway, seller requests).",
+        "names-essence": "The decision separates the problem's own complexity from the complexity the solution adds.",
+        "names-tradeoff": "The consequences name at least one force that got worse, not only the ones that got better.",
+        "names-given-up": "What was given up is written down in a full sentence.",
+        "revisit-trigger": "The revisit trigger is a condition someone could notice, not a hope."
+      }
+    }
+  }
+}

@@ -1,0 +1,610 @@
+{
+  "id": "technology",
+  "number": 3,
+  "quarter": 3,
+  "timelapseQuarters": 2,
+  "dilemma": {
+    "id": "fix-search",
+    "options": [
+      {
+        "id": "postgres-fts",
+        "topology": [
+          {
+            "op": "updateComponent",
+            "id": "shared-postgres",
+            "set": {
+              "capacity": 2600
+            }
+          }
+        ],
+        "effects": [
+          {
+            "id": "fts-ships-in-days",
+            "target": {
+              "force": "velocity"
+            },
+            "delta": 3,
+            "timing": {
+              "kind": "immediate"
+            },
+            "anchor": "shared-postgres",
+            "assumption": "assumptions.technology.ftsShipsInDays",
+            "sources": [
+              "boring-tech"
+            ]
+          },
+          {
+            "id": "fts-nothing-new",
+            "target": {
+              "force": "cognitiveLoad"
+            },
+            "delta": 1,
+            "timing": {
+              "kind": "immediate"
+            },
+            "anchor": "shared-postgres",
+            "assumption": "assumptions.technology.ftsNothingNew",
+            "sources": [
+              "boring-tech",
+              "team-topologies"
+            ]
+          },
+          {
+            "id": "fts-bigger-instance",
+            "target": {
+              "force": "cost"
+            },
+            "delta": 3,
+            "byVariant": {
+              "regulated-fintech": 1
+            },
+            "timing": {
+              "kind": "immediate"
+            },
+            "anchor": "shared-postgres",
+            "assumption": "assumptions.technology.ftsBiggerInstance",
+            "sources": [
+              "model"
+            ]
+          },
+          {
+            "id": "fts-relevance-ceiling",
+            "target": {
+              "force": "velocity"
+            },
+            "delta": -4,
+            "timing": {
+              "kind": "delayed",
+              "afterQuarters": 2
+            },
+            "anchor": "shared-postgres",
+            "assumption": "assumptions.technology.ftsRelevanceCeiling",
+            "sources": [
+              "boring-tech",
+              "model"
+            ]
+          },
+          {
+            "id": "fts-shared-blast-radius",
+            "target": {
+              "force": "reliability"
+            },
+            "delta": -4,
+            "timing": {
+              "kind": "conditional",
+              "eventId": "black-friday"
+            },
+            "anchor": "shared-postgres",
+            "assumption": "assumptions.technology.ftsSharedBlastRadius",
+            "sources": [
+              "kleppmann-ddia",
+              "model"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "search-cluster",
+        "topology": [
+          {
+            "op": "addComponent",
+            "component": {
+              "id": "search-cluster",
+              "kind": "database",
+              "district": "storefront",
+              "loadShare": 1,
+              "capacity": 6000
+            }
+          },
+          {
+            "op": "addConnection",
+            "connection": {
+              "id": "search-queries",
+              "kind": "pipe",
+              "from": "mercadito-app",
+              "to": "search-cluster"
+            }
+          },
+          {
+            "op": "updateComponent",
+            "id": "mercadito-app",
+            "set": {
+              "capacity": 1000
+            }
+          }
+        ],
+        "effects": [
+          {
+            "id": "es-setup-quarter",
+            "target": {
+              "force": "velocity"
+            },
+            "delta": -5,
+            "byVariant": {
+              "regulated-fintech": -2
+            },
+            "timing": {
+              "kind": "immediate"
+            },
+            "anchor": "search-cluster",
+            "assumption": "assumptions.technology.esSetupQuarter",
+            "sources": [
+              "boring-tech",
+              "model"
+            ]
+          },
+          {
+            "id": "es-token-spent",
+            "target": {
+              "force": "cognitiveLoad"
+            },
+            "delta": 6,
+            "byVariant": {
+              "regulated-fintech": 2
+            },
+            "timing": {
+              "kind": "immediate"
+            },
+            "anchor": "search-cluster",
+            "assumption": "assumptions.technology.esTokenSpent",
+            "sources": [
+              "boring-tech",
+              "team-topologies"
+            ]
+          },
+          {
+            "id": "es-two-truths",
+            "target": {
+              "force": "complexity"
+            },
+            "delta": 5,
+            "timing": {
+              "kind": "immediate"
+            },
+            "anchor": "search-cluster",
+            "assumption": "assumptions.technology.esTwoTruths",
+            "sources": [
+              "kleppmann-ddia"
+            ]
+          },
+          {
+            "id": "es-cluster-bill",
+            "target": {
+              "force": "cost"
+            },
+            "delta": 6,
+            "byVariant": {
+              "regulated-fintech": 2
+            },
+            "timing": {
+              "kind": "immediate"
+            },
+            "anchor": "search-cluster",
+            "assumption": "assumptions.technology.esClusterBill",
+            "sources": [
+              "model"
+            ]
+          },
+          {
+            "id": "es-holds-the-peak",
+            "target": {
+              "force": "reliability"
+            },
+            "delta": 3,
+            "timing": {
+              "kind": "conditional",
+              "eventId": "black-friday"
+            },
+            "anchor": "search-cluster",
+            "assumption": "assumptions.technology.esHoldsThePeak",
+            "sources": [
+              "kleppmann-ddia",
+              "model"
+            ]
+          },
+          {
+            "id": "es-first-reindex",
+            "target": {
+              "force": "reliability"
+            },
+            "delta": -3,
+            "timing": {
+              "kind": "delayed",
+              "afterQuarters": 2
+            },
+            "anchor": "search-cluster",
+            "assumption": "assumptions.technology.esFirstReindex",
+            "sources": [
+              "google-sre",
+              "model"
+            ]
+          },
+          {
+            "id": "search-reservoir-dry",
+            "target": {
+              "force": "reliability"
+            },
+            "delta": 2,
+            "timing": {
+              "kind": "conditional",
+              "eventId": "reservoir-dry"
+            },
+            "anchor": "search-cluster",
+            "assumption": "assumptions.technology.searchReservoirDry",
+            "sources": [
+              "kleppmann-ddia",
+              "model"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "discovery-platform",
+        "topology": [
+          {
+            "op": "addDistrict",
+            "district": {
+              "id": "discovery"
+            }
+          },
+          {
+            "op": "addComponent",
+            "component": {
+              "id": "discovery-service",
+              "kind": "service",
+              "district": "discovery",
+              "loadShare": 0.5,
+              "capacity": 600
+            }
+          },
+          {
+            "op": "addComponent",
+            "component": {
+              "id": "graph-db",
+              "kind": "database",
+              "district": "discovery",
+              "loadShare": 0.5,
+              "capacity": 2000
+            }
+          },
+          {
+            "op": "addConnection",
+            "connection": {
+              "id": "discovery-api",
+              "kind": "road",
+              "from": "mercadito-app",
+              "to": "discovery-service"
+            }
+          },
+          {
+            "op": "addConnection",
+            "connection": {
+              "id": "graph-access",
+              "kind": "pipe",
+              "from": "discovery-service",
+              "to": "graph-db"
+            }
+          },
+          {
+            "op": "updateComponent",
+            "id": "mercadito-app",
+            "set": {
+              "capacity": 850
+            }
+          }
+        ],
+        "effects": [
+          {
+            "id": "shiny-learning-curve",
+            "target": {
+              "force": "velocity"
+            },
+            "delta": -10,
+            "byVariant": {
+              "regulated-fintech": -4
+            },
+            "timing": {
+              "kind": "immediate"
+            },
+            "anchor": "discovery-service",
+            "assumption": "assumptions.technology.shinyLearningCurve",
+            "sources": [
+              "boring-tech",
+              "model"
+            ]
+          },
+          {
+            "id": "shiny-two-tokens",
+            "target": {
+              "force": "cognitiveLoad"
+            },
+            "delta": 14,
+            "byVariant": {
+              "regulated-fintech": 5
+            },
+            "timing": {
+              "kind": "immediate"
+            },
+            "anchor": "discovery-service",
+            "assumption": "assumptions.technology.shinyTwoTokens",
+            "sources": [
+              "boring-tech",
+              "team-topologies"
+            ]
+          },
+          {
+            "id": "shiny-new-runtime",
+            "target": {
+              "force": "complexity"
+            },
+            "delta": 10,
+            "byVariant": {
+              "regulated-fintech": 4
+            },
+            "timing": {
+              "kind": "immediate"
+            },
+            "anchor": "graph-db",
+            "assumption": "assumptions.technology.shinyNewRuntime",
+            "sources": [
+              "boring-tech",
+              "fsa"
+            ]
+          },
+          {
+            "id": "shiny-infra",
+            "target": {
+              "force": "cost"
+            },
+            "delta": 7,
+            "byVariant": {
+              "regulated-fintech": 2
+            },
+            "timing": {
+              "kind": "immediate"
+            },
+            "anchor": "graph-db",
+            "assumption": "assumptions.technology.shinyInfra",
+            "sources": [
+              "model"
+            ]
+          },
+          {
+            "id": "shiny-recs-lift",
+            "target": {
+              "context": "ordersPerDay"
+            },
+            "delta": 60,
+            "byVariant": {
+              "regulated-fintech": 600
+            },
+            "timing": {
+              "kind": "delayed",
+              "afterQuarters": 1
+            },
+            "anchor": "discovery-service",
+            "assumption": "assumptions.technology.shinyRecsLift",
+            "sources": [
+              "model"
+            ]
+          },
+          {
+            "id": "shiny-unknown-failures",
+            "target": {
+              "force": "reliability"
+            },
+            "delta": -5,
+            "timing": {
+              "kind": "delayed",
+              "afterQuarters": 2
+            },
+            "anchor": "graph-db",
+            "assumption": "assumptions.technology.shinyUnknownFailures",
+            "sources": [
+              "boring-tech",
+              "google-sre"
+            ]
+          },
+          {
+            "id": "shiny-bus-factor",
+            "target": {
+              "force": "velocity"
+            },
+            "delta": -15,
+            "byVariant": {
+              "regulated-fintech": -5
+            },
+            "timing": {
+              "kind": "conditional",
+              "eventId": "key-engineer-leaves"
+            },
+            "anchor": "discovery-service",
+            "assumption": "assumptions.technology.shinyBusFactor",
+            "sources": [
+              "boring-tech",
+              "team-topologies",
+              "model"
+            ]
+          },
+          {
+            "id": "discovery-licence-audit",
+            "target": {
+              "force": "cost"
+            },
+            "delta": 3,
+            "timing": {
+              "kind": "conditional",
+              "eventId": "regulator-licence"
+            },
+            "anchor": "graph-db",
+            "assumption": "assumptions.technology.discoveryLicenceAudit",
+            "sources": [
+              "boring-tech",
+              "model"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "events": [
+    {
+      "id": "black-friday",
+      "trigger": {
+        "kind": "scheduled",
+        "quarter": 4
+      },
+      "anchor": "mercadito-app",
+      "effects": [
+        {
+          "id": "black-friday-buyers",
+          "target": {
+            "context": "ordersPerDay"
+          },
+          "delta": 250,
+          "timing": {
+            "kind": "immediate"
+          },
+          "anchor": "mercadito-app",
+          "assumption": "assumptions.technology.blackFridayBuyers",
+          "sources": [
+            "model"
+          ]
+        },
+        {
+          "id": "black-friday-freeze",
+          "target": {
+            "force": "velocity"
+          },
+          "delta": -2,
+          "timing": {
+            "kind": "immediate"
+          },
+          "anchor": "mercadito-app",
+          "assumption": "assumptions.technology.blackFridayFreeze",
+          "sources": [
+            "google-sre",
+            "model"
+          ]
+        }
+      ]
+    }
+  ],
+  "inspections": [
+    {
+      "id": "postgres-headroom",
+      "atOffset": 2,
+      "anchor": "shared-postgres",
+      "minStress": 0.45
+    }
+  ],
+  "review": {
+    "questions": [
+      {
+        "id": "which-token",
+        "criteria": [
+          "names-tokens"
+        ]
+      },
+      {
+        "id": "who-runs-it",
+        "criteria": [
+          "names-operations",
+          "names-given-up"
+        ]
+      },
+      {
+        "id": "when-revisit",
+        "criteria": [
+          "revisit-trigger",
+          "grounded-context"
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    {
+      "id": "grounded-context",
+      "field": "context",
+      "check": {
+        "kind": "mentionsAny",
+        "termsKey": "terms.context"
+      }
+    },
+    {
+      "id": "names-tokens",
+      "field": "decision",
+      "check": {
+        "kind": "mentionsAny",
+        "termsKey": "terms.technology.tokens"
+      }
+    },
+    {
+      "id": "names-operations",
+      "field": "consequences",
+      "check": {
+        "kind": "mentionsAny",
+        "termsKey": "terms.technology.operations"
+      }
+    },
+    {
+      "id": "names-given-up",
+      "field": "givenUp",
+      "check": {
+        "kind": "minWords",
+        "n": 6
+      }
+    },
+    {
+      "id": "revisit-trigger",
+      "field": "revisit",
+      "check": {
+        "kind": "hasCondition"
+      }
+    }
+  ],
+  "readNext": [
+    "boring-tech",
+    "team-topologies",
+    "google-sre"
+  ],
+  "contextVariants": [
+    {
+      "id": "regulated-fintech",
+      "context": {
+        "teamSize": 80,
+        "ordersPerDay": 20000,
+        "runwayMonths": 36,
+        "regulation": "licensed"
+      },
+      "forces": {
+        "velocity": 40,
+        "complexity": 60,
+        "cost": 58,
+        "reliability": 70,
+        "cognitiveLoad": 62
+      },
+      "capacityScale": 40
+    }
+  ]
+}

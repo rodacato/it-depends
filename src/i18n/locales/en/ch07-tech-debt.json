@@ -1,0 +1,87 @@
+{
+  "assumptions": {
+    "techDebt": {
+      "planShipsOnTime": "Hard-coding Colombia next to Mexico behind a country flag fits in one quarter. Taking on debt on purpose buys the date.",
+      "planCountryFlags": "Two countries switched by flags inside one checkout is more branches than the problem needs, and everyone can see them.",
+      "planFitnessFunctions": "A written plan, an ADR and two CI checks (no new country flags, checkout tests run per country) cost about a week of one team.",
+      "planRepaymentQuarter": "The quarter after launch, one team spends most of its time extracting a country seam instead of shipping features. The repayment is scheduled, so it actually happens.",
+      "planDebtRetired": "Once the seam exists and the fitness functions guard it, the flags come out and stay out.",
+      "planLaunchEdgeCases": "Some Colombian edge cases (tax IDs, address formats) slip past the shortcut; the per-country checks catch most of them within days, not all.",
+      "planRegulatorReadsAdr": "The regulator asks how country rules are controlled. A dated ADR and a repayment ticket are an answer, though not a free one.",
+      "noPlanShipsFastest": "No ADR, no checks, no seam: the shortcut ships a little faster than the planned one, because the plan was the only overhead.",
+      "noPlanIfsEverywhere": "Without a boundary, 'if country == CO' lands wherever someone needed it: pricing, tax, invoices, payouts.",
+      "noPlanTribalKnowledge": "The knowledge of where the Colombia branches live is in three people's heads, and the team has forty.",
+      "noPlanInterestCompounds": "Each new feature has to be written twice, once per country, and the shared tables gain country columns nobody owns. Interest is charged on every change.",
+      "noPlanVelocityGone": "Two quarters on, the velocity bought at launch has been paid back with interest. 'Later' never got a date.",
+      "noPlanRegressions": "Changes to the Mexican checkout break the Colombian one and nobody notices until a customer does. Code without tests is legacy the day it merges.",
+      "noPlanLaunchBreaks": "Launch week surfaces the cases nobody wrote down: peso formatting, tax IDs, a payout bank that rejects the file.",
+      "noPlanRegulatorArchaeology": "The regulator asks where country rules are enforced. Finding out takes an audit of the codebase, paid at consultant rates.",
+      "generalQuarterLate": "Extracting a country seam from a checkout that assumes Mexico takes the whole quarter: tests around the old code first, then the seam, then Colombia.",
+      "generalEngineeringCost": "A quarter of two teams spent on a refactor the business cannot see.",
+      "generalBurnsRunway": "Colombia's revenue starts a quarter later, about two months of runway spent waiting for it.",
+      "generalSeamConcept": "A country abstraction is a new concept every engineer must learn before touching checkout.",
+      "generalCleanSeam": "With one place where country rules live, adding Colombia is configuration, and the next country is cheaper again.",
+      "generalFewerRegressions": "Checkout tests run per country on every change; regressions in one market stop leaking into the other.",
+      "generalMissesWindow": "The launch date arrives and the checkout is not ready. Marketing was already spent, and part of the demand goes to a competitor that launched first.",
+      "generalRegulatorOnePlace": "Country rules live in one module with tests, so the regulator's questions have a short answer.",
+      "colombiaOrders": "Colombia adds roughly 1,200 orders a day in its first quarter, if the checkout can take them.",
+      "colombiaSecondMarket": "A second market means a second set of holidays, carriers, banks and support hours to keep in mind.",
+      "licenceComplianceCost": "A payments licence brings controls, reporting and the people to run them, whatever the architecture.",
+      "licenceChangeControl": "Licensed means change control: production changes in regulated flows need a record and a second approver."
+    }
+  },
+  "terms": {
+    "techDebt": {
+      "quadrant": "debt, deliberate, prudent, reckless, inadvertent, shortcut, interest, principal, borrow, loan, hack, flag, on purpose, knowingly",
+      "repayment": "repay, pay back, pay down, payback, repayment, refactor, fitness function, deadline, by Q, next quarter, scheduled, ticket, budget, seam, extract, owner, due"
+    }
+  },
+  "chapters": {
+    "tech-debt": {
+      "short": "DEBT",
+      "title": "Colombia by next quarter",
+      "concept": "Technical debt as a deliberate decision with a repayment plan: Cunningham's metaphor, Fowler's quadrant, seams and fitness functions.",
+      "voice": "Every codebase has debt. Some of it has a payment schedule.",
+      "briefing": "Forty engineers, and the business wants Colombia live in one quarter. The checkout assumes Mexico in the currency, the tax IDs, the addresses and the payouts. There is a shortcut, and everyone already knows where it goes.",
+      "dilemma": "Do you borrow the quarter, and if you do, who writes down when it gets paid back?",
+      "disagreement": "Experts disagree here. Cunningham's original metaphor only works if you repay by refactoring, and many argue debt without a plan is just a mess with a nicer name. Others point out that most debt is discovered, not chosen, and that a repayment plan written under deadline pressure is mostly optimism. Both have seen it happen.",
+      "readNext": "Read Cunningham's short experience report for what the metaphor originally meant, then Fowler's quadrant to tell prudent from reckless, then Feathers on seams and the fitness-function chapters of Building Evolutionary Architectures for how to make the repayment stick.",
+      "options": {
+        "shortcut-with-plan": {
+          "title": "Take the shortcut, on purpose, with a repayment plan",
+          "optimizes": "Colombia on the date; the debt has an owner, a deadline and two CI checks guarding it.",
+          "costs": "A week of plan and checks now, and a whole quarter of repayment that ships nothing visible."
+        },
+        "shortcut-no-plan": {
+          "title": "Take the shortcut; clean it up later",
+          "optimizes": "Colombia on the date, slightly faster, with no ceremony.",
+          "costs": "Interest on every change after, and 'later' has no date."
+        },
+        "generalize-first": {
+          "title": "Generalize the checkout first, launch a quarter late",
+          "optimizes": "A country seam that makes Colombia, and the next country, cheap and safe.",
+          "costs": "The launch date, part of the demand and two months of runway."
+        }
+      },
+      "events": {
+        "colombia-launch": "Monday, 09:00 Bogotá time. Colombia is live. The first order is paid in pesos; the right ones, hopefully.",
+        "regulator-licence": "The payments licence is granted, with conditions. The first one: show us where each country's rules are enforced."
+      },
+      "inspections": {
+        "checkout-cracks": "Site inspection: hairline cracks along the checkout, branching wherever someone wrote 'if country'. Measured, dated, and either scheduled for repair or not."
+      },
+      "review": {
+        "which-quadrant": "Is this debt deliberate or inadvertent, prudent or reckless, and what about the situation made it so?",
+        "what-interest": "What interest does this decision pay, on which part of the system, and who pays it?",
+        "when-repaid": "When does the debt get repaid, what triggers the repayment, and how would you notice it slipping?"
+      },
+      "rubric": {
+        "grounded-context": "The context names the constraints that actually shaped the choice (team, launch date, orders, regulation).",
+        "names-debt-kind": "The decision says whether debt was taken, and whether on purpose.",
+        "names-tradeoff": "The consequences name at least one force that got worse, not only the ones that got better.",
+        "names-given-up": "What was given up is written down in a full sentence.",
+        "repayment-plan": "The revisit section is a repayment plan with a trigger or a date: what gets refactored, by when, and what check enforces it."
+      }
+    }
+  }
+}

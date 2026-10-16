@@ -1,0 +1,665 @@
+{
+  "id": "finale",
+  "number": 8,
+  "quarter": 11,
+  "timelapseQuarters": 3,
+  "dilemma": {
+    "id": "accountable-payments",
+    "options": [
+      {
+        "id": "platform-team",
+        "topology": [
+          {
+            "op": "addDistrict",
+            "district": {
+              "id": "payments"
+            }
+          },
+          {
+            "op": "addComponent",
+            "component": {
+              "id": "payments-service",
+              "kind": "service",
+              "district": "payments",
+              "loadShare": 0.6,
+              "capacity": 20000
+            }
+          },
+          {
+            "op": "addComponent",
+            "component": {
+              "id": "ledger-db",
+              "kind": "database",
+              "district": "payments",
+              "loadShare": 0.6,
+              "capacity": 30000
+            }
+          },
+          {
+            "op": "addConnection",
+            "connection": {
+              "id": "payments-api",
+              "kind": "road",
+              "from": "mercadito-app",
+              "to": "payments-service"
+            }
+          },
+          {
+            "op": "addConnection",
+            "connection": {
+              "id": "ledger-access",
+              "kind": "pipe",
+              "from": "payments-service",
+              "to": "ledger-db"
+            }
+          }
+        ],
+        "effects": [
+          {
+            "id": "platform-move-eats-quarter",
+            "target": {
+              "force": "velocity"
+            },
+            "delta": -10,
+            "timing": {
+              "kind": "immediate"
+            },
+            "anchor": "payments-service",
+            "assumption": "assumptions.finale.platformMoveEatsQuarter",
+            "sources": [
+              "team-topologies",
+              "hard-parts"
+            ]
+          },
+          {
+            "id": "platform-new-seam",
+            "target": {
+              "force": "complexity"
+            },
+            "delta": 8,
+            "timing": {
+              "kind": "immediate"
+            },
+            "anchor": "payments-service",
+            "assumption": "assumptions.finale.platformNewSeam",
+            "sources": [
+              "hard-parts",
+              "fsa"
+            ]
+          },
+          {
+            "id": "platform-headcount",
+            "target": {
+              "force": "cost"
+            },
+            "delta": 10,
+            "timing": {
+              "kind": "immediate"
+            },
+            "anchor": "ledger-db",
+            "assumption": "assumptions.finale.platformHeadcount",
+            "sources": [
+              "model"
+            ]
+          },
+          {
+            "id": "platform-cutover-risk",
+            "target": {
+              "force": "reliability"
+            },
+            "delta": -6,
+            "timing": {
+              "kind": "immediate"
+            },
+            "anchor": "ledger-db",
+            "assumption": "assumptions.finale.platformCutoverRisk",
+            "sources": [
+              "kleppmann-ddia",
+              "helland-beyond-transactions"
+            ]
+          },
+          {
+            "id": "platform-clear-owner",
+            "target": {
+              "force": "cognitiveLoad"
+            },
+            "delta": -8,
+            "timing": {
+              "kind": "immediate"
+            },
+            "anchor": "payments-service",
+            "assumption": "assumptions.finale.platformClearOwner",
+            "sources": [
+              "team-topologies",
+              "conway"
+            ]
+          },
+          {
+            "id": "platform-audit-trail",
+            "target": {
+              "force": "reliability"
+            },
+            "delta": 10,
+            "timing": {
+              "kind": "delayed",
+              "afterQuarters": 1
+            },
+            "anchor": "ledger-db",
+            "assumption": "assumptions.finale.platformAuditTrail",
+            "sources": [
+              "google-sre",
+              "model"
+            ]
+          },
+          {
+            "id": "platform-diligence",
+            "target": {
+              "context": "runwayMonths"
+            },
+            "delta": 3,
+            "timing": {
+              "kind": "conditional",
+              "eventId": "series-b"
+            },
+            "anchor": "payments-service",
+            "assumption": "assumptions.finale.platformDiligence",
+            "sources": [
+              "model"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "strangle-payments",
+        "topology": [],
+        "effects": [
+          {
+            "id": "strangle-no-cutover",
+            "target": {
+              "force": "reliability"
+            },
+            "delta": 3,
+            "timing": {
+              "kind": "immediate"
+            },
+            "anchor": "mercadito-app",
+            "assumption": "assumptions.finale.strangleNoCutover",
+            "sources": [
+              "fowler-strangler",
+              "accelerate"
+            ]
+          },
+          {
+            "id": "strangle-slow-tax",
+            "target": {
+              "force": "velocity"
+            },
+            "delta": -4,
+            "timing": {
+              "kind": "immediate"
+            },
+            "anchor": "mercadito-app",
+            "assumption": "assumptions.finale.strangleSlowTax",
+            "sources": [
+              "fowler-strangler",
+              "model"
+            ]
+          },
+          {
+            "id": "strangle-fitness-functions",
+            "target": {
+              "force": "cost"
+            },
+            "delta": 4,
+            "timing": {
+              "kind": "immediate"
+            },
+            "anchor": "mercadito-app",
+            "assumption": "assumptions.finale.strangleFitnessFunctions",
+            "sources": [
+              "evolutionary",
+              "model"
+            ]
+          },
+          {
+            "id": "strangle-two-paths",
+            "target": {
+              "force": "complexity"
+            },
+            "delta": 5,
+            "timing": {
+              "kind": "immediate"
+            },
+            "anchor": "mercadito-app",
+            "assumption": "assumptions.finale.strangleTwoPaths",
+            "sources": [
+              "fowler-strangler",
+              "feathers-legacy"
+            ]
+          },
+          {
+            "id": "strangle-still-everyones",
+            "target": {
+              "force": "cognitiveLoad"
+            },
+            "delta": 4,
+            "timing": {
+              "kind": "immediate"
+            },
+            "anchor": "mercadito-app",
+            "assumption": "assumptions.finale.strangleStillEveryones",
+            "sources": [
+              "team-topologies",
+              "conway"
+            ]
+          },
+          {
+            "id": "strangle-seams-pay",
+            "target": {
+              "force": "complexity"
+            },
+            "delta": -7,
+            "timing": {
+              "kind": "delayed",
+              "afterQuarters": 2
+            },
+            "anchor": "mercadito-app",
+            "assumption": "assumptions.finale.strangleSeamsPay",
+            "sources": [
+              "evolutionary",
+              "feathers-legacy"
+            ]
+          },
+          {
+            "id": "strangle-open-finding",
+            "target": {
+              "context": "runwayMonths"
+            },
+            "delta": -3,
+            "timing": {
+              "kind": "conditional",
+              "eventId": "series-b"
+            },
+            "anchor": "mercadito-app",
+            "assumption": "assumptions.finale.strangleOpenFinding",
+            "sources": [
+              "model"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "reliability-freeze",
+        "topology": [],
+        "effects": [
+          {
+            "id": "freeze-stops-features",
+            "target": {
+              "force": "velocity"
+            },
+            "delta": -12,
+            "timing": {
+              "kind": "immediate"
+            },
+            "anchor": "mercadito-app",
+            "assumption": "assumptions.finale.freezeStopsFeatures",
+            "sources": [
+              "google-sre",
+              "model"
+            ]
+          },
+          {
+            "id": "freeze-error-budgets",
+            "target": {
+              "force": "reliability"
+            },
+            "delta": 9,
+            "timing": {
+              "kind": "immediate"
+            },
+            "anchor": "mercadito-app",
+            "assumption": "assumptions.finale.freezeErrorBudgets",
+            "sources": [
+              "google-sre"
+            ]
+          },
+          {
+            "id": "freeze-sre-hires",
+            "target": {
+              "force": "cost"
+            },
+            "delta": 6,
+            "timing": {
+              "kind": "immediate"
+            },
+            "anchor": "mercadito-app",
+            "assumption": "assumptions.finale.freezeSreHires",
+            "sources": [
+              "google-sre",
+              "model"
+            ]
+          },
+          {
+            "id": "freeze-quiet-heads",
+            "target": {
+              "force": "cognitiveLoad"
+            },
+            "delta": -4,
+            "timing": {
+              "kind": "immediate"
+            },
+            "anchor": "mercadito-app",
+            "assumption": "assumptions.finale.freezeQuietHeads",
+            "sources": [
+              "team-topologies"
+            ]
+          },
+          {
+            "id": "freeze-structure-unchanged",
+            "target": {
+              "force": "complexity"
+            },
+            "delta": 2,
+            "timing": {
+              "kind": "immediate"
+            },
+            "anchor": "shared-postgres",
+            "assumption": "assumptions.finale.freezeStructureUnchanged",
+            "sources": [
+              "apsd",
+              "model"
+            ]
+          },
+          {
+            "id": "freeze-big-batch",
+            "target": {
+              "force": "reliability"
+            },
+            "delta": -5,
+            "timing": {
+              "kind": "delayed",
+              "afterQuarters": 2
+            },
+            "anchor": "mercadito-app",
+            "assumption": "assumptions.finale.freezeBigBatch",
+            "sources": [
+              "accelerate"
+            ]
+          },
+          {
+            "id": "freeze-evidence-diligence",
+            "target": {
+              "context": "runwayMonths"
+            },
+            "delta": 2,
+            "timing": {
+              "kind": "conditional",
+              "eventId": "series-b"
+            },
+            "anchor": "mercadito-app",
+            "assumption": "assumptions.finale.freezeEvidenceDiligence",
+            "sources": [
+              "google-sre",
+              "model"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "buy-platform",
+        "topology": [
+          {
+            "op": "addDistrict",
+            "district": {
+              "id": "payments"
+            }
+          },
+          {
+            "op": "addComponent",
+            "component": {
+              "id": "payments-service",
+              "kind": "service",
+              "district": "payments",
+              "loadShare": 0.6,
+              "capacity": 40000
+            }
+          },
+          {
+            "op": "addConnection",
+            "connection": {
+              "id": "payments-api",
+              "kind": "road",
+              "from": "mercadito-app",
+              "to": "payments-service"
+            }
+          }
+        ],
+        "effects": [
+          {
+            "id": "buy-borrowed-licence",
+            "target": {
+              "force": "reliability"
+            },
+            "delta": 6,
+            "timing": {
+              "kind": "immediate"
+            },
+            "anchor": "payments-service",
+            "assumption": "assumptions.finale.buyBorrowedLicence",
+            "sources": [
+              "wardley-maps",
+              "hard-parts"
+            ]
+          },
+          {
+            "id": "buy-less-to-carry",
+            "target": {
+              "force": "cognitiveLoad"
+            },
+            "delta": -6,
+            "timing": {
+              "kind": "immediate"
+            },
+            "anchor": "payments-service",
+            "assumption": "assumptions.finale.buyLessToCarry",
+            "sources": [
+              "team-topologies",
+              "wardley-maps"
+            ]
+          },
+          {
+            "id": "buy-integration-quarter",
+            "target": {
+              "force": "velocity"
+            },
+            "delta": -5,
+            "timing": {
+              "kind": "immediate"
+            },
+            "anchor": "payments-service",
+            "assumption": "assumptions.finale.buyIntegrationQuarter",
+            "sources": [
+              "boring-tech",
+              "model"
+            ]
+          },
+          {
+            "id": "buy-data-migration",
+            "target": {
+              "force": "complexity"
+            },
+            "delta": 4,
+            "timing": {
+              "kind": "immediate"
+            },
+            "anchor": "payments-service",
+            "assumption": "assumptions.finale.buyDataMigration",
+            "sources": [
+              "hard-parts",
+              "kleppmann-ddia"
+            ]
+          },
+          {
+            "id": "buy-take-rate",
+            "target": {
+              "force": "cost"
+            },
+            "delta": 12,
+            "timing": {
+              "kind": "immediate"
+            },
+            "anchor": "payments-service",
+            "assumption": "assumptions.finale.buyTakeRate",
+            "sources": [
+              "model",
+              "wardley-maps"
+            ]
+          },
+          {
+            "id": "buy-lock-in",
+            "target": {
+              "force": "cost"
+            },
+            "delta": 6,
+            "timing": {
+              "kind": "delayed",
+              "afterQuarters": 2
+            },
+            "anchor": "payments-service",
+            "assumption": "assumptions.finale.buyLockIn",
+            "sources": [
+              "bezos-doors",
+              "model"
+            ]
+          },
+          {
+            "id": "buy-margin-diligence",
+            "target": {
+              "context": "runwayMonths"
+            },
+            "delta": -4,
+            "timing": {
+              "kind": "conditional",
+              "eventId": "series-b"
+            },
+            "anchor": "payments-service",
+            "assumption": "assumptions.finale.buyMarginDiligence",
+            "sources": [
+              "model",
+              "wardley-maps"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "events": [
+    {
+      "id": "series-b",
+      "trigger": {
+        "kind": "scheduled",
+        "quarter": 12
+      },
+      "anchor": "mercadito-app",
+      "effects": [
+        {
+          "id": "series-b-closes",
+          "target": {
+            "context": "runwayMonths"
+          },
+          "delta": 24,
+          "timing": {
+            "kind": "immediate"
+          },
+          "assumption": "assumptions.finale.seriesBCloses",
+          "sources": [
+            "model"
+          ]
+        }
+      ]
+    }
+  ],
+  "inspections": [
+    {
+      "id": "who-answers",
+      "atOffset": 1,
+      "anchor": "mercadito-app",
+      "minStress": 0
+    }
+  ],
+  "review": {
+    "questions": [
+      {
+        "id": "what-auditor-sees",
+        "criteria": [
+          "names-evidence",
+          "grounded-context"
+        ]
+      },
+      {
+        "id": "who-pays",
+        "criteria": [
+          "names-forces",
+          "names-given-up"
+        ]
+      },
+      {
+        "id": "prove-wrong",
+        "criteria": [
+          "revisit-condition"
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    {
+      "id": "grounded-context",
+      "field": "context",
+      "check": {
+        "kind": "mentionsAny",
+        "termsKey": "terms.context"
+      }
+    },
+    {
+      "id": "names-evidence",
+      "field": "decision",
+      "check": {
+        "kind": "mentionsAny",
+        "termsKey": "terms.finale.evidence"
+      }
+    },
+    {
+      "id": "names-forces",
+      "field": "consequences",
+      "check": {
+        "kind": "mentionsAny",
+        "termsKey": "terms.forces"
+      }
+    },
+    {
+      "id": "names-given-up",
+      "field": "givenUp",
+      "check": {
+        "kind": "minWords",
+        "n": 15
+      }
+    },
+    {
+      "id": "revisit-condition",
+      "field": "revisit",
+      "check": {
+        "kind": "hasCondition"
+      }
+    }
+  ],
+  "readNext": [
+    "nygard-adr",
+    "fsa",
+    "hard-parts",
+    "team-topologies",
+    "evolutionary",
+    "google-sre",
+    "wardley-maps",
+    "bezos-doors"
+  ]
+}

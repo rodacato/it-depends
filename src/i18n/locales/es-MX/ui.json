@@ -179,6 +179,15 @@
       "footer": "DIBUJÓ: TÚ · REVISÓ: COMITÉ DE REVISIÓN",
       "newCampaign": "NUEVA CAMPAÑA"
     },
-    "quarterShort": "T{q} A{y}"
+    "quarterShort": "T{q} A{y}",
+    "detail": {
+      "title": "Detalle · corte por {name}",
+      "subtitle": "Sobre el nivel de calle, lo que tocan los usuarios. Debajo, los datos y colas de los que depende. Un piso ≈ el doble de tráfico.",
+      "grade": "NIVEL ±0.00",
+      "belowGrade": "BAJO NIVEL · DATOS Y COLAS",
+      "load": "≈ {load} pedidos/día · {pct}% de su capacidad",
+      "back": "Volver al plano del predio",
+      "hint": "Haz clic para abrir el corte. Esc para volver."
+    }
   }
 }

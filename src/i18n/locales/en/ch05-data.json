@@ -1,0 +1,92 @@
+{
+  "chapters": {
+    "data": {
+      "short": "DATA",
+      "title": "Everyone drinks from the same reservoir",
+      "concept": "Shared database or a database per service: consistency, availability, and who owns the truth.",
+      "voice": "Sixteen engineers, one schema, and a migrations channel nobody mutes.",
+      "briefing": "Every team writes to the shared Postgres, and at peak it is the busiest reservoir in town. Orders are heading for 2,600 a day, and the shared Postgres was sized for fewer. One more migration that locks the orders table and checkout stops.",
+      "dilemma": "Who owns the order data, and how much inconsistency are you willing to live with to keep taking orders?",
+      "disagreement": "Experts disagree here. Richardson and Helland argue that each service should own its data and accept eventual consistency, because distributed transactions do not scale. Others reply that one well-run Postgres beats a fleet of small ones until the team is much larger, and that 'eventually' is a hard word to say to an auditor. Brewer himself says the CAP choice comes up only during a partition, not as a permanent label.",
+      "readNext": "Read Brewer's twelve-years-later essay first: CAP is a choice you make during a partition, not a label. Then Helland on life without distributed transactions, Richardson's chapter on sagas, and the transactions and replication chapters of Kleppmann.",
+      "variants": {
+        "regulated-fintech": "80-engineer regulated fintech"
+      },
+      "options": {
+        "scale-the-reservoir": {
+          "title": "Keep the shared Postgres; buy a bigger one and a read replica",
+          "optimizes": "One source of truth, real transactions, no migration this quarter.",
+          "costs": "Every team stays coupled through one schema; replica reads go stale at times. The bill arrives later."
+        },
+        "split-the-reservoir": {
+          "title": "orders-db of its own, with domain events",
+          "optimizes": "Orders keep flowing when the shared reservoir struggles; the orders team owns its schema.",
+          "costs": "A data migration now, eventual consistency forever, and reconciliation jobs to prove it adds up."
+        },
+        "coordinate-transactions": {
+          "title": "Two databases, one two-phase commit",
+          "optimizes": "Split storage that still commits as one transaction.",
+          "costs": "Latency on every order and a coordinator that blocks both stores when either one stalls."
+        }
+      },
+      "events": {
+        "series-a": "Series A closed. Two years of runway and a board that now asks about 'platform'.",
+        "reservoir-dry": "Tuesday, 19:40. The shared Postgres runs out of connections. Checkout, catalog and payouts all wait in the same line."
+      },
+      "inspections": {
+        "shared-reservoir": "Site inspection: the shared reservoir is still the busiest in town. Forty tables, five teams, no owner on most of them. Three migrations are queued for Thursday's window."
+      },
+      "review": {
+        "who-owns-truth": "Where does the truth about an order live now, and what consistency did you promise the rest of the system?",
+        "what-goes-stale": "What can now be stale, slow or blocked, and what did you give up to get the rest?",
+        "when-to-split": "What would make you split (or merge back) the data, and what number would tell you?"
+      },
+      "rubric": {
+        "grounded-context": "The context names the constraints that actually shaped the choice (team, traffic, runway, regulation).",
+        "names-consistency": "The decision says what consistency the system now offers: transactional, eventual, or stale reads, and where.",
+        "names-tradeoff": "The consequences name at least one force that got worse, not only the ones that got better.",
+        "names-given-up": "What was given up is written down in a full sentence.",
+        "revisit-trigger": "The revisit trigger is a condition someone could notice, not a hope."
+      }
+    }
+  },
+  "assumptions": {
+    "data": {
+      "scaleKeepsShipping": "A larger instance and a replica take days of operations work and no application rewrite, so feature work continues.",
+      "scaleBiggerBox": "A bigger primary plus a replica roughly doubles the database bill, which is still smaller than a new service's infrastructure.",
+      "scaleStaleReads": "Asynchronous replicas lag by seconds at peak; some customers will not see the order they just placed if the page reads from the replica.",
+      "scaleCouplingGrows": "With every team writing to the same schema, a column rename becomes a negotiation, and the coupling compounds with each new table.",
+      "scaleMigrationQueue": "Schema changes queue behind one shared migration window; people spend time learning which team's tables they must not touch.",
+      "scaleHeadroom": "Doubling capacity buys about a year of growth at current rates, enough to absorb the first peak that runs out of connections.",
+      "scaleOneAuditTrail": "One database with real transactions gives an auditor one consistent history, without reconciling stores.",
+      "splitMigration": "Moving orders to their own database means dual writes, a backfill and a cut-over: about a quarter of one team's time.",
+      "splitMovingParts": "A second database, a queue, an outbox and idempotent consumers: more parts that can each fail on their own.",
+      "splitEventual": "Once orders and the rest live in different stores, every engineer has to reason about states that are true here and not yet there.",
+      "splitInfrastructure": "A second managed database and a queue, with their environments and backups, from the first month.",
+      "splitReconciliation": "Eventual consistency needs proof: nightly reconciliation jobs and someone who reads their output.",
+      "splitAutonomy": "Once the cut-over is done, the orders team changes its schema and deploys without asking four other teams.",
+      "splitStaysOpen": "When the shared Postgres saturates, orders still commit to their own store and the rest catches up from events.",
+      "splitAuditAcrossStores": "An auditor wants one consistent picture of each order. Reconstructing it from two stores and an event log is slow and expensive.",
+      "txStillAtomic": "Two-phase commit keeps an order and its stock change atomic across both databases: no orphans, no reconciliation jobs.",
+      "txRoundTrips": "Each order now pays a prepare round and a commit round across the network while locks are held; everything touching orders gets slower to build and to run.",
+      "txCoordinatorIsCritical": "The coordinator becomes infrastructure every order depends on, with its own log, recovery and failure modes.",
+      "txInfrastructure": "A second database and a highly available coordinator, paid from the first month.",
+      "txInDoubt": "When the coordinator fails between prepare and commit, transactions stay in doubt with locks held, and someone on call has to resolve them by hand.",
+      "txBlocksInPartition": "Two-phase commit picks consistency over availability: when one participant is slow, prepared locks hold and both stores stall together.",
+      "txAuditFriendly": "One atomic commit per order across both stores is easy to show an auditor.",
+      "seriesARunway": "The Series A adds about two years of runway at the current burn.",
+      "reservoirDryPeak": "At about 2,600 orders a day, peak-hour connections exceed what the shared Postgres can serve and every team's queries wait together."
+    }
+  },
+  "components": {
+    "postgres-replica": { "name": "Postgres read replica", "role": "copy of the reservoir, a few seconds behind" },
+    "orders-db": { "name": "orders DB", "role": "the orders team's own reservoir" },
+    "domain-events": { "name": "domain-events queue", "role": "OrderPlaced, OrderPaid, eventually" },
+    "tx-coordinator": { "name": "transaction coordinator", "role": "two-phase commit across both stores" }
+  },
+  "terms": {
+    "data": {
+      "consistency": "consisten, eventual, stale, lag, replica, transaction, atomic, saga, 2pc, two-phase, partition, availab, cap theorem, reconcil, owner, source of truth, shared, event, outbox"
+    }
+  }
+}

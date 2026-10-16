@@ -1,0 +1,98 @@
+{
+  "components": {
+    "pricing-engine": {
+      "name": "motor de precios",
+      "role": "reglas configurables, un DSL"
+    },
+    "catalog-module": {
+      "name": "módulo de catálogo",
+      "role": "variantes, paquetes, regiones; una interfaz"
+    },
+    "catalog-saas": {
+      "name": "catálogo SaaS",
+      "role": "PIM del proveedor, su modelo de datos"
+    }
+  },
+  "assumptions": {
+    "complexity": {
+      "engineConfigNotCode": "Con el motor listo, variantes, paquetes y precios regionales se vuelven filas de configuración; la siguiente petición de precios sale sin deploy.",
+      "engineAccidental": "Un lenguaje de reglas, su evaluador, la precedencia y una pantalla de administración son complejidad que el negocio nunca pidió. Tres casos reales no necesitaban una solución general.",
+      "engineBuildTime": "Construir el motor ocupa a dos de cinco ingenieros casi todo el trimestre.",
+      "engineRuleCollisions": "En menos de un trimestre, dos reglas aplican al mismo producto y gana la más barata por accidente. Precios equivocados llegan a checkouts reales antes de que alguien se dé cuenta.",
+      "engineNobodyReadsRules": "Seis meses después, la tabla de reglas es el verdadero código de precios, y nadie sabe cuánto costará un producto sin ejecutarla.",
+      "engineHiresLearnDsl": "Después de la ronda semilla, cada persona que entra tiene que aprender un lenguaje de reglas casero que no existe en ningún otro lado y no tiene depurador.",
+      "catalogSlowerNow": "Modelar variantes, paquetes y precios regionales de forma explícita se lleva casi todo el trimestre; los vendedores esperan como seis semanas más que con un SaaS.",
+      "catalogEssentialOnly": "Tres casos escritos como tres casos solo agregan la complejidad que el problema ya traía.",
+      "catalogEngineeringTime": "El trimestre del módulo cuesta en sueldos más o menos lo mismo que el motor; solo compra menos flexibilidad.",
+      "catalogDeepInterface": "Una interfaz chiquita (cotiza este carrito para esta región) esconde tres casos; quien la llama aprende una función, no tres modelos.",
+      "catalogCasesTested": "Los casos explícitos se prueban uno por uno sin drama; las regresiones de precios bajan en un trimestre.",
+      "catalogCheapToChange": "Como los casos tienen nombre en el código, cambiar uno es una edición local. Dos trimestres después, los cambios de precio salen más rápido que con cualquiera de las otras opciones.",
+      "catalogFourthCase": "Con el dinero de la semilla llega un equipo de ventas, y ventas promete un cuarto caso (precios de mayoreo) que el módulo todavía no tiene. Alguien tiene que escribirlo.",
+      "saasShipsNow": "Un catálogo SaaS trae variantes y paquetes de fábrica; integrarlo es cosa de unas semanas, no de un trimestre.",
+      "saasSubscription": "La suscripción se cobra por SKU y por usuario; con unos cientos de pedidos al día ya es una línea visible en la factura.",
+      "saasAnnualContract": "El proveedor quiere el primer año pagado por adelantado, como un mes de runway.",
+      "saasTheirModel": "El equipo deja de cargar con el modelo del catálogo; los vendedores configuran productos en las pantallas del proveedor, no con tickets a ingeniería.",
+      "saasGlueAndLockIn": "Jobs de sincronización, webhooks y una capa de traducción entre su modelo de producto y tus pedidos. Cada mes de datos en su formato encarece la salida.",
+      "saasStalePrices": "Los precios viven en dos lugares. En menos de un trimestre se pierde un webhook y el precio nuevo de un vendedor aparece en la pantalla del proveedor pero no en el checkout.",
+      "saasPriceChange": "Cuando el proveedor sube precios, lo que era commodity se vuelve una negociación sin palanca: la factura crece y migrar cuesta más que pagar.",
+      "seedRunway": "Se cierra la ronda semilla y suma unos dieciocho meses de runway al ritmo de gasto actual.",
+      "saasBlackFridayLimits": "El proveedor de catálogo limita peticiones en el pico; las páginas de producto se degradan justo cuando hay más tráfico.",
+      "engineKeyEngineer": "El lenguaje de reglas interno era conocimiento tácito; quien se va se lleva la gramática."
+    }
+  },
+  "terms": {
+    "complexity": {
+      "essence": "esencial, esencia, accidental, abstracción, profund, superficial, interfaz, genéric, general, configur, regla, motor, caso, variante, paquete, regional, modelo, ocult, escond, simple, flexib, proveedor, lock-in, comprar"
+    }
+  },
+  "chapters": {
+    "complexity": {
+      "short": "COMPLEJIDAD",
+      "title": "Los vendedores quieren variantes, paquetes y precios por región",
+      "concept": "Complejidad esencial contra accidental, y el precio real de cada abstracción.",
+      "voice": "Toda abstracción es un préstamo. Algunas con tasa razonable.",
+      "briefing": "Q3 del año uno. Cinco ingenieros, unos cientos de pedidos al día y una pila de peticiones de vendedores: tallas y colores, paquetes de tres por dos, otro precio en Monterrey. El problema tiene tres casos reales. Cuántos tenga la solución depende de ti.",
+      "dilemma": "¿Cuánta de esta complejidad es del problema, y cuánta estás a punto de agregar tú?",
+      "disagreement": "Aquí los expertos no coinciden. Unos dicen que tres casos son el momento de generalizar, antes de que llegue el cuarto; otros, que la abstracción correcta solo se deja ver después de los casos, y que un módulo profundo le gana a uno flexible. Brooks preguntaría qué parte es esencia y qué parte es tuya.",
+      "readNext": "Lee a Brooks sobre esencia y accidente, luego el capítulo de Ousterhout sobre módulos profundos, y después ubica tu catálogo en un mapa de Wardley y pregúntate si ya es commodity.",
+      "variants": {
+        "regulated-fintech": "fintech regulada de 80 ingenieros"
+      },
+      "options": {
+        "pricing-engine": {
+          "title": "Un motor configurable de precios y reglas",
+          "optimizes": "Cualquier idea futura de precios se vuelve configuración, no un deploy.",
+          "costs": "Un lenguaje de reglas que nadie pidió; en seis meses nadie entiende las reglas."
+        },
+        "catalog-module": {
+          "title": "Modelar los tres casos en un módulo de catálogo profundo",
+          "optimizes": "Solo la complejidad esencial; barato de cambiar una vez que existe.",
+          "costs": "Casi todo el trimestre; los vendedores esperan, y el cuarto caso es código, no configuración."
+        },
+        "catalog-saas": {
+          "title": "Comprar un catálogo SaaS (PIM)",
+          "optimizes": "Variantes y paquetes este mes, construidos por alguien más.",
+          "costs": "Una suscripción, precios en dos lugares y un modelo de datos que es suyo."
+        }
+      },
+      "events": {
+        "seed-round": "Lunes, 09:00. Se cerró la ronda semilla. Dieciocho meses más, y un consejo al que le gustaría verlos bien usados."
+      },
+      "inspections": {
+        "three-ways-to-price": "Inspección de obra: preguntamos qué precio lleva un paquete en Monterrey y tres ingenieros dieron dos respuestas. Todavía no es bug. Es una pregunta, anotada al margen."
+      },
+      "review": {
+        "essential-or-accidental": "¿Qué parte de lo que construiste es esencial para vender cosas, y qué parte agregaste tú?",
+        "who-pays-later": "¿A qué renunciaste, y quién lo paga dentro de un año?",
+        "when-revisit": "¿Qué te haría revisar esta decisión, y cómo te darías cuenta?"
+      },
+      "rubric": {
+        "grounded-context": "El contexto nombra las restricciones que realmente dieron forma a la elección (equipo, pedidos, runway, peticiones de vendedores).",
+        "names-essence": "La decisión separa la complejidad propia del problema de la que agrega la solución.",
+        "names-tradeoff": "Las consecuencias nombran al menos una fuerza que empeoró, no solo las que mejoraron.",
+        "names-given-up": "Aquello a lo que se renunció está escrito en una oración completa.",
+        "revisit-trigger": "El disparador para revisar es una condición que alguien podría notar, no un deseo."
+      }
+    }
+  }
+}

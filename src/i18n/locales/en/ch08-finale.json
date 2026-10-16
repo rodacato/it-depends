@@ -1,0 +1,92 @@
+{
+  "terms": {
+    "finale": {
+      "evidence": "accountab, auditab, audit, evidence, owner, ownership, answers for, responsible, regulator, supervisor, licence, license, ledger, reconcil, SLO, error budget, fitness function, control, contract, report"
+    }
+  },
+  "chapters": {
+    "finale": {
+      "short": "FINALE",
+      "title": "Someone has to answer for the money",
+      "concept": "An open case: write and defend a full ADR with everything the drawing set has taught you.",
+      "voice": "Eighty engineers, one licence, and a regulator who reads ADRs for fun.",
+      "briefing": "Q4, Year 3. Mercadito is licensed and supervised, and the regulator now wants payments operated by a unit that is accountable and auditable, with names on it. The board wants a plan by the next meeting, and the Series B closes the quarter after. Every option below is defensible in some company; your job is to say why it is the right one in this one.",
+      "dilemma": "Who operates the money from now on, and what will you show the regulator to prove it?",
+      "disagreement": "Experts split three ways here. Platform people say accountability needs a team boundary and its own data, so carve it out now. Evolutionary architects say big moves under scrutiny are how incidents happen, so strangle it with fitness functions. SRE people say the regulator wants evidence, not diagrams, so freeze and measure. And Wardley would ask why you are building a commodity at all. Each is right in some quarter of some company.",
+      "readNext": "A closing shelf for the whole drawing set: Nygard for the ADR you just wrote; Richards and Ford, then The Hard Parts, for trade-off analysis; Team Topologies for the team you may have just created; Building Evolutionary Architectures for the fitness functions that keep any of this honest; the SRE book for error budgets; Wardley for what to build and what to buy; and back to the one-way door letter where it started.",
+      "options": {
+        "platform-team": {
+          "title": "Carve payments into a platform team, with its own service and ledger",
+          "optimizes": "One accountable owner, a ledger the auditor can read, payments off everyone else's plate.",
+          "costs": "A quarter of reorg and migration, a cutover window, and a new team on the payroll. Hard to walk back."
+        },
+        "strangle-payments": {
+          "title": "Strangle payments out of the monolith, guarded by fitness functions",
+          "optimizes": "No big bang under supervision; each step small, tested and reversible.",
+          "costs": "The regulator gets a roadmap, not a unit. Two code paths for a while, and the payoff arrives after the board meeting."
+        },
+        "reliability-freeze": {
+          "title": "Freeze architecture changes for two quarters; invest in SRE and evidence",
+          "optimizes": "SLOs, error budgets and incident history: the evidence a supervisor actually asks for.",
+          "costs": "Two quarters with no structural change and few features. The ownership question is postponed, not answered."
+        },
+        "buy-platform": {
+          "title": "Buy a licensed payments platform and become its customer",
+          "optimizes": "Borrow their licence, controls and audit history; a much smaller thing to operate.",
+          "costs": "A take rate on every payment, their roadmap, a long contract. You stay accountable for a vendor you do not run. The vendor sits off this sheet (the site has no room for another); payments-service here is only the thin adapter to it."
+        }
+      },
+      "events": {
+        "series-b": "Series B closes. Diligence spent a week on the payments ledger and two hours on the product."
+      },
+      "inspections": {
+        "who-answers": "Site inspection: the supervisor asked who answers for a disputed payment at 03:00. The answer is now on this sheet, in ink or in pencil."
+      },
+      "review": {
+        "what-auditor-sees": "Next quarter the supervisor audits payments. What exactly will they be able to inspect, and whose name is on it?",
+        "who-pays": "Which force got worse because of this decision, and which team or budget pays for it?",
+        "prove-wrong": "What observation in the next two quarters would prove this ADR wrong, and what would you do the day you saw it?"
+      },
+      "rubric": {
+        "grounded-context": "The context names the constraints that actually shaped the choice: team size, regulation, runway, traffic, the board's deadline.",
+        "names-evidence": "The decision says who is accountable and what evidence (a ledger, SLOs, fitness functions, a contract) proves it to a regulator.",
+        "names-forces": "The consequences name at least one force that got worse, not only the ones that improved.",
+        "names-given-up": "What was given up is argued in at least fifteen words, not listed in three.",
+        "revisit-condition": "The revisit trigger is a condition someone could observe and date, not a hope."
+      }
+    }
+  },
+  "assumptions": {
+    "finale": {
+      "platformMoveEatsQuarter": "Forming a payments team, moving people and migrating the ledger consumes most of a quarter for the engineers involved and slows everyone who depends on them.",
+      "platformNewSeam": "A service with its own ledger adds a network boundary, a data migration and a contract that every caller must respect.",
+      "platformHeadcount": "A platform team of six to eight people plus its own infrastructure and on-call costs noticeably more than payments spread thinly across the monolith.",
+      "platformCutoverRisk": "Moving balances from the shared database to a new ledger needs a dual-write or reconciliation window, and money is where such windows bite.",
+      "platformClearOwner": "With one team owning payments end to end, the other seventy engineers stop carrying payment rules in their heads.",
+      "platformAuditTrail": "An append-only ledger owned by one team produces the reconciliations and change history an auditor asks for, once the migration settles.",
+      "platformDiligence": "Investors price a clean, owned ledger as lower regulatory risk, which shows up as slightly better terms on the round.",
+      "strangleNoCutover": "Small, reversible extractions behind a routing seam avoid a single risky cutover; the system keeps working at every step.",
+      "strangleSlowTax": "Routing, shadow traffic and parallel checks slow every payments change a little for as long as the strangling lasts.",
+      "strangleFitnessFunctions": "Automated checks on dependencies, ledger balances and latency cost engineering time to build and CI time to run.",
+      "strangleTwoPaths": "For several quarters some payments take the old path and some the new one, and both must stay correct.",
+      "strangleStillEveryones": "Until the extraction finishes, payments code still lives in the monolith, and every team touching it still needs to understand it.",
+      "strangleSeamsPay": "Once the seams are in place and guarded, the monolith loses its most entangled module and complexity drops measurably.",
+      "strangleOpenFinding": "A regulator's requirement with only a roadmap behind it reads as an open finding in diligence, and the terms reflect it.",
+      "freezeStopsFeatures": "Two quarters of no structural change and a reliability focus leave little capacity for the roadmap the board approved.",
+      "freezeErrorBudgets": "SLOs with error budgets, runbooks and blameless reviews reduce incident frequency within a quarter of being enforced.",
+      "freezeSreHires": "A small SRE group and the observability tooling it needs are a real line in the budget.",
+      "freezeQuietHeads": "With no migrations in flight, engineers carry fewer moving parts and context switches drop.",
+      "freezeStructureUnchanged": "Features keep landing in the same shared structure, so the accidental complexity the freeze does not touch keeps accumulating.",
+      "freezeBigBatch": "Changes deferred by a freeze ship afterwards in larger batches, and larger batches fail more often.",
+      "freezeEvidenceDiligence": "A year of SLO reports and incident reviews answers diligence questions quickly, which helps the round a little.",
+      "buyBorrowedLicence": "A licensed platform brings mature controls, certifications and incident history that would take years to build in house.",
+      "buyLessToCarry": "Operating an integration is much less to know than operating a ledger, a card flow and their compliance.",
+      "buyIntegrationQuarter": "Integrating, testing and migrating to an external platform still takes most of a quarter for the teams that touch payments.",
+      "buyDataMigration": "Historical payments, refunds and disputes must be migrated or reconciled across two systems during the switch.",
+      "buyTakeRate": "The platform charges a percentage of every payment, which at Year 3 volume is larger than the team it replaces.",
+      "buyLockIn": "After two quarters the contract, the data and the integration make leaving expensive, and renewal terms reflect that.",
+      "buyMarginDiligence": "Investors read a vendor's take rate on every payment as permanently lower gross margin and price the round accordingly.",
+      "seriesBCloses": "The Series B adds about two years of runway at the current burn."
+    }
+  }
+}

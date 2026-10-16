@@ -1,0 +1,87 @@
+{
+  "assumptions": {
+    "techDebt": {
+      "planShipsOnTime": "Meter Colombia a mano junto a México detrás de un flag de país cabe en un trimestre. Endeudarse a propósito compra la fecha.",
+      "planCountryFlags": "Dos países conmutados con flags dentro de un mismo checkout son más ramas de las que el problema necesita, y todo mundo las ve.",
+      "planFitnessFunctions": "Un plan por escrito, un ADR y dos checks en CI (ningún flag de país nuevo, pruebas del checkout por país) cuestan como una semana de un equipo.",
+      "planRepaymentQuarter": "El trimestre después del lanzamiento, un equipo dedica casi todo su tiempo a extraer una costura de país en vez de sacar funcionalidades. El pago está agendado, así que sí ocurre.",
+      "planDebtRetired": "Una vez que existe la costura y las fitness functions la cuidan, los flags salen y no regresan.",
+      "planLaunchEdgeCases": "Algunos casos colombianos (NIT, formatos de dirección) se cuelan por el atajo; los checks por país atrapan la mayoría en días, no todos.",
+      "planRegulatorReadsAdr": "El regulador pregunta cómo se controlan las reglas por país. Un ADR fechado y un ticket de pago son una respuesta, aunque no gratis.",
+      "noPlanShipsFastest": "Sin ADR, sin checks, sin costura: el atajo sale un poco antes que el planeado, porque el plan era el único overhead.",
+      "noPlanIfsEverywhere": "Sin una frontera, el 'if country == CO' cae donde alguien lo necesitó: precios, impuestos, facturas, dispersiones.",
+      "noPlanTribalKnowledge": "Saber dónde viven las ramas de Colombia está en la cabeza de tres personas, y el equipo es de cuarenta.",
+      "noPlanInterestCompounds": "Cada funcionalidad nueva se escribe dos veces, una por país, y las tablas compartidas ganan columnas de país que nadie es dueño de. Se cobra interés en cada cambio.",
+      "noPlanVelocityGone": "Dos trimestres después, la velocidad comprada en el lanzamiento ya se pagó con intereses. El 'después' nunca tuvo fecha.",
+      "noPlanRegressions": "Los cambios al checkout de México rompen el de Colombia y nadie se entera hasta que un cliente lo hace. El código sin pruebas es legado desde el día del merge.",
+      "noPlanLaunchBreaks": "La semana del lanzamiento salen los casos que nadie anotó: formato de pesos, NIT, un banco de dispersión que rechaza el archivo.",
+      "noPlanRegulatorArchaeology": "El regulador pregunta dónde se aplican las reglas por país. Averiguarlo cuesta una auditoría del código, a tarifa de consultor.",
+      "generalQuarterLate": "Extraer una costura de país de un checkout que asume México se lleva el trimestre completo: primero pruebas alrededor del código viejo, luego la costura, luego Colombia.",
+      "generalEngineeringCost": "Un trimestre de dos equipos en un refactor que el negocio no puede ver.",
+      "generalBurnsRunway": "Los ingresos de Colombia empiezan un trimestre después: cerca de dos meses de runway esperándolos.",
+      "generalSeamConcept": "Una abstracción de país es un concepto nuevo que cada ingeniero tiene que aprender antes de tocar el checkout.",
+      "generalCleanSeam": "Con un solo lugar donde viven las reglas por país, agregar Colombia es configuración, y el siguiente país sale todavía más barato.",
+      "generalFewerRegressions": "Las pruebas del checkout corren por país en cada cambio; las regresiones de un mercado dejan de filtrarse al otro.",
+      "generalMissesWindow": "Llega la fecha y el checkout no está listo. El presupuesto de marketing ya se gastó, y parte de la demanda se va con un competidor que lanzó primero.",
+      "generalRegulatorOnePlace": "Las reglas por país viven en un módulo con pruebas, así que las preguntas del regulador tienen respuesta corta.",
+      "colombiaOrders": "Colombia suma unos 1,200 pedidos al día en su primer trimestre, si el checkout los aguanta.",
+      "colombiaSecondMarket": "Un segundo mercado es otro calendario de días festivos, otras paqueterías, otros bancos y otros horarios de soporte que tener en la cabeza.",
+      "licenceComplianceCost": "Una licencia de pagos trae controles, reportes y la gente que los opera, sea cual sea la arquitectura.",
+      "licenceChangeControl": "Tener licencia significa control de cambios: los cambios en producción en flujos regulados necesitan registro y un segundo aprobador."
+    }
+  },
+  "terms": {
+    "techDebt": {
+      "quadrant": "deuda, deliberad, a propósito, prudente, imprudente, inadvertid, sin querer, atajo, interés, intereses, principal, préstamo, prestad, parche, flag, conscientemente",
+      "repayment": "pagar, pago, saldar, amortiz, refactor, fitness function, fecha límite, para el Q, siguiente trimestre, agendad, ticket, presupuesto, costura, extraer, dueño, vence"
+    }
+  },
+  "chapters": {
+    "tech-debt": {
+      "short": "DEUDA",
+      "title": "Colombia para el próximo trimestre",
+      "concept": "La deuda técnica como decisión deliberada con un plan de pago: la metáfora de Cunningham, el cuadrante de Fowler, costuras y fitness functions.",
+      "voice": "Todo código tiene deuda. Alguna tiene calendario de pagos.",
+      "briefing": "Cuarenta ingenieros, y el negocio quiere Colombia en línea en un trimestre. El checkout asume México en la moneda, el RFC, las direcciones y las dispersiones. Hay un atajo, y todos saben ya por dónde pasa.",
+      "dilemma": "¿Pides prestado el trimestre? Y si lo haces, ¿quién deja por escrito cuándo se paga?",
+      "disagreement": "Aquí los expertos no coinciden. La metáfora original de Cunningham solo funciona si pagas refactorizando, y muchos sostienen que la deuda sin plan es solo un desorden con mejor nombre. Otros señalan que casi toda la deuda se descubre, no se elige, y que un plan de pago escrito bajo presión de fecha es sobre todo optimismo. Los dos lo han visto pasar.",
+      "readNext": "Lee el breve reporte de experiencia de Cunningham para ver qué significaba la metáfora al principio, luego el cuadrante de Fowler para distinguir lo prudente de lo imprudente, y después a Feathers sobre costuras y los capítulos de fitness functions de Building Evolutionary Architectures para que el pago no se quede en promesa.",
+      "options": {
+        "shortcut-with-plan": {
+          "title": "Tomar el atajo, a propósito, con plan de pago",
+          "optimizes": "Colombia en la fecha; la deuda tiene dueño, fecha límite y dos checks de CI que la vigilan.",
+          "costs": "Una semana de plan y checks ahora, y un trimestre entero de pago que no entrega nada visible."
+        },
+        "shortcut-no-plan": {
+          "title": "Tomar el atajo; ya lo limpiamos después",
+          "optimizes": "Colombia en la fecha, un poco más rápido y sin ceremonias.",
+          "costs": "Intereses en cada cambio posterior, y el 'después' no tiene fecha."
+        },
+        "generalize-first": {
+          "title": "Generalizar el checkout primero, lanzar un trimestre tarde",
+          "optimizes": "Una costura de país que hace barato y seguro lanzar Colombia, y el país que sigue.",
+          "costs": "La fecha de lanzamiento, parte de la demanda y dos meses de runway."
+        }
+      },
+      "events": {
+        "colombia-launch": "Lunes, 09:00 hora de Bogotá. Colombia está en línea. El primer pedido se paga en pesos; los correctos, ojalá.",
+        "regulator-licence": "Se otorga la licencia de pagos, con condiciones. La primera: muéstrennos dónde se aplican las reglas de cada país."
+      },
+      "inspections": {
+        "checkout-cracks": "Inspección de obra: grietas finas a lo largo del checkout, ramificándose donde alguien escribió 'if country'. Medidas, fechadas, y con reparación agendada o sin ella."
+      },
+      "review": {
+        "which-quadrant": "¿Esta deuda es deliberada o inadvertida, prudente o imprudente, y qué de la situación la hizo así?",
+        "what-interest": "¿Qué intereses paga esta decisión, sobre qué parte del sistema, y quién los paga?",
+        "when-repaid": "¿Cuándo se paga la deuda, qué dispara el pago, y cómo notarías que se está atrasando?"
+      },
+      "rubric": {
+        "grounded-context": "El contexto nombra las restricciones que realmente dieron forma a la elección (equipo, fecha de lanzamiento, pedidos, regulación).",
+        "names-debt-kind": "La decisión dice si se tomó deuda, y si fue a propósito.",
+        "names-tradeoff": "Las consecuencias nombran al menos una fuerza que empeoró, no solo las que mejoraron.",
+        "names-given-up": "Aquello a lo que se renunció está escrito en una oración completa.",
+        "repayment-plan": "La sección de revisión es un plan de pago con disparador o fecha: qué se refactoriza, para cuándo y qué check lo hace cumplir."
+      }
+    }
+  }
+}

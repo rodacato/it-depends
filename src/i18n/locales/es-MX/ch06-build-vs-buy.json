@@ -1,0 +1,110 @@
+{
+  "chapters": {
+    "build-vs-buy": {
+      "short": "CONSTRUIR VS COMPRAR",
+      "title": "Alguien está robando con nuestro checkout",
+      "concept": "Construir o comprar: construye lo que te diferencia, compra lo que ya es commodity, y cuenta los costos que ninguna factura enseña.",
+      "voice": "Toda demo de proveedor termina con la misma lámina: 'y simplemente funciona'. Fíjate quién hizo la lámina.",
+      "briefing": "Q1 del Año 3, unas 28 personas de ingeniería. Los contracargos se triplicaron en dos trimestres y una banda de fraude ya le encontró el modo al alta de vendedores. El próximo trimestre llega un auditor y va a querer saber cómo decidimos qué pago es fraude.",
+      "dilemma": "¿Detener el fraude es algo en lo que Mercadito debe ser bueno, o algo por lo que debe pagarle a alguien más para que lo sea?",
+      "disagreement": "Aquí los expertos no coinciden. El mapeo estilo Wardley dice que el scoring de fraude ya es commodity: cómpralo y usa a tu gente en lo que te diferencia. Otros responden que en un marketplace los patrones de fraude son el negocio (vendedores coludidos, publicaciones falsas) y que tercerizarlos es tercerizar justo lo que más necesitas aprender. Ambos tienen razón sobre algún marketplace.",
+      "readNext": "Empieza por el capítulo de Wardley Maps sobre evolución (génesis, a la medida, producto, commodity), relee el ensayo de las fichas de innovación como presupuesto de lo que construyes, y termina con Team Topologies sobre lo que un dominio nuevo le cuesta a la cabeza de un equipo.",
+      "variants": {
+        "regulated-fintech": "fintech regulada de 80 ingenieros"
+      },
+      "options": {
+        "build-risk": {
+          "title": "Construirlo: un distrito de riesgo con fraud-service y datos propios",
+          "optimizes": "Control sobre las reglas y los datos; una capacidad que la competencia no puede comprar.",
+          "costs": "Un equipo durante dos trimestres, peor detección antes de mejorar, y cada control lo demuestras tú."
+        },
+        "buy-scoring": {
+          "title": "Comprarlo: un proveedor de scoring de fraude llamado desde el checkout",
+          "optimizes": "En producción en semanas, con señales de fraude de miles de otros comercios.",
+          "costs": "Una comisión en cada pedido, una caja negra en el camino del checkout y un contrato que se renueva en sus términos."
+        },
+        "hybrid-rules": {
+          "title": "Comprar el score, quedarte con las reglas: proveedor más un módulo fraud-rules",
+          "optimizes": "El scoring commodity se compra; el criterio propio del marketplace se queda en casa.",
+          "costs": "Dos cosas que operar, una costura entre ellas, y aun así una factura."
+        }
+      },
+      "events": {
+        "vendor-price-change": "Llegan las cartas de renovación. 'Para seguir invirtiendo en nuestra plataforma', todos los proveedores suben precio.",
+        "audit-requirement": "La primera lista del auditor: 140 puntos, incluido 'evidencia del diseño y la operación efectiva de los controles de fraude'."
+      },
+      "inspections": {
+        "chargeback-spreadsheet": "Inspección de obra: las disputas de contracargos viven en una hoja de cálculo compartida con 900 filas y dos dueños. El auditor va a preguntar quién aprobó la fila 412."
+      },
+      "review": {
+        "what-differentiates": "¿La detección de fraude es donde Mercadito se diferencia, o un commodity que le toca necesitar? ¿En qué parte del mapa está?",
+        "hidden-costs": "¿Qué cuesta esta elección que no va a aparecer en la primera factura ni en el primer sprint?",
+        "when-switch": "¿Qué precio, volumen o hallazgo de auditoría te haría cruzar al otro lado, y cómo te darías cuenta?"
+      },
+      "rubric": {
+        "grounded-context": "El contexto nombra las restricciones que dieron forma a la elección (equipo, pedidos, contracargos, la auditoría, dinero).",
+        "names-evolution": "La decisión dice si la detección de fraude diferencia a Mercadito o es commodity, y construye o compra en consecuencia.",
+        "names-hidden-cost": "Las consecuencias nombran un costo que ningún lado anuncia: comisiones que escalan, lock-in, gente para operarlo, evidencia para el auditor.",
+        "names-given-up": "Aquello a lo que se renunció está escrito en una oración completa.",
+        "revisit-trigger": "El disparador para cambiar de lado es una condición que alguien podría notar, no un deseo."
+      }
+    }
+  },
+  "assumptions": {
+    "buildVsBuy": {
+      "buildTakesATeam": "Un servicio de fraude propio que sirva de algo se lleva a cuatro o cinco personas unos dos trimestres, de unas 28; es casi todo el roadmap de un equipo.",
+      "buildNewDistrict": "Un servicio nuevo, su propia base de datos y una llamada síncrona desde el checkout: un desplegable más y un contrato más que mantener.",
+      "buildSalaries": "Cinco sueldos y una base de datos nueva cuestan más este año de lo que costarían las comisiones de un proveedor con el volumen de hoy.",
+      "buildNewDomain": "El fraude es un dominio aparte (features, etiquetas, falsos positivos, disputas); alguien tiene que aprenderlo antes de poder hacerse cargo.",
+      "buildColdStart": "Un modelo entrenado solo con la historia de Mercadito arranca ciego ante patrones que todavía no ha visto, así que al principio detecta peor que un proveedor.",
+      "buildLearnsMarketplace": "Tras unos dos trimestres de contracargos etiquetados, las reglas afinadas para vendedores coludidos y publicaciones falsas atrapan lo que el scoring genérico deja pasar.",
+      "buildEvidenceOwnControls": "Si lo construyes, el auditor lo audita: bitácoras de cambios al modelo, revisiones de acceso y registros de excepciones los producimos nosotros.",
+      "buildNoInvoiceToReprice": "Sin comisión de fraude por transacción, que un proveedor suba precio toca una parte menor de los costos.",
+      "buyLiveInWeeks": "Integrar una API de scoring de fraude son unas semanas para dos personas; el scoring ya es un producto, no un proyecto de investigación.",
+      "buyConsortiumData": "Un proveedor ve fraude en miles de comercios, así que reconoce tarjetas y dispositivos robados desde el primer día.",
+      "buyCheckoutDependency": "Cada checkout ahora espera a un tercero; los timeouts necesitan una decisión de respaldo (aprobar, rechazar o mandar a revisión).",
+      "buyBlackBox": "Soporte y el equipo de riesgo reciben un score sin razón; explicarle a un vendedor por qué lo rechazaron se vuelve más difícil.",
+      "buyFeePerOrder": "La comisión son unos centavos por transacción evaluada; con el crecimiento del Año 3 supera el sueldo de un equipo chico en menos de un año.",
+      "buyLockedInAtRenewal": "Después de un año, nuestras etiquetas, umbrales y flujos viven en su dashboard. Cambiar implica reintegrar y reajustar, así que el aumento se firma.",
+      "buyAttestationHelps": "La certificación del propio proveedor cubre casi todo el modelo; aun así evidenciamos cómo usamos el score y quién lo anula.",
+      "hybridRulesTakeAPair": "Un módulo con una docena de reglas propias del marketplace se lleva a dos personas cerca de un trimestre, además de la integración.",
+      "hybridScorePlusLocal": "El scoring del proveedor atrapa el fraude genérico con tarjeta; nuestras reglas atrapan lo que solo ve un marketplace, como un vendedor que se compra a sí mismo.",
+      "hybridSeam": "Primero las reglas, luego el proveedor, y una política para cuando no coinciden: una costura que necesita sus propias pruebas.",
+      "hybridTwoThingsToRun": "Dos sistemas deciden sobre el mismo pago. Cuando rechazan a un buen cliente, alguien tiene que averiguar cuál de los dos dijo que no.",
+      "hybridFilteredFee": "Las reglas pueden saltarse al proveedor en pedidos claramente seguros o claramente fraudulentos, así que la comisión cae sobre menos transacciones, pero cae.",
+      "hybridRulesCompound": "Con el módulo de reglas en pie, los equipos de producto sacan nuevas validaciones de riesgo sin abrirle un ticket al proveedor.",
+      "hybridLeverageAtRenewal": "Ser dueños de las reglas y las etiquetas hace creíble cambiar de proveedor, así que la renovación es una negociación y no un aviso.",
+      "hybridTwoControlSets": "Dos conjuntos de controles que evidenciar: la certificación del proveedor más el historial de cambios y aprobaciones de nuestras reglas.",
+      "vendorsReprice": "En el Año 3 los proveedores que cobraban para crecer empiezan a cobrar para ganar margen; la mayoría de los contratos se renueva unos puntos más arriba.",
+      "auditFieldwork": "Una auditoría se lleva semanas de ingeniería juntando evidencia, más los honorarios de los auditores.",
+      "auditChangeControl": "La aprobación formal de cambios agrega un paso a cada release a producción; frena la entrega más de lo que evita incidentes."
+    }
+  },
+  "components": {
+    "fraud-service": {
+      "name": "fraud-service",
+      "role": "scoring y reglas propios"
+    },
+    "risk-db": {
+      "name": "risk DB",
+      "role": "etiquetas, features, decisiones"
+    },
+    "fraud-rules": {
+      "name": "fraud-rules",
+      "role": "reglas del marketplace antes del score"
+    },
+    "fraud-vendor": {
+      "name": "proveedor de fraude",
+      "role": "score de riesgo por transacción"
+    }
+  },
+  "districts": {
+    "risk": "riesgo"
+  },
+  "terms": {
+    "buildVsBuy": {
+      "evolution": "diferencia, commodity, núcleo, genéric, a la medida, construir, construi, comprar, compra, proveedor, propio, in-house, terceriz, wardley, mapa, producto, competitiv",
+      "hiddenCost": "comisión, por transacción, lock-in, amarrad, contrato, renovación, precio, mantenimiento, gente, sueldo, guardia, on-call, auditor, evidencia, control, integración, cambiar de proveedor, equipo, caja negra"
+    }
+  }
+}

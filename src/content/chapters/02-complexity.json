@@ -1,0 +1,615 @@
+{
+  "id": "complexity",
+  "number": 2,
+  "quarter": 2,
+  "timelapseQuarters": 1,
+  "dilemma": {
+    "id": "variants-bundles-regions",
+    "options": [
+      {
+        "id": "pricing-engine",
+        "topology": [
+          {
+            "op": "addComponent",
+            "component": {
+              "id": "pricing-engine",
+              "kind": "module",
+              "district": "storefront",
+              "loadShare": 1,
+              "capacity": 520
+            }
+          },
+          {
+            "op": "addConnection",
+            "connection": {
+              "id": "pricing-rules",
+              "kind": "road",
+              "from": "mercadito-app",
+              "to": "pricing-engine"
+            }
+          },
+          {
+            "op": "addConnection",
+            "connection": {
+              "id": "rules-table",
+              "kind": "pipe",
+              "from": "pricing-engine",
+              "to": "shared-postgres"
+            }
+          }
+        ],
+        "effects": [
+          {
+            "id": "engine-config-not-code",
+            "target": {
+              "force": "velocity"
+            },
+            "delta": 5,
+            "byVariant": {
+              "regulated-fintech": 2
+            },
+            "timing": {
+              "kind": "immediate"
+            },
+            "anchor": "pricing-engine",
+            "assumption": "assumptions.complexity.engineConfigNotCode",
+            "sources": [
+              "fsa",
+              "model"
+            ]
+          },
+          {
+            "id": "engine-accidental",
+            "target": {
+              "force": "complexity"
+            },
+            "delta": 10,
+            "byVariant": {
+              "regulated-fintech": 5
+            },
+            "timing": {
+              "kind": "immediate"
+            },
+            "anchor": "pricing-engine",
+            "assumption": "assumptions.complexity.engineAccidental",
+            "sources": [
+              "brooks-silver-bullet",
+              "apsd"
+            ]
+          },
+          {
+            "id": "engine-build-time",
+            "target": {
+              "force": "cost"
+            },
+            "delta": 4,
+            "timing": {
+              "kind": "immediate"
+            },
+            "anchor": "pricing-engine",
+            "assumption": "assumptions.complexity.engineBuildTime",
+            "sources": [
+              "model"
+            ]
+          },
+          {
+            "id": "engine-rule-collisions",
+            "target": {
+              "force": "reliability"
+            },
+            "delta": -5,
+            "byVariant": {
+              "regulated-fintech": -8
+            },
+            "timing": {
+              "kind": "delayed",
+              "afterQuarters": 1
+            },
+            "anchor": "pricing-engine",
+            "assumption": "assumptions.complexity.engineRuleCollisions",
+            "sources": [
+              "apsd",
+              "model"
+            ]
+          },
+          {
+            "id": "engine-nobody-reads-the-rules",
+            "target": {
+              "force": "cognitiveLoad"
+            },
+            "delta": 12,
+            "byVariant": {
+              "regulated-fintech": 5
+            },
+            "timing": {
+              "kind": "delayed",
+              "afterQuarters": 2
+            },
+            "anchor": "pricing-engine",
+            "assumption": "assumptions.complexity.engineNobodyReadsRules",
+            "sources": [
+              "apsd",
+              "brooks-silver-bullet"
+            ]
+          },
+          {
+            "id": "engine-hires-learn-the-dsl",
+            "target": {
+              "force": "cognitiveLoad"
+            },
+            "delta": 4,
+            "timing": {
+              "kind": "conditional",
+              "eventId": "seed-round"
+            },
+            "anchor": "pricing-engine",
+            "assumption": "assumptions.complexity.engineHiresLearnDsl",
+            "sources": [
+              "team-topologies",
+              "model"
+            ]
+          },
+          {
+            "id": "engine-key-engineer",
+            "target": {
+              "force": "velocity"
+            },
+            "delta": -2,
+            "timing": {
+              "kind": "conditional",
+              "eventId": "key-engineer-leaves"
+            },
+            "anchor": "pricing-engine",
+            "assumption": "assumptions.complexity.engineKeyEngineer",
+            "sources": [
+              "team-topologies",
+              "model"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "catalog-module",
+        "topology": [
+          {
+            "op": "addComponent",
+            "component": {
+              "id": "catalog-module",
+              "kind": "module",
+              "district": "storefront",
+              "loadShare": 1,
+              "capacity": 1200
+            }
+          },
+          {
+            "op": "addConnection",
+            "connection": {
+              "id": "catalog-calls",
+              "kind": "road",
+              "from": "mercadito-app",
+              "to": "catalog-module"
+            }
+          },
+          {
+            "op": "addConnection",
+            "connection": {
+              "id": "catalog-tables",
+              "kind": "pipe",
+              "from": "catalog-module",
+              "to": "shared-postgres"
+            }
+          }
+        ],
+        "effects": [
+          {
+            "id": "catalog-slower-now",
+            "target": {
+              "force": "velocity"
+            },
+            "delta": -6,
+            "byVariant": {
+              "regulated-fintech": -2
+            },
+            "timing": {
+              "kind": "immediate"
+            },
+            "anchor": "catalog-module",
+            "assumption": "assumptions.complexity.catalogSlowerNow",
+            "sources": [
+              "apsd",
+              "model"
+            ]
+          },
+          {
+            "id": "catalog-essential-only",
+            "target": {
+              "force": "complexity"
+            },
+            "delta": 4,
+            "byVariant": {
+              "regulated-fintech": 2
+            },
+            "timing": {
+              "kind": "immediate"
+            },
+            "anchor": "catalog-module",
+            "assumption": "assumptions.complexity.catalogEssentialOnly",
+            "sources": [
+              "brooks-silver-bullet"
+            ]
+          },
+          {
+            "id": "catalog-engineering-time",
+            "target": {
+              "force": "cost"
+            },
+            "delta": 4,
+            "timing": {
+              "kind": "immediate"
+            },
+            "anchor": "catalog-module",
+            "assumption": "assumptions.complexity.catalogEngineeringTime",
+            "sources": [
+              "model"
+            ]
+          },
+          {
+            "id": "catalog-deep-interface",
+            "target": {
+              "force": "cognitiveLoad"
+            },
+            "delta": 2,
+            "timing": {
+              "kind": "immediate"
+            },
+            "anchor": "catalog-module",
+            "assumption": "assumptions.complexity.catalogDeepInterface",
+            "sources": [
+              "apsd"
+            ]
+          },
+          {
+            "id": "catalog-cases-tested",
+            "target": {
+              "force": "reliability"
+            },
+            "delta": 4,
+            "timing": {
+              "kind": "delayed",
+              "afterQuarters": 1
+            },
+            "anchor": "catalog-module",
+            "assumption": "assumptions.complexity.catalogCasesTested",
+            "sources": [
+              "evolutionary",
+              "feathers-legacy"
+            ]
+          },
+          {
+            "id": "catalog-cheap-to-change",
+            "target": {
+              "force": "velocity"
+            },
+            "delta": 6,
+            "timing": {
+              "kind": "delayed",
+              "afterQuarters": 2
+            },
+            "anchor": "catalog-module",
+            "assumption": "assumptions.complexity.catalogCheapToChange",
+            "sources": [
+              "apsd",
+              "model"
+            ]
+          },
+          {
+            "id": "catalog-fourth-case",
+            "target": {
+              "force": "velocity"
+            },
+            "delta": -3,
+            "timing": {
+              "kind": "conditional",
+              "eventId": "seed-round"
+            },
+            "anchor": "catalog-module",
+            "assumption": "assumptions.complexity.catalogFourthCase",
+            "sources": [
+              "model"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "catalog-saas",
+        "topology": [
+          {
+            "op": "addComponent",
+            "component": {
+              "id": "catalog-saas",
+              "kind": "vendor",
+              "loadShare": 1,
+              "capacity": 100000
+            }
+          },
+          {
+            "op": "addConnection",
+            "connection": {
+              "id": "catalog-sync",
+              "kind": "road",
+              "from": "mercadito-app",
+              "to": "catalog-saas"
+            }
+          }
+        ],
+        "effects": [
+          {
+            "id": "saas-ships-now",
+            "target": {
+              "force": "velocity"
+            },
+            "delta": 7,
+            "byVariant": {
+              "regulated-fintech": 3
+            },
+            "timing": {
+              "kind": "immediate"
+            },
+            "anchor": "catalog-saas",
+            "assumption": "assumptions.complexity.saasShipsNow",
+            "sources": [
+              "wardley-maps",
+              "boring-tech"
+            ]
+          },
+          {
+            "id": "saas-subscription",
+            "target": {
+              "force": "cost"
+            },
+            "delta": 6,
+            "byVariant": {
+              "regulated-fintech": 2
+            },
+            "timing": {
+              "kind": "immediate"
+            },
+            "anchor": "catalog-saas",
+            "assumption": "assumptions.complexity.saasSubscription",
+            "sources": [
+              "model"
+            ]
+          },
+          {
+            "id": "saas-annual-contract",
+            "target": {
+              "context": "runwayMonths"
+            },
+            "delta": -1,
+            "timing": {
+              "kind": "immediate"
+            },
+            "anchor": "catalog-saas",
+            "assumption": "assumptions.complexity.saasAnnualContract",
+            "sources": [
+              "model"
+            ]
+          },
+          {
+            "id": "saas-their-model",
+            "target": {
+              "force": "cognitiveLoad"
+            },
+            "delta": -3,
+            "timing": {
+              "kind": "immediate"
+            },
+            "anchor": "catalog-saas",
+            "assumption": "assumptions.complexity.saasTheirModel",
+            "sources": [
+              "wardley-maps",
+              "team-topologies"
+            ]
+          },
+          {
+            "id": "saas-glue-and-lock-in",
+            "target": {
+              "force": "complexity"
+            },
+            "delta": 4,
+            "byVariant": {
+              "regulated-fintech": 6
+            },
+            "timing": {
+              "kind": "immediate"
+            },
+            "anchor": "catalog-saas",
+            "assumption": "assumptions.complexity.saasGlueAndLockIn",
+            "sources": [
+              "hard-parts",
+              "model"
+            ]
+          },
+          {
+            "id": "saas-stale-prices",
+            "target": {
+              "force": "reliability"
+            },
+            "delta": -3,
+            "timing": {
+              "kind": "delayed",
+              "afterQuarters": 1
+            },
+            "anchor": "catalog-saas",
+            "assumption": "assumptions.complexity.saasStalePrices",
+            "sources": [
+              "kleppmann-ddia",
+              "model"
+            ]
+          },
+          {
+            "id": "saas-price-change",
+            "target": {
+              "force": "cost"
+            },
+            "delta": 8,
+            "byVariant": {
+              "regulated-fintech": 12
+            },
+            "timing": {
+              "kind": "conditional",
+              "eventId": "vendor-price-change"
+            },
+            "anchor": "catalog-saas",
+            "assumption": "assumptions.complexity.saasPriceChange",
+            "sources": [
+              "wardley-maps",
+              "model"
+            ]
+          },
+          {
+            "id": "saas-black-friday-limits",
+            "target": {
+              "force": "reliability"
+            },
+            "delta": -3,
+            "timing": {
+              "kind": "conditional",
+              "eventId": "black-friday"
+            },
+            "anchor": "catalog-saas",
+            "assumption": "assumptions.complexity.saasBlackFridayLimits",
+            "sources": [
+              "hard-parts",
+              "model"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "events": [
+    {
+      "id": "seed-round",
+      "trigger": {
+        "kind": "scheduled",
+        "quarter": 3
+      },
+      "anchor": "mercadito-app",
+      "effects": [
+        {
+          "id": "seed-runway",
+          "target": {
+            "context": "runwayMonths"
+          },
+          "delta": 18,
+          "timing": {
+            "kind": "immediate"
+          },
+          "anchor": "mercadito-app",
+          "assumption": "assumptions.complexity.seedRunway",
+          "sources": [
+            "model"
+          ]
+        }
+      ]
+    }
+  ],
+  "inspections": [
+    {
+      "id": "three-ways-to-price",
+      "atOffset": 1,
+      "anchor": "mercadito-app",
+      "minStress": 0
+    }
+  ],
+  "review": {
+    "questions": [
+      {
+        "id": "essential-or-accidental",
+        "criteria": [
+          "names-essence"
+        ]
+      },
+      {
+        "id": "who-pays-later",
+        "criteria": [
+          "names-given-up",
+          "names-tradeoff"
+        ]
+      },
+      {
+        "id": "when-revisit",
+        "criteria": [
+          "revisit-trigger",
+          "grounded-context"
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    {
+      "id": "grounded-context",
+      "field": "context",
+      "check": {
+        "kind": "mentionsAny",
+        "termsKey": "terms.context"
+      }
+    },
+    {
+      "id": "names-essence",
+      "field": "decision",
+      "check": {
+        "kind": "mentionsAny",
+        "termsKey": "terms.complexity.essence"
+      }
+    },
+    {
+      "id": "names-tradeoff",
+      "field": "consequences",
+      "check": {
+        "kind": "mentionsAny",
+        "termsKey": "terms.forces"
+      }
+    },
+    {
+      "id": "names-given-up",
+      "field": "givenUp",
+      "check": {
+        "kind": "minWords",
+        "n": 6
+      }
+    },
+    {
+      "id": "revisit-trigger",
+      "field": "revisit",
+      "check": {
+        "kind": "hasCondition"
+      }
+    }
+  ],
+  "readNext": [
+    "brooks-silver-bullet",
+    "apsd",
+    "wardley-maps"
+  ],
+  "contextVariants": [
+    {
+      "id": "regulated-fintech",
+      "context": {
+        "teamSize": 80,
+        "ordersPerDay": 20000,
+        "runwayMonths": 36,
+        "regulation": "licensed"
+      },
+      "forces": {
+        "velocity": 40,
+        "complexity": 60,
+        "cost": 58,
+        "reliability": 70,
+        "cognitiveLoad": 62
+      },
+      "capacityScale": 40
+    }
+  ]
+}

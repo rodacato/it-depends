@@ -1,0 +1,113 @@
+{
+  "chapters": {
+    "services": {
+      "short": "SERVICIOS",
+      "title": "Doce ingenieros, un despliegue",
+      "concept": "Monolito modular o servicios: tamaño del equipo, ley de Conway y cuándo partir.",
+      "voice": "Tres equipos, una rama main y una merge queue con opiniones propias.",
+      "briefing": "Doce ingenieros en tres equipos medio definidos comparten un solo código y un solo despliegue. Los pedidos andan en un par de miles al día, y cada jueves el release de alguien espera la migración de alguien más. El organigrama ya empezó a dibujar la arquitectura; la pregunta es si el lápiz lo tienes tú.",
+      "dilemma": "¿Marcas líneas más firmes dentro del monolito, recortas una pieza o lo partes en muchas?",
+      "disagreement": "Aquí los expertos no coinciden. Fowler propone empezar con un monolito y partir cuando las fronteras ya demostraron ser buenas; Tilkov responde que un monolito rara vez se parte limpio después, así que conviene diseñar las piezas desde el inicio. Ambos tienen casos que los respaldan, y ambos dicen que el tamaño del equipo cambia la respuesta.",
+      "readNext": "Lee MonolithFirst de Fowler y la respuesta de Tilkov lado a lado, y luego los capítulos de Team Topologies sobre carga cognitiva y la ley de Conway. El desacuerdo es la lección.",
+      "variants": {
+        "regulated-fintech": "fintech regulada de 80 ingenieros"
+      },
+      "options": {
+        "modular-monolith": {
+          "title": "Monolito modular: fronteras firmes dentro de mercadito-app",
+          "optimizes": "Un despliegue, una base de datos y fronteras que todavía se mueven barato.",
+          "costs": "Un trimestre de refactor antes de que rinda; reglas que solo valen mientras la gente las respete."
+        },
+        "orders-service": {
+          "title": "Sacar pedidos a su propio servicio, de un solo equipo",
+          "optimizes": "Un equipo libera pedidos a su ritmo; la arquitectura sigue al organigrama a propósito.",
+          "costs": "Una llamada de red donde había una llamada a función, una cola que operar y un trimestre más lento mientras se recorta."
+        },
+        "microservices": {
+          "title": "Microservicios: pedidos, catálogo y notificaciones, todo de una vez",
+          "optimizes": "Cada equipo con su propio desplegable, algún día.",
+          "costs": "Cuatro sistemas para doce personas, la prima de los microservicios pagada por adelantado y una baja de confiabilidad mientras todos aprenden."
+        }
+      },
+      "events": {
+        "key-engineer-leaves": "Lunes, 09:30. La ingeniera que sabía por qué pedidos funciona como funciona presenta su renuncia. Dos semanas."
+      },
+      "inspections": {
+        "everything-ends-at-postgres": "Inspección de obra: digan lo que digan las cajas, cada tubería del sitio sigue terminando en el mismo Postgres. La frontera solo está dibujada en la superficie."
+      },
+      "review": {
+        "who-owns-what": "¿Qué equipo es dueño de qué parte del sistema después de esta decisión, y el dibujo coincide con el organigrama?",
+        "what-it-costs": "¿Qué empeoró, y a qué renunciaste para obtener lo demás?",
+        "when-split": "¿Qué te diría que es momento de partir más, o de volver a juntar?"
+      },
+      "rubric": {
+        "grounded-context": "El contexto nombra las restricciones que realmente dieron forma a la elección (tamaño del equipo, tráfico, runway, dolor de despliegue).",
+        "names-ownership": "La decisión dice quién es dueño de qué: equipos, fronteras, módulos o servicios.",
+        "names-tradeoff": "Las consecuencias nombran al menos una fuerza que empeoró, no solo las que mejoraron.",
+        "names-given-up": "Aquello a lo que se renunció está escrito en una oración completa.",
+        "revisit-trigger": "El disparador para revisar es una condición que alguien podría notar, como un número de equipos o una cola de despliegue, no un deseo."
+      }
+    }
+  },
+  "assumptions": {
+    "services": {
+      "mmBoundaryWork": "Nombrar módulos y hacer cumplir sus fronteras con un verificador de dependencias se lleva como un tercio del trimestre de un equipo que, si no, estaría sacando funcionalidades.",
+      "mmFewerCollisions": "Cuando el código de pedidos deja de meterse en las tablas de catálogo, los equipos chocan menos, y se nota: menos conflictos de merge y menos revisiones entre equipos en un trimestre.",
+      "mmClearSeams": "Las fronteras explícitas entre módulos quitan parte del acoplamiento accidental que nadie quiso en primer lugar.",
+      "mmDiscipline": "Las fronteras entre módulos dentro de un solo código solo aguantan mientras la gente las respete; cada ingeniero tiene que conocer las reglas y el code review tiene que cuidarlas. Con 80 ingenieros eso es un trabajo de tiempo completo.",
+      "mmOneDeploy": "Un solo desplegable es una sola cosa que monitorear y a la cual hacer rollback. Con doce personas es más simple; con ochenta, un mal cambio de cualquier equipo tumba todo.",
+      "mmBiggerBox": "Correr el monolito en máquinas más grandes para aguantar la carga cuesta más cada mes, pero menos que operar servicios nuevos.",
+      "mmReadableWithoutThem": "Cuando se va una persona clave, el conocimiento vive en un código que los demás ya leen a diario. Igual duele, poquito.",
+      "splitExtraction": "Recortar pedidos del monolito, al estilo strangler, se lleva casi un trimestre del equipo dueño antes de que el servicio nuevo cargue tráfico real.",
+      "splitTeamOwnsIt": "Un equipo dueño de un servicio de punta a punta lo despliega por su cuenta y más seguido, y eso se ve en el lead time en un trimestre. Entre más grande la empresa, mayor la ganancia.",
+      "splitNetwork": "Una llamada de red, una cola y un contrato reemplazan lo que era una llamada a función. Con ellos llegan reintentos, timeouts y versionado.",
+      "splitInfrastructure": "Un servicio nuevo necesita su propio pipeline, ambientes, dashboards y guardia, y se paga cada mes.",
+      "splitNewFailures": "Un servicio nuevo trae nuevas formas de fallar: timeouts, una cola atorada, un mensaje procesado dos veces. A mayor escala, esa misma separación aísla las fallas.",
+      "splitTwoSystems": "Doce personas cargan ahora dos sistemas y el contrato entre ellos. Con 80 ingenieros pasa al revés: cada equipo carga un servicio en lugar de todo el monolito.",
+      "splitSharedDatabase": "El servicio sigue escribiendo en el Postgres compartido. Dos desplegables cambiando un mismo esquema es acoplamiento que las cajas no muestran.",
+      "splitContractWalksOut": "Cuando se va quien diseñó el contrato de pedidos, el contrato se queda y las razones detrás de él no. Los nuevos dueños lo reaprenden a punta de incidentes.",
+      "msBigBang": "Partir tres servicios a la vez con doce ingenieros detiene casi todo el trabajo de producto durante el trimestre.",
+      "msAutonomy": "Los despliegues independientes aceleran la entrega cuando los equipos son lo bastante grandes y estables para tener un servicio cada uno; con tres equipos y cuatro servicios, la ganancia es chica.",
+      "msDistributed": "Cuatro desplegables, una cola y una base compartida: tracing distribuido, contratos y fallas parciales se vuelven trabajo de todos los días.",
+      "msPlatform": "Cada servicio necesita pipeline, ambientes, monitoreo y guardia. Casi toda esa plataforma se paga antes de que regrese algo.",
+      "msReliabilityDip": "Durante el primer trimestre operando varios servicios, los incidentes suben mientras los equipos aprenden qué llamadas pueden fallar y cómo.",
+      "msSystemsPerHead": "Cuatro sistemas entre doce personas significa que cada ingeniero carga más de un servicio en la cabeza, más los contratos entre ellos.",
+      "msRunway": "La infraestructura extra y la entrega más lenta cuestan como un mes de runway al ritmo de gasto del año 2.",
+      "msOrphanedService": "Con más sistemas que equipos, perder a una persona clave deja un servicio que nadie entiende del todo. El siguiente incidente ahí tarda más en arreglarse.",
+      "tacitKnowledgeLeaves": "Perder a una ingeniera senior con conocimiento tácito de pedidos le cuesta al equipo como un trimestre de curva de aprendizaje para quien herede el trabajo.",
+      "modularReservoirDry": "Todos los pedidos siguen en la base compartida; las fronteras en el código no reparten la carga sobre los datos.",
+      "sharedDbCoupling": "Un servicio separado sobre una base compartida es un monolito distribuido: la caída es compartida, y la investigación también."
+    }
+  },
+  "components": {
+    "orders-module": {
+      "name": "módulo de pedidos",
+      "role": "frontera firme, mismo despliegue"
+    },
+    "orders-service": {
+      "name": "orders-service",
+      "role": "de un solo equipo"
+    },
+    "orders-queue": {
+      "name": "cola de pedidos",
+      "role": "eventos de pedidos"
+    },
+    "catalog-service": {
+      "name": "catalog-service",
+      "role": "productos y publicaciones"
+    },
+    "notifications-service": {
+      "name": "notifications-service",
+      "role": "correos y notificaciones push"
+    }
+  },
+  "districts": {
+    "orders": "pedidos",
+    "catalog": "catálogo"
+  },
+  "terms": {
+    "services": {
+      "ownership": "equipo, dueño, dueña, propiedad, conway, frontera, módulo, modulo, servicio, despliegue, desplegar, partir, separar, extraer, monolito, contrato, organigrama, responsab"
+    }
+  }
+}

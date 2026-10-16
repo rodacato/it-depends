@@ -69,7 +69,9 @@
       "coordinationCost": "Past about 20 people, communication paths grow faster than headcount; every quarter adds coordination load.",
       "burn": "The company burns about three months of runway per quarter until revenue catches up.",
       "demandNoise": "Demand varies quarter to quarter by up to 6%, for reasons no architecture controls.",
-      "congestion": "A component running past its capacity shows up as incidents: timeouts, retries, angry Fridays."
+      "congestion": "A component running past its capacity shows up as incidents: timeouts, retries, angry Fridays.",
+      "revenueDilution": "Revenue grows faster than spend, so each quarter the same bills weigh a little less.",
+      "operationalLearning": "Each quarter's incidents leave runbooks, alerts and habits behind; reliability improves a little even if nothing else changes."
     },
     "reversibility": {
       "hostedShipsFast": "A hosted checkout is days of integration, not weeks. Easy to undo: you can always build your own later.",
@@ -92,7 +94,18 @@
       "servicePciScope": "Handling card data directly puts the company in PCI DSS scope: audits, controls, and the people to run them.",
       "serviceQueuesThroughOutage": "With an own ledger and a queue, orders can be accepted and settled after the network recovers.",
       "outageRefunds": "A two-hour processor outage on a Saturday: refunds, apologies, a little lost trust.",
-      "fridayPeak": "Friday evening traffic runs about three times the daily average. The monolith notices first."
+      "fridayPeak": "Friday evening traffic runs about three times the daily average. The monolith notices first.",
+      "hostedPriceChange": "At renewal the hosted checkout reprices its fee; leaving means rebuilding checkout, so the increase gets signed.",
+      "hostedAuditScope": "Card data never touches our systems, so most payment controls are the vendor's to evidence.",
+      "hostedBlackFridayFee": "A percentage fee scales with the spike: the best sales week is also the most expensive one.",
+      "portPriceChange": "The processor raises its price, but the port makes a second adapter credible, so the increase is negotiable.",
+      "portReservoirDry": "Payments still write to the shared Postgres, so when it runs dry checkout waits with everyone else.",
+      "servicePriceChange": "A direct card-network link has no processor margin to reprice; interchange is set by the networks, not at a vendor's renewal.",
+      "serviceAuditScope": "An own ledger and direct card handling put us fully in audit scope: access reviews, key management and reconciliation evidence are all ours.",
+      "serviceBlackFridayBuffer": "The payment-events queue absorbs the checkout burst instead of passing it straight to the card network.",
+      "serviceKeyEngineer": "Ledger knowledge from the three-person era leaves with the person who wrote it.",
+      "serviceReservoirDry": "Payments keep their own reservoir, so a dry shared Postgres does not stop money moving.",
+      "serviceLicenceScope": "A licensed company that runs its own ledger must evidence every control around it to the regulator."
     }
   },
   "sources": {

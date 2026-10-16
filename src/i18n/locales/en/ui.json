@@ -179,6 +179,15 @@
       "footer": "DRAWN: YOU · CHECKED: REVIEW BOARD",
       "newCampaign": "NEW CAMPAIGN"
     },
-    "quarterShort": "Q{q} Y{y}"
+    "quarterShort": "Q{q} Y{y}",
+    "detail": {
+      "title": "Detail · section through {name}",
+      "subtitle": "Above grade, what users touch. Below grade, the data and queues it depends on. One floor ≈ a doubling of traffic.",
+      "grade": "GRADE ±0.00",
+      "belowGrade": "BELOW GRADE · DATA AND QUEUES",
+      "load": "≈ {load} orders/day · {pct}% of capacity",
+      "back": "Back to the site plan",
+      "hint": "Click to open the section drawing. Esc to come back."
+    }
   }
 }

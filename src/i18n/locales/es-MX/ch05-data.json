@@ -1,0 +1,92 @@
+{
+  "chapters": {
+    "data": {
+      "short": "DATOS",
+      "title": "Todos beben del mismo embalse",
+      "concept": "Base de datos compartida o una por servicio: consistencia, disponibilidad y quién es dueño de la verdad.",
+      "voice": "Dieciséis ingenieros, un esquema y un canal de migraciones que nadie silencia.",
+      "briefing": "Todos los equipos escriben en el Postgres compartido, y en hora pico es el embalse más ocupado de la ciudad. Los pedidos van rumbo a 2,600 al día, y el Postgres compartido se dimensionó para menos. Una migración más que bloquee la tabla de pedidos y el checkout se detiene.",
+      "dilemma": "¿Quién es dueño de los datos de pedidos, y cuánta inconsistencia estás dispuesto a tolerar para seguir recibiendo pedidos?",
+      "disagreement": "Aquí los expertos no coinciden. Richardson y Helland sostienen que cada servicio debe ser dueño de sus datos y aceptar consistencia eventual, porque las transacciones distribuidas no escalan. Otros responden que un Postgres bien operado le gana a una flota de bases pequeñas hasta que el equipo es mucho más grande, y que 'eventualmente' es una palabra difícil de decirle a un auditor. El propio Brewer dice que la elección de CAP solo aparece durante una partición, no como etiqueta permanente.",
+      "readNext": "Lee primero el ensayo de Brewer doce años después: CAP es una elección que haces durante una partición, no una etiqueta. Luego Helland sobre la vida sin transacciones distribuidas, el capítulo de sagas de Richardson, y los capítulos de transacciones y replicación de Kleppmann.",
+      "variants": {
+        "regulated-fintech": "fintech regulada de 80 ingenieros"
+      },
+      "options": {
+        "scale-the-reservoir": {
+          "title": "Conservar el Postgres compartido; uno más grande y una réplica de lectura",
+          "optimizes": "Una sola fuente de verdad, transacciones reales, ninguna migración este trimestre.",
+          "costs": "Todos los equipos siguen acoplados por un esquema; las lecturas de la réplica a veces llegan desactualizadas. La cuenta llega después."
+        },
+        "split-the-reservoir": {
+          "title": "orders-db propia, con eventos de dominio",
+          "optimizes": "Los pedidos siguen entrando cuando el embalse compartido se satura; el equipo de pedidos es dueño de su esquema.",
+          "costs": "Una migración de datos ahora, consistencia eventual para siempre y procesos de conciliación para demostrar que todo cuadra."
+        },
+        "coordinate-transactions": {
+          "title": "Dos bases de datos, un commit en dos fases",
+          "optimizes": "Almacenamiento separado que aún confirma como una sola transacción.",
+          "costs": "Latencia en cada pedido y un coordinador que bloquea ambas bases cuando cualquiera de las dos se atora."
+        }
+      },
+      "events": {
+        "series-a": "Se cerró la Serie A. Dos años de runway y un consejo que ahora pregunta por la 'plataforma'.",
+        "reservoir-dry": "Martes, 19:40. El Postgres compartido se queda sin conexiones. Checkout, catálogo y pagos a vendedores hacen la misma fila."
+      },
+      "inspections": {
+        "shared-reservoir": "Inspección de obra: el embalse compartido sigue siendo el más ocupado de la ciudad. Cuarenta tablas, cinco equipos, la mayoría sin dueño. Hay tres migraciones formadas para la ventana del jueves."
+      },
+      "review": {
+        "who-owns-truth": "¿Dónde vive ahora la verdad sobre un pedido, y qué consistencia le prometiste al resto del sistema?",
+        "what-goes-stale": "¿Qué puede ahora estar desactualizado, lento o bloqueado, y a qué renunciaste para obtener lo demás?",
+        "when-to-split": "¿Qué te haría separar (o volver a juntar) los datos, y qué número te lo diría?"
+      },
+      "rubric": {
+        "grounded-context": "El contexto nombra las restricciones que realmente dieron forma a la elección (equipo, tráfico, runway, regulación).",
+        "names-consistency": "La decisión dice qué consistencia ofrece ahora el sistema: transaccional, eventual o lecturas desactualizadas, y dónde.",
+        "names-tradeoff": "Las consecuencias nombran al menos una fuerza que empeoró, no solo las que mejoraron.",
+        "names-given-up": "Aquello a lo que se renunció está escrito en una oración completa.",
+        "revisit-trigger": "El disparador para revisar es una condición que alguien podría notar, no un deseo."
+      }
+    }
+  },
+  "assumptions": {
+    "data": {
+      "scaleKeepsShipping": "Una instancia más grande y una réplica son días de trabajo de operación sin reescribir la aplicación, así que el trabajo de producto sigue.",
+      "scaleBiggerBox": "Un primario más grande y una réplica casi duplican la factura de la base de datos, que aun así es menor que la infraestructura de un servicio nuevo.",
+      "scaleStaleReads": "Las réplicas asíncronas se atrasan segundos en hora pico; si la página lee de la réplica, algunos clientes no verán el pedido que acaban de hacer.",
+      "scaleCouplingGrows": "Con todos los equipos escribiendo en el mismo esquema, renombrar una columna se vuelve negociación, y el acoplamiento crece con cada tabla nueva.",
+      "scaleMigrationQueue": "Los cambios de esquema se forman detrás de una sola ventana de migraciones compartida; la gente gasta tiempo aprendiendo qué tablas de otro equipo no debe tocar.",
+      "scaleHeadroom": "Duplicar la capacidad compra cerca de un año de crecimiento al ritmo actual, suficiente para absorber el primer pico que agota las conexiones.",
+      "scaleOneAuditTrail": "Una sola base con transacciones reales le da al auditor una historia consistente, sin conciliar almacenes.",
+      "splitMigration": "Mover los pedidos a su propia base implica escrituras duales, un backfill y un corte: cerca de un trimestre del tiempo de un equipo.",
+      "splitMovingParts": "Una segunda base, una cola, un outbox y consumidores idempotentes: más piezas que pueden fallar cada una por su lado.",
+      "splitEventual": "Cuando los pedidos y lo demás viven en almacenes distintos, cada ingeniero tiene que razonar sobre estados que son ciertos aquí y todavía no allá.",
+      "splitInfrastructure": "Una segunda base administrada y una cola, con sus ambientes y respaldos, desde el primer mes.",
+      "splitReconciliation": "La consistencia eventual necesita pruebas: procesos de conciliación cada noche y alguien que lea lo que reportan.",
+      "splitAutonomy": "Terminado el corte, el equipo de pedidos cambia su esquema y despliega sin pedirle permiso a otros cuatro equipos.",
+      "splitStaysOpen": "Cuando el Postgres compartido se satura, los pedidos se siguen confirmando en su propio almacén y lo demás se pone al día con los eventos.",
+      "splitAuditAcrossStores": "Un auditor quiere una imagen consistente de cada pedido. Reconstruirla a partir de dos almacenes y un log de eventos es lento y caro.",
+      "txStillAtomic": "El commit en dos fases mantiene atómicos un pedido y su cambio de inventario en ambas bases: sin huérfanos ni procesos de conciliación.",
+      "txRoundTrips": "Cada pedido paga ahora una ronda de prepare y otra de commit por la red mientras se sostienen los locks; todo lo que toca pedidos se vuelve más lento de construir y de ejecutar.",
+      "txCoordinatorIsCritical": "El coordinador se vuelve infraestructura de la que depende cada pedido, con su propio log, su recuperación y sus formas de fallar.",
+      "txInfrastructure": "Una segunda base de datos y un coordinador en alta disponibilidad, pagados desde el primer mes.",
+      "txInDoubt": "Si el coordinador falla entre el prepare y el commit, las transacciones quedan en duda con los locks tomados, y alguien de guardia tiene que resolverlas a mano.",
+      "txBlocksInPartition": "El commit en dos fases elige consistencia sobre disponibilidad: cuando un participante va lento, los locks preparados se sostienen y ambas bases se atoran juntas.",
+      "txAuditFriendly": "Un commit atómico por pedido en ambas bases es fácil de mostrarle a un auditor.",
+      "seriesARunway": "La Serie A agrega cerca de dos años de runway al ritmo de gasto actual.",
+      "reservoirDryPeak": "Con unos 2,600 pedidos al día, las conexiones en hora pico superan lo que el Postgres compartido puede atender y las consultas de todos los equipos esperan juntas."
+    }
+  },
+  "components": {
+    "postgres-replica": { "name": "réplica de lectura de Postgres", "role": "copia del embalse, unos segundos atrás" },
+    "orders-db": { "name": "orders DB", "role": "el embalse propio del equipo de pedidos" },
+    "domain-events": { "name": "cola domain-events", "role": "OrderPlaced, OrderPaid, eventualmente" },
+    "tx-coordinator": { "name": "coordinador de transacciones", "role": "commit en dos fases entre ambas bases" }
+  },
+  "terms": {
+    "data": {
+      "consistency": "consisten, eventual, desactualiz, rezago, lag, réplica, replica, transacci, atómic, saga, 2pc, dos fases, partición, disponib, teorema cap, concilia, dueño, fuente de verdad, compartid, evento, outbox"
+    }
+  }
+}

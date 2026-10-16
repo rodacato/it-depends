@@ -1,0 +1,89 @@
+{
+  "id": "tech-debt",
+  "number": 7,
+  "quarter": 9,
+  "timelapseQuarters": 2,
+  "dilemma": {
+    "id": "colombia-checkout",
+    "options": [
+      {
+        "id": "shortcut-with-plan",
+        "topology": [],
+        "effects": [
+          { "id": "plan-ships-on-time", "target": { "force": "velocity" }, "delta": 8, "timing": { "kind": "immediate" }, "anchor": "mercadito-app", "assumption": "assumptions.techDebt.planShipsOnTime", "sources": ["cunningham-debt", "fowler-debt-quadrant"] },
+          { "id": "plan-country-flags", "target": { "force": "complexity" }, "delta": 6, "timing": { "kind": "immediate" }, "anchor": "mercadito-app", "assumption": "assumptions.techDebt.planCountryFlags", "sources": ["fowler-debt-quadrant", "apsd"] },
+          { "id": "plan-fitness-functions", "target": { "force": "cost" }, "delta": 3, "timing": { "kind": "immediate" }, "anchor": "mercadito-app", "assumption": "assumptions.techDebt.planFitnessFunctions", "sources": ["evolutionary", "model"] },
+          { "id": "plan-repayment-quarter", "target": { "force": "velocity" }, "delta": -7, "timing": { "kind": "delayed", "afterQuarters": 1 }, "anchor": "mercadito-app", "assumption": "assumptions.techDebt.planRepaymentQuarter", "sources": ["cunningham-debt", "model"] },
+          { "id": "plan-debt-retired", "target": { "force": "complexity" }, "delta": -7, "timing": { "kind": "delayed", "afterQuarters": 2 }, "anchor": "mercadito-app", "assumption": "assumptions.techDebt.planDebtRetired", "sources": ["feathers-legacy", "evolutionary"] },
+          { "id": "plan-launch-edge-cases", "target": { "force": "reliability" }, "delta": -2, "timing": { "kind": "conditional", "eventId": "colombia-launch" }, "anchor": "mercadito-app", "assumption": "assumptions.techDebt.planLaunchEdgeCases", "sources": ["evolutionary", "model"] },
+          { "id": "plan-regulator-reads-adr", "target": { "force": "cost" }, "delta": 3, "timing": { "kind": "conditional", "eventId": "regulator-licence" }, "anchor": "shared-postgres", "assumption": "assumptions.techDebt.planRegulatorReadsAdr", "sources": ["nygard-adr", "model"] }
+        ]
+      },
+      {
+        "id": "shortcut-no-plan",
+        "topology": [],
+        "effects": [
+          { "id": "noplan-ships-fastest", "target": { "force": "velocity" }, "delta": 10, "timing": { "kind": "immediate" }, "anchor": "mercadito-app", "assumption": "assumptions.techDebt.noPlanShipsFastest", "sources": ["fowler-debt-quadrant"] },
+          { "id": "noplan-ifs-everywhere", "target": { "force": "complexity" }, "delta": 8, "timing": { "kind": "immediate" }, "anchor": "mercadito-app", "assumption": "assumptions.techDebt.noPlanIfsEverywhere", "sources": ["fowler-debt-quadrant", "apsd"] },
+          { "id": "noplan-tribal-knowledge", "target": { "force": "cognitiveLoad" }, "delta": 5, "timing": { "kind": "immediate" }, "anchor": "mercadito-app", "assumption": "assumptions.techDebt.noPlanTribalKnowledge", "sources": ["team-topologies", "apsd"] },
+          { "id": "noplan-interest-compounds", "target": { "force": "complexity" }, "delta": 6, "timing": { "kind": "delayed", "afterQuarters": 1 }, "anchor": "shared-postgres", "assumption": "assumptions.techDebt.noPlanInterestCompounds", "sources": ["cunningham-debt", "model"] },
+          { "id": "noplan-velocity-gone", "target": { "force": "velocity" }, "delta": -10, "timing": { "kind": "delayed", "afterQuarters": 2 }, "anchor": "mercadito-app", "assumption": "assumptions.techDebt.noPlanVelocityGone", "sources": ["cunningham-debt", "accelerate"] },
+          { "id": "noplan-regressions", "target": { "force": "reliability" }, "delta": -5, "timing": { "kind": "delayed", "afterQuarters": 2 }, "anchor": "mercadito-app", "assumption": "assumptions.techDebt.noPlanRegressions", "sources": ["feathers-legacy", "model"] },
+          { "id": "noplan-launch-breaks", "target": { "force": "reliability" }, "delta": -4, "timing": { "kind": "conditional", "eventId": "colombia-launch" }, "anchor": "mercadito-app", "assumption": "assumptions.techDebt.noPlanLaunchBreaks", "sources": ["model"] },
+          { "id": "noplan-regulator-archaeology", "target": { "force": "cost" }, "delta": 10, "timing": { "kind": "conditional", "eventId": "regulator-licence" }, "anchor": "shared-postgres", "assumption": "assumptions.techDebt.noPlanRegulatorArchaeology", "sources": ["fowler-debt-quadrant", "model"] }
+        ]
+      },
+      {
+        "id": "generalize-first",
+        "topology": [],
+        "effects": [
+          { "id": "general-quarter-late", "target": { "force": "velocity" }, "delta": -8, "timing": { "kind": "immediate" }, "anchor": "mercadito-app", "assumption": "assumptions.techDebt.generalQuarterLate", "sources": ["feathers-legacy", "model"] },
+          { "id": "general-engineering-cost", "target": { "force": "cost" }, "delta": 5, "timing": { "kind": "immediate" }, "anchor": "mercadito-app", "assumption": "assumptions.techDebt.generalEngineeringCost", "sources": ["model"] },
+          { "id": "general-burns-runway", "target": { "context": "runwayMonths" }, "delta": -2, "timing": { "kind": "immediate" }, "anchor": "mercadito-app", "assumption": "assumptions.techDebt.generalBurnsRunway", "sources": ["model"] },
+          { "id": "general-seam-concept", "target": { "force": "cognitiveLoad" }, "delta": 3, "timing": { "kind": "immediate" }, "anchor": "mercadito-app", "assumption": "assumptions.techDebt.generalSeamConcept", "sources": ["feathers-legacy", "apsd"] },
+          { "id": "general-clean-seam", "target": { "force": "complexity" }, "delta": -4, "timing": { "kind": "delayed", "afterQuarters": 1 }, "anchor": "mercadito-app", "assumption": "assumptions.techDebt.generalCleanSeam", "sources": ["feathers-legacy", "apsd"] },
+          { "id": "general-fewer-regressions", "target": { "force": "reliability" }, "delta": 4, "timing": { "kind": "delayed", "afterQuarters": 2 }, "anchor": "mercadito-app", "assumption": "assumptions.techDebt.generalFewerRegressions", "sources": ["evolutionary", "accelerate"] },
+          { "id": "general-misses-the-window", "target": { "context": "ordersPerDay" }, "delta": -700, "timing": { "kind": "conditional", "eventId": "colombia-launch" }, "anchor": "mercadito-app", "assumption": "assumptions.techDebt.generalMissesWindow", "sources": ["model"] },
+          { "id": "general-regulator-one-place", "target": { "force": "cost" }, "delta": -3, "timing": { "kind": "conditional", "eventId": "regulator-licence" }, "anchor": "shared-postgres", "assumption": "assumptions.techDebt.generalRegulatorOnePlace", "sources": ["evolutionary", "model"] }
+        ]
+      }
+    ]
+  },
+  "events": [
+    {
+      "id": "colombia-launch",
+      "trigger": { "kind": "scheduled", "quarter": 10 },
+      "anchor": "mercadito-app",
+      "effects": [
+        { "id": "colombia-orders", "target": { "context": "ordersPerDay" }, "delta": 1200, "timing": { "kind": "immediate" }, "anchor": "mercadito-app", "assumption": "assumptions.techDebt.colombiaOrders", "sources": ["model"] },
+        { "id": "colombia-second-market", "target": { "force": "cognitiveLoad" }, "delta": 2, "timing": { "kind": "immediate" }, "anchor": "mercadito-app", "assumption": "assumptions.techDebt.colombiaSecondMarket", "sources": ["team-topologies", "model"] }
+      ]
+    },
+    {
+      "id": "regulator-licence",
+      "trigger": { "kind": "scheduled", "quarter": 11 },
+      "regulation": "licensed",
+      "anchor": "shared-postgres",
+      "effects": [
+        { "id": "licence-compliance-cost", "target": { "force": "cost" }, "delta": 6, "timing": { "kind": "immediate" }, "anchor": "shared-postgres", "assumption": "assumptions.techDebt.licenceComplianceCost", "sources": ["pci-dss", "model"] },
+        { "id": "licence-change-control", "target": { "force": "velocity" }, "delta": -3, "timing": { "kind": "immediate" }, "anchor": "mercadito-app", "assumption": "assumptions.techDebt.licenceChangeControl", "sources": ["model"] }
+      ]
+    }
+  ],
+  "inspections": [{ "id": "checkout-cracks", "atOffset": 2, "anchor": "mercadito-app", "minStress": 0.1 }],
+  "review": {
+    "questions": [
+      { "id": "which-quadrant", "criteria": ["names-debt-kind", "grounded-context"] },
+      { "id": "what-interest", "criteria": ["names-tradeoff", "names-given-up"] },
+      { "id": "when-repaid", "criteria": ["repayment-plan"] }
+    ]
+  },
+  "rubric": [
+    { "id": "grounded-context", "field": "context", "check": { "kind": "mentionsAny", "termsKey": "terms.context" } },
+    { "id": "names-debt-kind", "field": "decision", "check": { "kind": "mentionsAny", "termsKey": "terms.techDebt.quadrant" } },
+    { "id": "names-tradeoff", "field": "consequences", "check": { "kind": "mentionsAny", "termsKey": "terms.forces" } },
+    { "id": "names-given-up", "field": "givenUp", "check": { "kind": "minWords", "n": 6 } },
+    { "id": "repayment-plan", "field": "revisit", "check": { "kind": "mentionsAny", "termsKey": "terms.techDebt.repayment" } }
+  ],
+  "readNext": ["cunningham-debt", "fowler-debt-quadrant", "feathers-legacy", "evolutionary"]
+}

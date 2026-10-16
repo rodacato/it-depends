@@ -1,0 +1,110 @@
+{
+  "chapters": {
+    "build-vs-buy": {
+      "short": "BUILD VS BUY",
+      "title": "Somebody is stealing with our checkout",
+      "concept": "Build vs buy: build what differentiates you, buy what has become a commodity, and count the costs neither invoice shows.",
+      "voice": "Every vendor demo ends with the same slide: 'and it just works'. Note who built the slide.",
+      "briefing": "Q1 of Year 3, about 28 engineers. Chargebacks have tripled in two quarters and a fraud ring has discovered our seller onboarding. An auditor arrives next quarter and will want to know how we decide which payment is fraud.",
+      "dilemma": "Is stopping fraud something Mercadito should be good at, or something it should pay someone else to be good at?",
+      "disagreement": "Experts disagree here. Wardley-style mapping says fraud scoring is a commodity by now, so buy it and spend people on what differentiates; others argue that in a marketplace the fraud patterns are the business (seller collusion, fake listings) and outsourcing them outsources what you most need to learn. Both are right about some marketplace.",
+      "readNext": "Start with the chapter of Wardley Maps on evolution (genesis, custom, product, commodity), then reread the innovation-token essay as a budget for what you build, and finish with Team Topologies on what a new domain costs a team's head.",
+      "variants": {
+        "regulated-fintech": "80-engineer regulated fintech"
+      },
+      "options": {
+        "build-risk": {
+          "title": "Build it: a risk district with fraud-service and its own data",
+          "optimizes": "Control over the rules and the data; a capability competitors cannot buy.",
+          "costs": "A team for two quarters, worse detection before better, and every control is yours to prove."
+        },
+        "buy-scoring": {
+          "title": "Buy it: a fraud-scoring vendor called from checkout",
+          "optimizes": "Live in weeks, with fraud signals from thousands of other merchants.",
+          "costs": "A fee on every order, a black box in the checkout path, and a contract that renews on their terms."
+        },
+        "hybrid-rules": {
+          "title": "Buy the score, own the rules: vendor plus a fraud-rules module",
+          "optimizes": "Commodity scoring bought, marketplace-specific judgement kept in-house.",
+          "costs": "Two things to run, a seam between them, and still an invoice."
+        }
+      },
+      "events": {
+        "vendor-price-change": "Renewal letters arrive. 'To keep investing in our platform', every vendor's price goes up.",
+        "audit-requirement": "The auditor's first request list: 140 items, including 'evidence of fraud control design and operating effectiveness'."
+      },
+      "inspections": {
+        "chargeback-spreadsheet": "Site inspection: chargeback disputes live in a shared spreadsheet with 900 rows and two owners. The auditor will ask who approved row 412."
+      },
+      "review": {
+        "what-differentiates": "Is fraud detection where Mercadito differentiates, or a commodity it happens to need? Where on the map is it?",
+        "hidden-costs": "What does this choice cost that will not show up on the first invoice or in the first sprint?",
+        "when-switch": "What price, volume or audit finding would make you cross to the other side, and how would you notice?"
+      },
+      "rubric": {
+        "grounded-context": "The context names the constraints that shaped the choice (team, orders, chargebacks, the audit, cash).",
+        "names-evolution": "The decision says whether fraud detection differentiates Mercadito or is a commodity, and builds or buys accordingly.",
+        "names-hidden-cost": "The consequences name a cost neither side advertises: fees that scale, lock-in, people to run it, evidence for the auditor.",
+        "names-given-up": "What was given up is written down in a full sentence.",
+        "revisit-trigger": "The trigger to switch sides is a condition someone could notice, not a hope."
+      }
+    }
+  },
+  "assumptions": {
+    "buildVsBuy": {
+      "buildTakesATeam": "A useful in-house fraud service takes four or five engineers about two quarters, out of roughly 28; that is most of a team's roadmap.",
+      "buildNewDistrict": "A new service, its own database and a synchronous call from checkout: one more deployable and one more contract to keep.",
+      "buildSalaries": "Five salaries and a new database cost more this year than a vendor's fees would at today's volume.",
+      "buildNewDomain": "Fraud is a domain of its own (features, labels, false positives, disputes); someone has to learn it before they can own it.",
+      "buildColdStart": "A model trained only on Mercadito's own history starts blind to fraud patterns it has not seen yet, so early detection is worse than a vendor's.",
+      "buildLearnsMarketplace": "After about two quarters of labelled chargebacks, rules tuned to seller collusion and fake listings catch what generic scoring misses.",
+      "buildEvidenceOwnControls": "Building it means the auditor audits it: model change logs, access reviews and override records are ours to produce.",
+      "buildNoInvoiceToReprice": "With no per-transaction fraud fee, a vendor repricing touches less of the cost base.",
+      "buyLiveInWeeks": "Integrating a fraud-scoring API is a few weeks for two engineers; scoring is a product now, not a research project.",
+      "buyConsortiumData": "A vendor sees fraud across thousands of merchants, so it recognises stolen cards and devices on the first day.",
+      "buyCheckoutDependency": "Every checkout now waits on a third party; timeouts need a fallback decision (approve, decline, or queue for review).",
+      "buyBlackBox": "Support and risk analysts get a score without a reason; explaining a declined seller to that seller gets harder.",
+      "buyFeePerOrder": "The fee is a few cents per scored transaction; at Year 3 growth it outgrows a small team's salary within a year.",
+      "buyLockedInAtRenewal": "After a year, our labels, thresholds and workflows live in their dashboard. Switching means re-integrating and re-tuning, so the price increase gets signed.",
+      "buyAttestationHelps": "The vendor's own attestation covers most of the model; we still evidence how we use the score and who overrides it.",
+      "hybridRulesTakeAPair": "A rules module with a dozen marketplace-specific rules takes two engineers about a quarter, on top of the integration.",
+      "hybridScorePlusLocal": "Vendor scoring catches generic card fraud; our rules catch the patterns only a marketplace sees, like a seller buying from themselves.",
+      "hybridSeam": "Rules first, vendor second, and a policy for when they disagree: a seam that needs its own tests.",
+      "hybridTwoThingsToRun": "Two systems decide on the same payment. When a good customer is declined, someone has to find out which one said no.",
+      "hybridFilteredFee": "Rules can skip the vendor for clearly safe and clearly fraudulent orders, so the fee lands on fewer transactions, but it still lands.",
+      "hybridRulesCompound": "Once the rules module exists, product teams ship new risk checks without a vendor ticket.",
+      "hybridLeverageAtRenewal": "Owning the rules and the labels makes switching vendors credible, so the renewal is a negotiation rather than a notice.",
+      "hybridTwoControlSets": "Two control sets to evidence: the vendor's attestation plus our rules' change history and approvals.",
+      "vendorsReprice": "In Year 3 vendors that priced for growth start pricing for margin; most contracts renew a few points higher.",
+      "auditFieldwork": "An audit takes weeks of engineers' time collecting evidence, plus the auditors' own fee.",
+      "auditChangeControl": "Formal change approval adds a step to every production release; it slows delivery more than it prevents incidents."
+    }
+  },
+  "components": {
+    "fraud-service": {
+      "name": "fraud-service",
+      "role": "own scoring and rules"
+    },
+    "risk-db": {
+      "name": "risk DB",
+      "role": "labels, features, decisions"
+    },
+    "fraud-rules": {
+      "name": "fraud-rules",
+      "role": "marketplace rules before the score"
+    },
+    "fraud-vendor": {
+      "name": "fraud vendor",
+      "role": "risk score per transaction"
+    }
+  },
+  "districts": {
+    "risk": "risk"
+  },
+  "terms": {
+    "buildVsBuy": {
+      "evolution": "differentiat, commodity, core, generic, custom, build, buy, vendor, in-house, outsourc, wardley, map, product, utility, competitive",
+      "hiddenCost": "fee, per-transaction, per transaction, lock-in, locked, contract, renewal, price, maintenance, people, salar, on-call, audit, evidence, control, integration, switching, team, black box"
+    }
+  }
+}

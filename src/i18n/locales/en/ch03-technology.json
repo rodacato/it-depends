@@ -1,0 +1,101 @@
+{
+  "components": {
+    "search-cluster": {
+      "name": "search cluster",
+      "role": "Elasticsearch, three nodes"
+    },
+    "discovery-service": {
+      "name": "discovery-service",
+      "role": "recommendations, in Elixir"
+    },
+    "graph-db": {
+      "name": "graph DB",
+      "role": "Neo4j, who-bought-what"
+    }
+  },
+  "districts": {
+    "discovery": "discovery"
+  },
+  "terms": {
+    "technology": {
+      "tokens": "token, boring, novel, new, shiny, proven, known, familiar, mature, innovation, stack, postgres, elasticsearch, neo4j, elixir, language, learn",
+      "operations": "operate, operations, ops, on-call, pager, 3am, upgrade, monitor, backup, reindex, run it, runbook, maintain, maintenance, who knows, bus factor, expertise, failure mode"
+    }
+  },
+  "assumptions": {
+    "technology": {
+      "ftsShipsInDays": "A tsvector column and a GIN index make search fast enough in days, written by people who already know Postgres.",
+      "ftsNothingNew": "Nothing new to learn, deploy or page anyone about. The only new concept is a ranking function.",
+      "ftsBiggerInstance": "A bigger database instance buys some headroom; search queries eat most of it.",
+      "ftsRelevanceCeiling": "Within two quarters someone asks for typo tolerance, synonyms and facets. Postgres can do some of it, slowly and with effort.",
+      "ftsSharedBlastRadius": "On Black Friday, searches and checkouts queue for the same database. A slow search becomes a slow payment.",
+      "esSetupQuarter": "Mappings, an indexing job and a way to keep the index in sync take about a quarter of one engineer's time.",
+      "esTokenSpent": "A JVM cluster with its own query language, heap tuning and upgrade path: one innovation token, spent on search.",
+      "esTwoTruths": "Product data now lives in two places. The index lags the database, and someone has to decide which one is right.",
+      "esClusterBill": "Three nodes running all month, whether anyone searches or not.",
+      "esHoldsThePeak": "Search is the heaviest read on Black Friday; sent to the cluster, it stops competing with checkout.",
+      "esFirstReindex": "Within two quarters a mapping change forces a full reindex, and the first one is done at night, by hand, nervously.",
+      "shinyLearningCurve": "A new language and a graph database cost the team about a quarter of learning before they cost nothing.",
+      "shinyTwoTokens": "Two innovation tokens at once, for a team of six: a runtime and a data model most of them have never used.",
+      "shinyNewRuntime": "A second runtime, a second build pipeline, a second way to deploy and observe things.",
+      "shinyInfra": "A graph database, its backups and a new service's environments, paid monthly from day one.",
+      "shinyRecsLift": "Recommendations lift orders by a few percent once the graph has enough history. Plausible, unproven.",
+      "shinyUnknownFailures": "Nobody on the team has seen this graph database fail under load yet. The first time it does, they learn how.",
+      "shinyBusFactor": "Only one engineer really understands the Elixir service and the graph model. When that person leaves, the team has to learn it in production.",
+      "blackFridayBuyers": "Black Friday adds about 250 orders a day, and enough of those buyers come back that the bump does not fully fade.",
+      "blackFridayFreeze": "A week of code freeze and war-room duty before and during the peak. Features wait.",
+      "discoveryLicenceAudit": "An unusual stack costs more to evidence: the auditor needs it explained before they can sample it.",
+      "searchReservoirDry": "Catalog reads already go to the search cluster, so the shared Postgres has a little more headroom when it runs dry."
+    }
+  },
+  "chapters": {
+    "technology": {
+      "short": "TECHNOLOGY",
+      "title": "Search is slow and Black Friday is coming",
+      "concept": "Choosing technology: innovation tokens, and why boring technology often wins.",
+      "voice": "Every new tool is free until somebody has to be paged for it.",
+      "briefing": "Q4, Year 1. Six engineers, one monolith, one Postgres, and a search box that takes four seconds to say nothing useful. Black Friday is in eight weeks, and someone has already opened a tab about graph databases.",
+      "dilemma": "Where do you spend your innovation tokens, if anywhere, before the busiest week of the year?",
+      "disagreement": "Experts disagree here. McKinley's camp says a small company gets a handful of innovation tokens and should spend them only on what makes it different; others answer that the right specialised tool is boring somewhere else, and refusing it just moves the pain into your own code. Both describe real companies.",
+      "readNext": "Read Choose Boring Technology for the token budget, then the cognitive-load chapters of Team Topologies on what a team can actually carry, then the SRE book on who answers the pager.",
+      "variants": {
+        "regulated-fintech": "80-engineer regulated fintech"
+      },
+      "options": {
+        "postgres-fts": {
+          "title": "Postgres full-text search, on the shared database",
+          "optimizes": "Shipping in days with what the team already knows; no tokens spent.",
+          "costs": "A relevance ceiling, and search shares a database with checkout."
+        },
+        "search-cluster": {
+          "title": "An Elasticsearch cluster for search",
+          "optimizes": "Good search, and the heaviest read moved off the monolith before the peak.",
+          "costs": "One innovation token, a second copy of the catalog, and a cluster to run."
+        },
+        "discovery-platform": {
+          "title": "A discovery service in Elixir on Neo4j",
+          "optimizes": "Recommendations, a modern stack, and a story for the hiring page.",
+          "costs": "Two tokens at once, a quarter of learning, and knowledge held by one person."
+        }
+      },
+      "events": {
+        "black-friday": "Black Friday, 09:00. Traffic triples by noon; a share of the new buyers come back in December."
+      },
+      "inspections": {
+        "postgres-headroom": "Site inspection: shared Postgres at about half its capacity and climbing. Whatever got added this year, every order still writes here."
+      },
+      "review": {
+        "which-token": "Which innovation token did you spend, or decline to spend, and on what?",
+        "who-runs-it": "Who runs this at 3am, and what did you give up to make that possible?",
+        "when-revisit": "What would tell you the boring option has run out, or the new one has not paid off?"
+      },
+      "rubric": {
+        "grounded-context": "The context names the constraints that actually shaped the choice (team size, traffic, the Black Friday date).",
+        "names-tokens": "The decision says what is new to the team and what is boring, not only which product was picked.",
+        "names-operations": "The consequences say who operates it: upgrades, on-call, failure modes, the people who know it.",
+        "names-given-up": "What was given up is written down in a full sentence.",
+        "revisit-trigger": "The revisit trigger is a condition someone could notice, not a hope."
+      }
+    }
+  }
+}

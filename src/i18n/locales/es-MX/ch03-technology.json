@@ -1,0 +1,101 @@
+{
+  "components": {
+    "search-cluster": {
+      "name": "clúster de búsqueda",
+      "role": "Elasticsearch, tres nodos"
+    },
+    "discovery-service": {
+      "name": "discovery-service",
+      "role": "recomendaciones, en Elixir"
+    },
+    "graph-db": {
+      "name": "base de grafos",
+      "role": "Neo4j, quién compró qué"
+    }
+  },
+  "districts": {
+    "discovery": "descubrimiento"
+  },
+  "terms": {
+    "technology": {
+      "tokens": "ficha, aburrid, nuev, novedos, brillante, probad, conocid, familiar, madur, innovación, stack, postgres, elasticsearch, neo4j, elixir, lenguaje, aprender",
+      "operations": "operar, operación, ops, guardia, on-call, pager, 3am, madrugada, actualiza, monitore, respaldo, backup, reindex, runbook, mantener, mantenimiento, quién sabe, bus factor, experiencia, modo de falla"
+    }
+  },
+  "assumptions": {
+    "technology": {
+      "ftsShipsInDays": "Una columna tsvector y un índice GIN dejan la búsqueda suficientemente rápida en días, hecha por gente que ya conoce Postgres.",
+      "ftsNothingNew": "Nada nuevo que aprender, desplegar ni vigilar de madrugada. El único concepto nuevo es una función de ranking.",
+      "ftsBiggerInstance": "Una instancia más grande compra algo de holgura; las búsquedas se comen casi toda.",
+      "ftsRelevanceCeiling": "En dos trimestres alguien pide tolerancia a errores de dedo, sinónimos y facetas. Postgres puede con parte de eso, lento y con esfuerzo.",
+      "ftsSharedBlastRadius": "En el Black Friday, búsquedas y pagos hacen fila en la misma base de datos. Una búsqueda lenta se vuelve un pago lento.",
+      "esSetupQuarter": "Mappings, un job de indexación y una forma de mantener el índice sincronizado se llevan como un trimestre de una persona.",
+      "esTokenSpent": "Un clúster en la JVM con su propio lenguaje de consultas, ajuste de heap y ruta de actualización: una ficha de innovación, gastada en búsqueda.",
+      "esTwoTruths": "Los datos de producto ahora viven en dos lugares. El índice va atrás de la base, y alguien tiene que decidir cuál manda.",
+      "esClusterBill": "Tres nodos prendidos todo el mes, busque alguien o no.",
+      "esHoldsThePeak": "La búsqueda es la lectura más pesada del Black Friday; mandada al clúster, deja de competir con el checkout.",
+      "esFirstReindex": "En dos trimestres un cambio de mapping obliga a reindexar todo, y la primera vez se hace de noche, a mano y con nervios.",
+      "shinyLearningCurve": "Un lenguaje nuevo y una base de grafos le cuestan al equipo como un trimestre de aprendizaje antes de dejar de costar.",
+      "shinyTwoTokens": "Dos fichas de innovación de golpe, para un equipo de seis: un runtime y un modelo de datos que casi nadie ha usado.",
+      "shinyNewRuntime": "Un segundo runtime, un segundo pipeline de build, una segunda forma de desplegar y observar.",
+      "shinyInfra": "Una base de grafos, sus respaldos y los ambientes de un servicio nuevo, pagados cada mes desde el día uno.",
+      "shinyRecsLift": "Las recomendaciones suben los pedidos unos cuantos puntos porcentuales cuando el grafo tiene suficiente historia. Creíble, no comprobado.",
+      "shinyUnknownFailures": "Nadie en el equipo ha visto fallar esta base de grafos bajo carga. La primera vez que pase, aprenderán cómo.",
+      "shinyBusFactor": "Solo una persona entiende de verdad el servicio en Elixir y el modelo de grafos. Cuando se va, el equipo tiene que aprenderlo en producción.",
+      "blackFridayBuyers": "El Black Friday suma unos 250 pedidos al día, y suficientes compradores regresan como para que el salto no se borre del todo.",
+      "blackFridayFreeze": "Una semana de congelamiento de código y guardia de war room antes y durante el pico. Las funcionalidades esperan.",
+      "discoveryLicenceAudit": "Un stack poco común cuesta más evidenciarlo: el auditor necesita que se lo expliquen antes de poder muestrearlo.",
+      "searchReservoirDry": "Las lecturas de catálogo ya van al clúster de búsqueda, así que el Postgres compartido tiene un poco más de holgura cuando se seca."
+    }
+  },
+  "chapters": {
+    "technology": {
+      "short": "TECNOLOGÍA",
+      "title": "La búsqueda es lenta y viene el Black Friday",
+      "concept": "Elegir tecnología: fichas de innovación, y por qué la tecnología aburrida suele ganar.",
+      "voice": "Toda herramienta nueva es gratis hasta que alguien tiene que contestar el pager por ella.",
+      "briefing": "Q4 del Año 1. Seis ingenieros, un monolito, un Postgres y una caja de búsqueda que tarda cuatro segundos en no decir nada útil. El Black Friday es en ocho semanas, y alguien ya tiene abierta una pestaña sobre bases de grafos.",
+      "dilemma": "¿Dónde gastas tus fichas de innovación, si es que en algún lado, antes de la semana más pesada del año?",
+      "disagreement": "Aquí los expertos no coinciden. El bando de McKinley dice que una empresa chica tiene unas cuantas fichas de innovación y debe gastarlas solo en lo que la hace distinta; otros responden que la herramienta especializada correcta es aburrida en otra parte, y que rechazarla solo mueve el dolor a tu propio código. Los dos describen empresas reales.",
+      "readNext": "Lee Choose Boring Technology para el presupuesto de fichas, luego los capítulos de carga cognitiva de Team Topologies sobre lo que un equipo de verdad puede cargar, y después el libro de SRE sobre quién contesta el pager.",
+      "variants": {
+        "regulated-fintech": "fintech regulada de 80 ingenieros"
+      },
+      "options": {
+        "postgres-fts": {
+          "title": "Búsqueda full-text de Postgres, en la base compartida",
+          "optimizes": "Entregar en días con lo que el equipo ya sabe; cero fichas gastadas.",
+          "costs": "Un techo de relevancia, y la búsqueda comparte base de datos con el checkout."
+        },
+        "search-cluster": {
+          "title": "Un clúster de Elasticsearch para búsqueda",
+          "optimizes": "Buena búsqueda, y la lectura más pesada fuera del monolito antes del pico.",
+          "costs": "Una ficha de innovación, una segunda copia del catálogo y un clúster que operar."
+        },
+        "discovery-platform": {
+          "title": "Un servicio de descubrimiento en Elixir sobre Neo4j",
+          "optimizes": "Recomendaciones, un stack moderno y algo bonito para la página de vacantes.",
+          "costs": "Dos fichas de golpe, un trimestre de aprendizaje y el conocimiento en una sola cabeza."
+        }
+      },
+      "events": {
+        "black-friday": "Black Friday, 09:00. El tráfico se triplica antes del mediodía; parte de los compradores nuevos regresa en diciembre."
+      },
+      "inspections": {
+        "postgres-headroom": "Inspección de obra: el Postgres compartido va como a la mitad de su capacidad y sigue subiendo. Se haya agregado lo que se haya agregado este año, cada pedido sigue escribiendo aquí."
+      },
+      "review": {
+        "which-token": "¿Qué ficha de innovación gastaste, o decidiste no gastar, y en qué?",
+        "who-runs-it": "¿Quién opera esto a las 3am, y a qué renunciaste para que fuera posible?",
+        "when-revisit": "¿Qué te diría que la opción aburrida ya no alcanza, o que la nueva no se pagó?"
+      },
+      "rubric": {
+        "grounded-context": "El contexto nombra las restricciones que realmente dieron forma a la elección (tamaño del equipo, tráfico, la fecha del Black Friday).",
+        "names-tokens": "La decisión dice qué es nuevo para el equipo y qué es aburrido, no solo qué producto se eligió.",
+        "names-operations": "Las consecuencias dicen quién lo opera: actualizaciones, guardias, modos de falla, la gente que lo conoce.",
+        "names-given-up": "Aquello a lo que se renunció está escrito en una oración completa.",
+        "revisit-trigger": "El disparador para revisar es una condición que alguien podría notar, no un deseo."
+      }
+    }
+  }
+}

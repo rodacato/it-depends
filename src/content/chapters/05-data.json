@@ -1,0 +1,112 @@
+{
+  "id": "data",
+  "number": 5,
+  "quarter": 6,
+  "timelapseQuarters": 2,
+  "dilemma": {
+    "id": "who-owns-the-data",
+    "options": [
+      {
+        "id": "scale-the-reservoir",
+        "topology": [
+          { "op": "updateComponent", "id": "shared-postgres", "set": { "capacity": 4400, "loadShare": 0.8 } },
+          { "op": "addComponent", "component": { "id": "postgres-replica", "kind": "database", "district": "storefront", "loadShare": 0.5, "capacity": 4000 } },
+          { "op": "addConnection", "connection": { "id": "replica-stream", "kind": "pipe", "from": "shared-postgres", "to": "postgres-replica" } },
+          { "op": "addConnection", "connection": { "id": "app-reads", "kind": "pipe", "from": "mercadito-app", "to": "postgres-replica" } }
+        ],
+        "effects": [
+          { "id": "scale-keeps-shipping", "target": { "force": "velocity" }, "delta": 3, "byVariant": { "regulated-fintech": 1 }, "timing": { "kind": "immediate" }, "anchor": "shared-postgres", "assumption": "assumptions.data.scaleKeepsShipping", "sources": ["boring-tech", "fsa"] },
+          { "id": "scale-bigger-box", "target": { "force": "cost" }, "delta": 5, "byVariant": { "regulated-fintech": 3 }, "timing": { "kind": "immediate" }, "anchor": "shared-postgres", "assumption": "assumptions.data.scaleBiggerBox", "sources": ["model"] },
+          { "id": "scale-stale-reads", "target": { "force": "reliability" }, "delta": -2, "timing": { "kind": "immediate" }, "anchor": "postgres-replica", "assumption": "assumptions.data.scaleStaleReads", "sources": ["kleppmann-ddia"] },
+          { "id": "scale-coupling-grows", "target": { "force": "complexity" }, "delta": 7, "byVariant": { "regulated-fintech": 12 }, "timing": { "kind": "delayed", "afterQuarters": 2 }, "anchor": "shared-postgres", "assumption": "assumptions.data.scaleCouplingGrows", "sources": ["hard-parts", "fsa"] },
+          { "id": "scale-migration-queue", "target": { "force": "cognitiveLoad" }, "delta": 6, "byVariant": { "regulated-fintech": 12 }, "timing": { "kind": "delayed", "afterQuarters": 2 }, "anchor": "shared-postgres", "assumption": "assumptions.data.scaleMigrationQueue", "sources": ["team-topologies", "conway"] },
+          { "id": "scale-headroom", "target": { "force": "reliability" }, "delta": 3, "timing": { "kind": "conditional", "eventId": "reservoir-dry" }, "anchor": "shared-postgres", "assumption": "assumptions.data.scaleHeadroom", "sources": ["model"] },
+          { "id": "scale-one-audit-trail", "target": { "force": "cost" }, "delta": -2, "byVariant": { "regulated-fintech": -4 }, "timing": { "kind": "conditional", "eventId": "audit-requirement" }, "anchor": "shared-postgres", "assumption": "assumptions.data.scaleOneAuditTrail", "sources": ["hard-parts", "model"] }
+        ]
+      },
+      {
+        "id": "split-the-reservoir",
+        "topology": [
+          { "op": "addDistrict", "district": { "id": "orders" } },
+          { "op": "addComponent", "component": { "id": "orders-db", "kind": "database", "district": "orders", "loadShare": 0.5, "capacity": 4000 } },
+          { "op": "addComponent", "component": { "id": "domain-events", "kind": "queue", "district": "orders", "loadShare": 0.5, "capacity": 6000 } },
+          { "op": "updateComponent", "id": "shared-postgres", "set": { "loadShare": 0.4 } },
+          { "op": "addConnection", "connection": { "id": "orders-data", "kind": "pipe", "from": "mercadito-app", "to": "orders-db" } },
+          { "op": "addConnection", "connection": { "id": "domain-events-out", "kind": "rail", "from": "mercadito-app", "to": "domain-events" } }
+        ],
+        "effects": [
+          { "id": "split-migration", "target": { "force": "velocity" }, "delta": -8, "byVariant": { "regulated-fintech": -3 }, "timing": { "kind": "immediate" }, "anchor": "orders-db", "assumption": "assumptions.data.splitMigration", "sources": ["hard-parts", "richardson-patterns"] },
+          { "id": "split-moving-parts", "target": { "force": "complexity" }, "delta": 8, "byVariant": { "regulated-fintech": 3 }, "timing": { "kind": "immediate" }, "anchor": "domain-events", "assumption": "assumptions.data.splitMovingParts", "sources": ["fsa", "hard-parts"] },
+          { "id": "split-eventual", "target": { "force": "cognitiveLoad" }, "delta": 7, "byVariant": { "regulated-fintech": 3 }, "timing": { "kind": "immediate" }, "anchor": "domain-events", "assumption": "assumptions.data.splitEventual", "sources": ["helland-beyond-transactions", "kleppmann-ddia"] },
+          { "id": "split-infrastructure", "target": { "force": "cost" }, "delta": 4, "byVariant": { "regulated-fintech": 1 }, "timing": { "kind": "immediate" }, "anchor": "orders-db", "assumption": "assumptions.data.splitInfrastructure", "sources": ["model"] },
+          { "id": "split-reconciliation", "target": { "force": "cost" }, "delta": 4, "timing": { "kind": "delayed", "afterQuarters": 1 }, "anchor": "domain-events", "assumption": "assumptions.data.splitReconciliation", "sources": ["richardson-patterns", "model"] },
+          { "id": "split-autonomy", "target": { "force": "velocity" }, "delta": 7, "byVariant": { "regulated-fintech": 10 }, "timing": { "kind": "delayed", "afterQuarters": 2 }, "anchor": "orders-db", "assumption": "assumptions.data.splitAutonomy", "sources": ["team-topologies", "richardson-patterns"] },
+          { "id": "split-stays-open", "target": { "force": "reliability" }, "delta": 5, "timing": { "kind": "conditional", "eventId": "reservoir-dry" }, "anchor": "orders-db", "assumption": "assumptions.data.splitStaysOpen", "sources": ["brewer-cap", "kleppmann-ddia"] },
+          { "id": "split-audit-across-stores", "target": { "force": "cost" }, "delta": 7, "byVariant": { "regulated-fintech": 10 }, "timing": { "kind": "conditional", "eventId": "audit-requirement" }, "anchor": "domain-events", "assumption": "assumptions.data.splitAuditAcrossStores", "sources": ["helland-beyond-transactions", "model"] }
+        ]
+      },
+      {
+        "id": "coordinate-transactions",
+        "topology": [
+          { "op": "addDistrict", "district": { "id": "orders" } },
+          { "op": "addComponent", "component": { "id": "orders-db", "kind": "database", "district": "orders", "loadShare": 0.5, "capacity": 4000 } },
+          { "op": "addComponent", "component": { "id": "tx-coordinator", "kind": "service", "district": "orders", "loadShare": 0.5, "capacity": 2600 } },
+          { "op": "updateComponent", "id": "shared-postgres", "set": { "loadShare": 0.45 } },
+          { "op": "addConnection", "connection": { "id": "tx-begin", "kind": "road", "from": "mercadito-app", "to": "tx-coordinator" } },
+          { "op": "addConnection", "connection": { "id": "tx-prepare-orders", "kind": "pipe", "from": "tx-coordinator", "to": "orders-db" } },
+          { "op": "addConnection", "connection": { "id": "tx-prepare-shared", "kind": "pipe", "from": "tx-coordinator", "to": "shared-postgres" } }
+        ],
+        "effects": [
+          { "id": "tx-still-atomic", "target": { "force": "reliability" }, "delta": 3, "timing": { "kind": "immediate" }, "anchor": "tx-coordinator", "assumption": "assumptions.data.txStillAtomic", "sources": ["kleppmann-ddia"] },
+          { "id": "tx-round-trips", "target": { "force": "velocity" }, "delta": -5, "byVariant": { "regulated-fintech": -2 }, "timing": { "kind": "immediate" }, "anchor": "tx-coordinator", "assumption": "assumptions.data.txRoundTrips", "sources": ["kleppmann-ddia", "helland-beyond-transactions"] },
+          { "id": "tx-coordinator-is-critical", "target": { "force": "complexity" }, "delta": 9, "byVariant": { "regulated-fintech": 4 }, "timing": { "kind": "immediate" }, "anchor": "tx-coordinator", "assumption": "assumptions.data.txCoordinatorIsCritical", "sources": ["kleppmann-ddia", "hard-parts"] },
+          { "id": "tx-infrastructure", "target": { "force": "cost" }, "delta": 6, "byVariant": { "regulated-fintech": 2 }, "timing": { "kind": "immediate" }, "anchor": "orders-db", "assumption": "assumptions.data.txInfrastructure", "sources": ["model"] },
+          { "id": "tx-in-doubt", "target": { "force": "cognitiveLoad" }, "delta": 5, "timing": { "kind": "delayed", "afterQuarters": 2 }, "anchor": "tx-coordinator", "assumption": "assumptions.data.txInDoubt", "sources": ["helland-beyond-transactions", "richardson-patterns"] },
+          { "id": "tx-blocks-in-partition", "target": { "force": "reliability" }, "delta": -5, "timing": { "kind": "conditional", "eventId": "reservoir-dry" }, "anchor": "tx-coordinator", "assumption": "assumptions.data.txBlocksInPartition", "sources": ["brewer-cap", "kleppmann-ddia"] },
+          { "id": "tx-audit-friendly", "target": { "force": "cost" }, "delta": -3, "byVariant": { "regulated-fintech": -6 }, "timing": { "kind": "conditional", "eventId": "audit-requirement" }, "anchor": "orders-db", "assumption": "assumptions.data.txAuditFriendly", "sources": ["hard-parts", "model"] }
+        ]
+      }
+    ]
+  },
+  "events": [
+    {
+      "id": "series-a",
+      "trigger": { "kind": "scheduled", "quarter": 7 },
+      "effects": [
+        { "id": "series-a-runway", "target": { "context": "runwayMonths" }, "delta": 24, "timing": { "kind": "immediate" }, "assumption": "assumptions.data.seriesARunway", "sources": ["model"] }
+      ]
+    },
+    {
+      "id": "reservoir-dry",
+      "trigger": { "kind": "threshold", "on": { "context": "ordersPerDay" }, "op": "gte", "value": 2600 },
+      "anchor": "shared-postgres",
+      "effects": [
+        { "id": "reservoir-dry-peak", "target": { "force": "reliability" }, "delta": -4, "timing": { "kind": "immediate" }, "anchor": "shared-postgres", "assumption": "assumptions.data.reservoirDryPeak", "sources": ["model", "kleppmann-ddia"] }
+      ]
+    }
+  ],
+  "inspections": [{ "id": "shared-reservoir", "atOffset": 2, "anchor": "shared-postgres", "minStress": 0.5 }],
+  "review": {
+    "questions": [
+      { "id": "who-owns-truth", "criteria": ["names-consistency", "grounded-context"] },
+      { "id": "what-goes-stale", "criteria": ["names-tradeoff", "names-given-up"] },
+      { "id": "when-to-split", "criteria": ["revisit-trigger"] }
+    ]
+  },
+  "rubric": [
+    { "id": "grounded-context", "field": "context", "check": { "kind": "mentionsAny", "termsKey": "terms.context" } },
+    { "id": "names-consistency", "field": "decision", "check": { "kind": "mentionsAny", "termsKey": "terms.data.consistency" } },
+    { "id": "names-tradeoff", "field": "consequences", "check": { "kind": "mentionsAny", "termsKey": "terms.forces" } },
+    { "id": "names-given-up", "field": "givenUp", "check": { "kind": "minWords", "n": 6 } },
+    { "id": "revisit-trigger", "field": "revisit", "check": { "kind": "hasCondition" } }
+  ],
+  "readNext": ["brewer-cap", "helland-beyond-transactions", "richardson-patterns", "kleppmann-ddia"],
+  "contextVariants": [
+    {
+      "id": "regulated-fintech",
+      "context": { "teamSize": 80, "ordersPerDay": 20000, "runwayMonths": 36, "regulation": "licensed" },
+      "forces": { "velocity": 40, "complexity": 60, "cost": 58, "reliability": 70, "cognitiveLoad": 62 },
+      "capacityScale": 40
+    }
+  ]
+}

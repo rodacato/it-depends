@@ -1,0 +1,827 @@
+{
+  "id": "services",
+  "number": 4,
+  "quarter": 5,
+  "timelapseQuarters": 1,
+  "dilemma": {
+    "id": "split-or-not",
+    "options": [
+      {
+        "id": "modular-monolith",
+        "topology": [
+          {
+            "op": "addComponent",
+            "component": {
+              "id": "orders-module",
+              "kind": "module",
+              "district": "storefront",
+              "loadShare": 0.7,
+              "capacity": 2400
+            }
+          },
+          {
+            "op": "addConnection",
+            "connection": {
+              "id": "orders-port",
+              "kind": "road",
+              "from": "mercadito-app",
+              "to": "orders-module"
+            }
+          },
+          {
+            "op": "updateComponent",
+            "id": "mercadito-app",
+            "set": {
+              "capacity": 1800
+            }
+          }
+        ],
+        "effects": [
+          {
+            "id": "mm-boundary-work",
+            "target": {
+              "force": "velocity"
+            },
+            "delta": -4,
+            "byVariant": {
+              "regulated-fintech": -2
+            },
+            "timing": {
+              "kind": "immediate"
+            },
+            "anchor": "orders-module",
+            "assumption": "assumptions.services.mmBoundaryWork",
+            "sources": [
+              "fowler-monolith-first",
+              "model"
+            ]
+          },
+          {
+            "id": "mm-fewer-collisions",
+            "target": {
+              "force": "velocity"
+            },
+            "delta": 7,
+            "byVariant": {
+              "regulated-fintech": 2
+            },
+            "timing": {
+              "kind": "delayed",
+              "afterQuarters": 1
+            },
+            "anchor": "orders-module",
+            "assumption": "assumptions.services.mmFewerCollisions",
+            "sources": [
+              "fowler-monolith-first",
+              "accelerate"
+            ]
+          },
+          {
+            "id": "mm-clear-seams",
+            "target": {
+              "force": "complexity"
+            },
+            "delta": -3,
+            "timing": {
+              "kind": "immediate"
+            },
+            "anchor": "orders-module",
+            "assumption": "assumptions.services.mmClearSeams",
+            "sources": [
+              "apsd",
+              "fowler-monolith-first"
+            ]
+          },
+          {
+            "id": "mm-discipline",
+            "target": {
+              "force": "cognitiveLoad"
+            },
+            "delta": 3,
+            "byVariant": {
+              "regulated-fintech": 9
+            },
+            "timing": {
+              "kind": "immediate"
+            },
+            "anchor": "mercadito-app",
+            "assumption": "assumptions.services.mmDiscipline",
+            "sources": [
+              "team-topologies",
+              "conway"
+            ]
+          },
+          {
+            "id": "mm-one-deploy",
+            "target": {
+              "force": "reliability"
+            },
+            "delta": 3,
+            "byVariant": {
+              "regulated-fintech": -5
+            },
+            "timing": {
+              "kind": "immediate"
+            },
+            "anchor": "mercadito-app",
+            "assumption": "assumptions.services.mmOneDeploy",
+            "sources": [
+              "fowler-microservice-premium",
+              "accelerate"
+            ]
+          },
+          {
+            "id": "mm-bigger-box",
+            "target": {
+              "force": "cost"
+            },
+            "delta": 4,
+            "byVariant": {
+              "regulated-fintech": 2
+            },
+            "timing": {
+              "kind": "immediate"
+            },
+            "anchor": "mercadito-app",
+            "assumption": "assumptions.services.mmBiggerBox",
+            "sources": [
+              "model"
+            ]
+          },
+          {
+            "id": "mm-readable-without-them",
+            "target": {
+              "force": "velocity"
+            },
+            "delta": -2,
+            "timing": {
+              "kind": "conditional",
+              "eventId": "key-engineer-leaves"
+            },
+            "anchor": "orders-module",
+            "assumption": "assumptions.services.mmReadableWithoutThem",
+            "sources": [
+              "team-topologies",
+              "model"
+            ]
+          },
+          {
+            "id": "modular-reservoir-dry",
+            "target": {
+              "force": "reliability"
+            },
+            "delta": -3,
+            "timing": {
+              "kind": "conditional",
+              "eventId": "reservoir-dry"
+            },
+            "anchor": "orders-module",
+            "assumption": "assumptions.services.modularReservoirDry",
+            "sources": [
+              "hard-parts",
+              "model"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "orders-service",
+        "topology": [
+          {
+            "op": "addDistrict",
+            "district": {
+              "id": "orders"
+            }
+          },
+          {
+            "op": "addComponent",
+            "component": {
+              "id": "orders-service",
+              "kind": "service",
+              "district": "orders",
+              "loadShare": 0.6,
+              "capacity": 1500
+            }
+          },
+          {
+            "op": "addComponent",
+            "component": {
+              "id": "orders-queue",
+              "kind": "queue",
+              "district": "orders",
+              "loadShare": 0.6,
+              "capacity": 8000
+            }
+          },
+          {
+            "op": "addConnection",
+            "connection": {
+              "id": "orders-api",
+              "kind": "road",
+              "from": "mercadito-app",
+              "to": "orders-service"
+            }
+          },
+          {
+            "op": "addConnection",
+            "connection": {
+              "id": "orders-events",
+              "kind": "rail",
+              "from": "orders-service",
+              "to": "orders-queue"
+            }
+          },
+          {
+            "op": "addConnection",
+            "connection": {
+              "id": "orders-events-return",
+              "kind": "rail",
+              "from": "orders-queue",
+              "to": "mercadito-app"
+            }
+          },
+          {
+            "op": "addConnection",
+            "connection": {
+              "id": "orders-db-access",
+              "kind": "pipe",
+              "from": "orders-service",
+              "to": "shared-postgres"
+            }
+          },
+          {
+            "op": "updateComponent",
+            "id": "mercadito-app",
+            "set": {
+              "loadShare": 0.6
+            }
+          }
+        ],
+        "effects": [
+          {
+            "id": "split-extraction",
+            "target": {
+              "force": "velocity"
+            },
+            "delta": -8,
+            "byVariant": {
+              "regulated-fintech": -3
+            },
+            "timing": {
+              "kind": "immediate"
+            },
+            "anchor": "orders-service",
+            "assumption": "assumptions.services.splitExtraction",
+            "sources": [
+              "fowler-strangler",
+              "fowler-microservice-premium"
+            ]
+          },
+          {
+            "id": "split-team-owns-it",
+            "target": {
+              "force": "velocity"
+            },
+            "delta": 10,
+            "byVariant": {
+              "regulated-fintech": 14
+            },
+            "timing": {
+              "kind": "delayed",
+              "afterQuarters": 1
+            },
+            "anchor": "orders-service",
+            "assumption": "assumptions.services.splitTeamOwnsIt",
+            "sources": [
+              "conway",
+              "team-topologies",
+              "accelerate"
+            ]
+          },
+          {
+            "id": "split-network",
+            "target": {
+              "force": "complexity"
+            },
+            "delta": 10,
+            "byVariant": {
+              "regulated-fintech": 4
+            },
+            "timing": {
+              "kind": "immediate"
+            },
+            "anchor": "orders-queue",
+            "assumption": "assumptions.services.splitNetwork",
+            "sources": [
+              "fsa",
+              "fowler-microservice-premium"
+            ]
+          },
+          {
+            "id": "split-infrastructure",
+            "target": {
+              "force": "cost"
+            },
+            "delta": 7,
+            "byVariant": {
+              "regulated-fintech": 2
+            },
+            "timing": {
+              "kind": "immediate"
+            },
+            "anchor": "orders-service",
+            "assumption": "assumptions.services.splitInfrastructure",
+            "sources": [
+              "model"
+            ]
+          },
+          {
+            "id": "split-new-failures",
+            "target": {
+              "force": "reliability"
+            },
+            "delta": -4,
+            "byVariant": {
+              "regulated-fintech": 3
+            },
+            "timing": {
+              "kind": "immediate"
+            },
+            "anchor": "orders-queue",
+            "assumption": "assumptions.services.splitNewFailures",
+            "sources": [
+              "fsa",
+              "google-sre"
+            ]
+          },
+          {
+            "id": "split-two-systems",
+            "target": {
+              "force": "cognitiveLoad"
+            },
+            "delta": 6,
+            "byVariant": {
+              "regulated-fintech": -6
+            },
+            "timing": {
+              "kind": "immediate"
+            },
+            "anchor": "orders-service",
+            "assumption": "assumptions.services.splitTwoSystems",
+            "sources": [
+              "team-topologies"
+            ]
+          },
+          {
+            "id": "split-shared-database",
+            "target": {
+              "force": "complexity"
+            },
+            "delta": 4,
+            "timing": {
+              "kind": "delayed",
+              "afterQuarters": 1
+            },
+            "anchor": "shared-postgres",
+            "assumption": "assumptions.services.splitSharedDatabase",
+            "sources": [
+              "hard-parts",
+              "richardson-patterns"
+            ]
+          },
+          {
+            "id": "split-contract-walks-out",
+            "target": {
+              "force": "velocity"
+            },
+            "delta": -4,
+            "timing": {
+              "kind": "conditional",
+              "eventId": "key-engineer-leaves"
+            },
+            "anchor": "orders-service",
+            "assumption": "assumptions.services.splitContractWalksOut",
+            "sources": [
+              "team-topologies",
+              "model"
+            ]
+          },
+          {
+            "id": "service-shared-db-coupling",
+            "target": {
+              "force": "cognitiveLoad"
+            },
+            "delta": 2,
+            "timing": {
+              "kind": "conditional",
+              "eventId": "reservoir-dry"
+            },
+            "anchor": "orders-service",
+            "assumption": "assumptions.services.sharedDbCoupling",
+            "sources": [
+              "hard-parts"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "microservices",
+        "topology": [
+          {
+            "op": "addDistrict",
+            "district": {
+              "id": "orders"
+            }
+          },
+          {
+            "op": "addDistrict",
+            "district": {
+              "id": "catalog"
+            }
+          },
+          {
+            "op": "addComponent",
+            "component": {
+              "id": "orders-service",
+              "kind": "service",
+              "district": "orders",
+              "loadShare": 0.6,
+              "capacity": 1500
+            }
+          },
+          {
+            "op": "addComponent",
+            "component": {
+              "id": "orders-queue",
+              "kind": "queue",
+              "district": "orders",
+              "loadShare": 0.6,
+              "capacity": 8000
+            }
+          },
+          {
+            "op": "addComponent",
+            "component": {
+              "id": "catalog-service",
+              "kind": "service",
+              "district": "catalog",
+              "loadShare": 0.8,
+              "capacity": 1500
+            }
+          },
+          {
+            "op": "addComponent",
+            "component": {
+              "id": "notifications-service",
+              "kind": "service",
+              "district": "catalog",
+              "loadShare": 0.6,
+              "capacity": 2000
+            }
+          },
+          {
+            "op": "addConnection",
+            "connection": {
+              "id": "orders-api",
+              "kind": "road",
+              "from": "mercadito-app",
+              "to": "orders-service"
+            }
+          },
+          {
+            "op": "addConnection",
+            "connection": {
+              "id": "orders-events",
+              "kind": "rail",
+              "from": "orders-service",
+              "to": "orders-queue"
+            }
+          },
+          {
+            "op": "addConnection",
+            "connection": {
+              "id": "notifications-feed",
+              "kind": "rail",
+              "from": "orders-queue",
+              "to": "notifications-service"
+            }
+          },
+          {
+            "op": "addConnection",
+            "connection": {
+              "id": "catalog-api",
+              "kind": "road",
+              "from": "mercadito-app",
+              "to": "catalog-service"
+            }
+          },
+          {
+            "op": "addConnection",
+            "connection": {
+              "id": "orders-db-access",
+              "kind": "pipe",
+              "from": "orders-service",
+              "to": "shared-postgres"
+            }
+          },
+          {
+            "op": "addConnection",
+            "connection": {
+              "id": "catalog-db-access",
+              "kind": "pipe",
+              "from": "catalog-service",
+              "to": "shared-postgres"
+            }
+          },
+          {
+            "op": "updateComponent",
+            "id": "mercadito-app",
+            "set": {
+              "loadShare": 0.4
+            }
+          }
+        ],
+        "effects": [
+          {
+            "id": "ms-big-bang",
+            "target": {
+              "force": "velocity"
+            },
+            "delta": -18,
+            "byVariant": {
+              "regulated-fintech": -6
+            },
+            "timing": {
+              "kind": "immediate"
+            },
+            "anchor": "catalog-service",
+            "assumption": "assumptions.services.msBigBang",
+            "sources": [
+              "fowler-microservice-premium",
+              "fsa"
+            ]
+          },
+          {
+            "id": "ms-autonomy",
+            "target": {
+              "force": "velocity"
+            },
+            "delta": 6,
+            "byVariant": {
+              "regulated-fintech": 16
+            },
+            "timing": {
+              "kind": "delayed",
+              "afterQuarters": 1
+            },
+            "anchor": "orders-service",
+            "assumption": "assumptions.services.msAutonomy",
+            "sources": [
+              "tilkov-dont-start-monolith",
+              "accelerate"
+            ]
+          },
+          {
+            "id": "ms-distributed",
+            "target": {
+              "force": "complexity"
+            },
+            "delta": 20,
+            "byVariant": {
+              "regulated-fintech": 8
+            },
+            "timing": {
+              "kind": "immediate"
+            },
+            "anchor": "orders-queue",
+            "assumption": "assumptions.services.msDistributed",
+            "sources": [
+              "fsa",
+              "hard-parts"
+            ]
+          },
+          {
+            "id": "ms-platform",
+            "target": {
+              "force": "cost"
+            },
+            "delta": 16,
+            "byVariant": {
+              "regulated-fintech": 5
+            },
+            "timing": {
+              "kind": "immediate"
+            },
+            "anchor": "notifications-service",
+            "assumption": "assumptions.services.msPlatform",
+            "sources": [
+              "fowler-microservice-premium",
+              "model"
+            ]
+          },
+          {
+            "id": "ms-reliability-dip",
+            "target": {
+              "force": "reliability"
+            },
+            "delta": -10,
+            "byVariant": {
+              "regulated-fintech": -3
+            },
+            "timing": {
+              "kind": "immediate"
+            },
+            "anchor": "notifications-service",
+            "assumption": "assumptions.services.msReliabilityDip",
+            "sources": [
+              "fsa",
+              "google-sre"
+            ]
+          },
+          {
+            "id": "ms-systems-per-head",
+            "target": {
+              "force": "cognitiveLoad"
+            },
+            "delta": 18,
+            "byVariant": {
+              "regulated-fintech": 2
+            },
+            "timing": {
+              "kind": "immediate"
+            },
+            "anchor": "catalog-service",
+            "assumption": "assumptions.services.msSystemsPerHead",
+            "sources": [
+              "team-topologies",
+              "conway"
+            ]
+          },
+          {
+            "id": "ms-runway",
+            "target": {
+              "context": "runwayMonths"
+            },
+            "delta": -1,
+            "byVariant": {
+              "regulated-fintech": 0
+            },
+            "timing": {
+              "kind": "immediate"
+            },
+            "anchor": "orders-service",
+            "assumption": "assumptions.services.msRunway",
+            "sources": [
+              "model"
+            ]
+          },
+          {
+            "id": "ms-orphaned-service",
+            "target": {
+              "force": "reliability"
+            },
+            "delta": -6,
+            "byVariant": {
+              "regulated-fintech": -1
+            },
+            "timing": {
+              "kind": "conditional",
+              "eventId": "key-engineer-leaves"
+            },
+            "anchor": "notifications-service",
+            "assumption": "assumptions.services.msOrphanedService",
+            "sources": [
+              "team-topologies",
+              "model"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "events": [
+    {
+      "id": "key-engineer-leaves",
+      "trigger": {
+        "kind": "scheduled",
+        "quarter": 6
+      },
+      "anchor": "mercadito-app",
+      "effects": [
+        {
+          "id": "tacit-knowledge-leaves",
+          "target": {
+            "force": "velocity"
+          },
+          "delta": -3,
+          "timing": {
+            "kind": "immediate"
+          },
+          "anchor": "mercadito-app",
+          "assumption": "assumptions.services.tacitKnowledgeLeaves",
+          "sources": [
+            "team-topologies",
+            "model"
+          ]
+        }
+      ]
+    }
+  ],
+  "inspections": [
+    {
+      "id": "everything-ends-at-postgres",
+      "atOffset": 1,
+      "anchor": "shared-postgres",
+      "minStress": 0.25
+    }
+  ],
+  "review": {
+    "questions": [
+      {
+        "id": "who-owns-what",
+        "criteria": [
+          "names-ownership",
+          "grounded-context"
+        ]
+      },
+      {
+        "id": "what-it-costs",
+        "criteria": [
+          "names-tradeoff",
+          "names-given-up"
+        ]
+      },
+      {
+        "id": "when-split",
+        "criteria": [
+          "revisit-trigger"
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    {
+      "id": "grounded-context",
+      "field": "context",
+      "check": {
+        "kind": "mentionsAny",
+        "termsKey": "terms.context"
+      }
+    },
+    {
+      "id": "names-ownership",
+      "field": "decision",
+      "check": {
+        "kind": "mentionsAny",
+        "termsKey": "terms.services.ownership"
+      }
+    },
+    {
+      "id": "names-tradeoff",
+      "field": "consequences",
+      "check": {
+        "kind": "mentionsAny",
+        "termsKey": "terms.forces"
+      }
+    },
+    {
+      "id": "names-given-up",
+      "field": "givenUp",
+      "check": {
+        "kind": "minWords",
+        "n": 6
+      }
+    },
+    {
+      "id": "revisit-trigger",
+      "field": "revisit",
+      "check": {
+        "kind": "hasCondition"
+      }
+    }
+  ],
+  "readNext": [
+    "fowler-monolith-first",
+    "tilkov-dont-start-monolith",
+    "team-topologies"
+  ],
+  "contextVariants": [
+    {
+      "id": "regulated-fintech",
+      "context": {
+        "teamSize": 80,
+        "ordersPerDay": 20000,
+        "runwayMonths": 36,
+        "regulation": "licensed"
+      },
+      "forces": {
+        "velocity": 40,
+        "complexity": 60,
+        "cost": 58,
+        "reliability": 70,
+        "cognitiveLoad": 62
+      },
+      "capacityScale": 40
+    }
+  ]
+}

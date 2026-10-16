@@ -69,7 +69,9 @@
       "coordinationCost": "Pasando de unas 20 personas, los caminos de comunicación crecen más rápido que el equipo; cada trimestre suma carga de coordinación.",
       "burn": "La empresa quema unos tres meses de runway por trimestre hasta que los ingresos la alcanzan.",
       "demandNoise": "La demanda varía hasta 6% de un trimestre a otro, por razones que ninguna arquitectura controla.",
-      "congestion": "Un componente que trabaja por encima de su capacidad se nota en incidentes: timeouts, reintentos, viernes furiosos."
+      "congestion": "Un componente que trabaja por encima de su capacidad se nota en incidentes: timeouts, reintentos, viernes furiosos.",
+      "revenueDilution": "Los ingresos crecen más rápido que el gasto, así que cada trimestre las mismas cuentas pesan un poco menos.",
+      "operationalLearning": "Los incidentes de cada trimestre dejan runbooks, alertas y hábitos; la confiabilidad mejora un poco aunque nada más cambie."
     },
     "reversibility": {
       "hostedShipsFast": "Un checkout alojado es cuestión de días de integración, no de semanas. Fácil de deshacer: siempre puedes construir el tuyo después.",
@@ -92,7 +94,18 @@
       "servicePciScope": "Manejar datos de tarjeta directamente mete a la empresa en el alcance de PCI DSS: auditorías, controles y la gente que los opera.",
       "serviceQueuesThroughOutage": "Con ledger propio y una cola, los pedidos se pueden aceptar y liquidar cuando la red se recupere.",
       "outageRefunds": "Una caída de dos horas del procesador un sábado: reembolsos, disculpas, un poco de confianza perdida.",
-      "fridayPeak": "El tráfico del viernes en la noche es como tres veces el promedio diario. El monolito es el primero en notarlo."
+      "fridayPeak": "El tráfico del viernes en la noche es como tres veces el promedio diario. El monolito es el primero en notarlo.",
+      "hostedPriceChange": "En la renovación el checkout alojado sube su comisión; irse implica reconstruir el checkout, así que el aumento se firma.",
+      "hostedAuditScope": "Los datos de tarjeta nunca tocan nuestros sistemas, así que casi todos los controles de pago los evidencia el proveedor.",
+      "hostedBlackFridayFee": "Una comisión porcentual crece con el pico: la mejor semana de ventas también es la más cara.",
+      "portPriceChange": "El procesador sube su precio, pero el puerto hace creíble un segundo adaptador, así que el aumento se negocia.",
+      "portReservoirDry": "Pagos sigue escribiendo en el Postgres compartido, así que cuando se seca el checkout espera junto con todos.",
+      "servicePriceChange": "Una conexión directa con la red no tiene margen de procesador que repreciar; el intercambio lo fijan las redes, no la renovación de un proveedor.",
+      "serviceAuditScope": "Un ledger propio y manejar tarjetas directamente nos meten completos en el alcance de la auditoría: revisiones de acceso, manejo de llaves y evidencia de conciliación son nuestras.",
+      "serviceBlackFridayBuffer": "La cola payment-events absorbe la ráfaga del checkout en vez de pasarla directo a la red de tarjetas.",
+      "serviceKeyEngineer": "El conocimiento del ledger de la época de tres personas se va con quien lo escribió.",
+      "serviceReservoirDry": "Pagos tiene su propio depósito, así que un Postgres compartido seco no detiene el dinero.",
+      "serviceLicenceScope": "Una empresa con licencia que opera su propio ledger debe evidenciar ante el regulador cada control a su alrededor."
     }
   },
   "sources": {
