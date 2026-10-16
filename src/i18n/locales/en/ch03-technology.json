@@ -54,7 +54,7 @@
       "title": "Search is slow and Black Friday is coming",
       "concept": "Choosing technology: innovation tokens, and why boring technology often wins.",
       "voice": "Every new tool is free until somebody has to be paged for it.",
-      "briefing": "Q4, Year 1. Six engineers, one monolith, one Postgres, and a search box that takes four seconds to say nothing useful. Black Friday is in eight weeks, and someone has already opened a tab about graph databases.",
+      "briefing": "Q4, Year 1. Six engineers, one monolith, one Postgres, and a search box that takes four seconds to say nothing useful. Black Friday is in eight weeks, and product would also like search to suggest what people did not know they were looking for.",
       "dilemma": "Where do you spend your innovation tokens, if anywhere, before the busiest week of the year?",
       "disagreement": "Experts disagree here. McKinley's camp says a small company gets a handful of innovation tokens and should spend them only on what makes it different; others answer that the right specialised tool is boring somewhere else, and refusing it just moves the pain into your own code. Both describe real companies.",
       "readNext": "Read Choose Boring Technology for the token budget, then the cognitive-load chapters of Team Topologies on what a team can actually carry, then the SRE book on who answers the pager.",
@@ -65,7 +65,7 @@
         "postgres-fts": {
           "title": "Postgres full-text search, on the shared database",
           "optimizes": "Shipping in days with what the team already knows; no tokens spent.",
-          "costs": "A relevance ceiling, and search shares a database with checkout."
+          "costs": "Limited relevance (trigrams and weights stretch it, up to a point), and search shares a database with checkout."
         },
         "search-cluster": {
           "title": "An Elasticsearch cluster for search",
@@ -74,7 +74,7 @@
         },
         "discovery-platform": {
           "title": "A discovery service in Elixir on Neo4j",
-          "optimizes": "Recommendations, a modern stack, and a story for the hiring page.",
+          "optimizes": "Search and recommendations on one product graph, which is what product is asking for.",
           "costs": "Two tokens at once, a quarter of learning, and knowledge held by one person."
         }
       },

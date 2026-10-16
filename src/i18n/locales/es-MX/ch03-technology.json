@@ -54,7 +54,7 @@
       "title": "La búsqueda es lenta y viene el Black Friday",
       "concept": "Elegir tecnología: fichas de innovación, y por qué la tecnología aburrida suele ganar.",
       "voice": "Toda herramienta nueva es gratis hasta que alguien tiene que contestar el pager por ella.",
-      "briefing": "Q4 del Año 1. Seis ingenieros, un monolito, un Postgres y una caja de búsqueda que tarda cuatro segundos en no decir nada útil. El Black Friday es en ocho semanas, y alguien ya tiene abierta una pestaña sobre bases de grafos.",
+      "briefing": "Q4 del Año 1. Seis ingenieros, un monolito, un Postgres y una caja de búsqueda que tarda cuatro segundos en no decir nada útil. El Black Friday es en ocho semanas, y producto quiere además que el buscador sugiera lo que la gente no sabía que buscaba.",
       "dilemma": "¿Dónde gastas tus fichas de innovación, si es que en algún lado, antes de la semana más pesada del año?",
       "disagreement": "Aquí los expertos no coinciden. El bando de McKinley dice que una empresa chica tiene unas cuantas fichas de innovación y debe gastarlas solo en lo que la hace distinta; otros responden que la herramienta especializada correcta es aburrida en otra parte, y que rechazarla solo mueve el dolor a tu propio código. Los dos describen empresas reales.",
       "readNext": "Lee Choose Boring Technology para el presupuesto de fichas, luego los capítulos de carga cognitiva de Team Topologies sobre lo que un equipo de verdad puede cargar, y después el libro de SRE sobre quién contesta el pager.",
@@ -65,7 +65,7 @@
         "postgres-fts": {
           "title": "Búsqueda full-text de Postgres, en la base compartida",
           "optimizes": "Entregar en días con lo que el equipo ya sabe; cero fichas gastadas.",
-          "costs": "Un techo de relevancia, y la búsqueda comparte base de datos con el checkout."
+          "costs": "Relevancia limitada (se estira con trigramas y pesos, hasta cierto punto), y la búsqueda comparte base de datos con el checkout."
         },
         "search-cluster": {
           "title": "Un clúster de Elasticsearch para búsqueda",
@@ -74,7 +74,7 @@
         },
         "discovery-platform": {
           "title": "Un servicio de descubrimiento en Elixir sobre Neo4j",
-          "optimizes": "Recomendaciones, un stack moderno y algo bonito para la página de vacantes.",
+          "optimizes": "Búsqueda y recomendaciones sobre un mismo grafo de productos, que es lo que producto está pidiendo.",
           "costs": "Dos fichas de golpe, un trimestre de aprendizaje y el conocimiento en una sola cabeza."
         }
       },

@@ -158,8 +158,8 @@
       "options": {
         "hosted-checkout": {
           "title": "Checkout alojado, conectado al monolito",
-          "optimizes": "Lanzar en dos semanas; se deshace sin esfuerzo.",
-          "costs": "Una comisión en cada pedido; su página de pago, no la tuya."
+          "optimizes": "Lanzar en dos semanas, con los datos de tarjeta fuera de tus servidores.",
+          "costs": "Una comisión en cada pedido; su página de pago, no la tuya; y salir después significa migrar clientes y contratos."
         },
         "payments-port": {
           "title": "Un módulo de pagos detrás de un puerto",
@@ -168,7 +168,7 @@
         },
         "own-service": {
           "title": "payments-service y ledger propios",
-          "optimizes": "Control y margen, algún día.",
+          "optimizes": "Control del flujo de pago y del margen, y un ledger tuyo desde el primer día.",
           "costs": "Las seis semanas completas; datos de tarjeta en alcance. Una puerta de un solo sentido."
         }
       },

@@ -61,8 +61,8 @@
       "options": {
         "pricing-engine": {
           "title": "Un motor configurable de precios y reglas",
-          "optimizes": "Cualquier idea futura de precios se vuelve configuración, no un deploy.",
-          "costs": "Un lenguaje de reglas que nadie pidió; en seis meses nadie entiende las reglas."
+          "optimizes": "Cualquier idea futura de precios se vuelve configuración, y los vendedores dejan de esperar un deploy.",
+          "costs": "Un lenguaje de reglas que alguien tiene que diseñar, probar y documentar; si las reglas crecen sin dueño, en seis meses nadie las entiende."
         },
         "catalog-module": {
           "title": "Modelar los tres casos en un módulo de catálogo profundo",

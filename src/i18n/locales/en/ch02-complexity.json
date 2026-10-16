@@ -61,8 +61,8 @@
       "options": {
         "pricing-engine": {
           "title": "A configurable pricing and rules engine",
-          "optimizes": "Any future pricing idea becomes configuration, not a deploy.",
-          "costs": "A rule language nobody asked for; in six months nobody can read the rules."
+          "optimizes": "Any future pricing idea becomes configuration, and sellers stop waiting for a deploy.",
+          "costs": "A rule language someone has to design, test and document; if the rules grow without an owner, in six months nobody can read them."
         },
         "catalog-module": {
           "title": "Model the three cases in a deep catalog module",

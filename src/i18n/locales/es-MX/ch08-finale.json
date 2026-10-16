@@ -12,7 +12,7 @@
       "voice": "Más de sesenta ingenieros, una licencia y un regulador que lee ADRs por gusto.",
       "briefing": "Cuarto trimestre del año 3. Mercadito tiene licencia y está supervisado, y ahora el regulador quiere que los pagos los opere una unidad responsable y auditable, con nombres y apellidos. El consejo quiere un plan para la próxima sesión, y la Serie B cierra el trimestre siguiente. Cada opción de abajo se puede defender en alguna empresa; tu trabajo es decir por qué es la correcta en esta.",
       "dilemma": "¿Quién opera el dinero de aquí en adelante, y qué le vas a enseñar al regulador para demostrarlo?",
-      "disagreement": "Aquí los expertos se dividen en tres. La gente de plataformas dice que la rendición de cuentas necesita una frontera de equipo y datos propios, así que hay que separarlo ya. Los arquitectos evolutivos dicen que los movimientos grandes bajo supervisión son justo como empiezan los incidentes, así que hay que estrangularlo con fitness functions. La gente de SRE dice que el regulador quiere evidencia, no diagramas, así que congela y mide. Y Wardley preguntaría por qué estás construyendo un commodity. Cada uno tiene razón en algún trimestre de alguna empresa.",
+      "disagreement": "Aquí los expertos se dividen en tres. La gente de plataformas dice que la rendición de cuentas necesita una frontera de equipo y datos propios, así que hay que separarlo ya. Los arquitectos evolutivos dicen que los movimientos grandes bajo supervisión son justo como empiezan los incidentes, así que hay que estrangularlo con fitness functions. La gente de SRE dice que el regulador quiere evidencia, no diagramas, así que deja que el presupuesto de error marque el ritmo y mide. Y Wardley preguntaría por qué estás construyendo un commodity. Cada uno tiene razón en algún trimestre de alguna empresa.",
       "readNext": "Un librero de cierre para todo el juego de planos: Nygard para el ADR que acabas de escribir; Richards y Ford, y luego The Hard Parts, para analizar trade-offs; Team Topologies para el equipo que quizá acabas de crear; Building Evolutionary Architectures para las fitness functions que mantienen honesto todo esto; el libro de SRE para los presupuestos de error; Wardley para decidir qué construir y qué comprar; y de vuelta a la carta de la puerta de un solo sentido, donde empezó todo.",
       "options": {
         "platform-team": {
@@ -26,9 +26,9 @@
           "costs": "El regulador recibe un roadmap, no una unidad. Dos rutas de código por un rato, y el beneficio llega después de la junta de consejo."
         },
         "reliability-freeze": {
-          "title": "Congelar cambios de arquitectura dos trimestres; invertir en SRE y evidencia",
+          "title": "Atar los cambios de arquitectura al presupuesto de error; invertir en SRE y evidencia",
           "optimizes": "SLOs, presupuestos de error e historial de incidentes: la evidencia que un supervisor de verdad pide.",
-          "costs": "Dos trimestres sin cambios estructurales y con pocas funcionalidades. La pregunta de quién es dueño se pospone, no se responde."
+          "costs": "Mientras el presupuesto esté agotado, casi no entran cambios estructurales ni funcionalidades. La pregunta de quién es dueño se pospone, no se responde."
         },
         "buy-platform": {
           "title": "Comprar una plataforma de pagos con licencia y volverse su cliente",
@@ -72,12 +72,12 @@
       "strangleStillEveryones": "Hasta que termine la extracción, la lógica de pagos que sigue en el monolito (reembolsos, disputas, reglas de cobro) es de cada equipo que la toca, y todos tienen que entenderla.",
       "strangleSeamsPay": "Con las costuras puestas y vigiladas, el monolito pierde su módulo más enredado y la complejidad baja de forma medible.",
       "strangleOpenFinding": "Un requisito del regulador respaldado solo por un roadmap se lee como hallazgo abierto en el due diligence, y los términos lo reflejan.",
-      "freezeStopsFeatures": "Dos trimestres sin cambios estructurales y con foco en confiabilidad dejan poca capacidad para el roadmap que aprobó el consejo.",
+      "freezeStopsFeatures": "Con el presupuesto de error agotado al arrancar, los cambios estructurales esperan y el foco en confiabilidad deja poca capacidad para el roadmap que aprobó el consejo.",
       "freezeErrorBudgets": "SLOs con presupuestos de error, runbooks y revisiones sin culpables reducen la frecuencia de incidentes al trimestre de aplicarse.",
       "freezeSreHires": "Un grupo chico de SRE y las herramientas de observabilidad que necesita son una línea real en el presupuesto.",
-      "freezeQuietHeads": "Sin migraciones en curso, los ingenieros cargan menos piezas en movimiento y bajan los cambios de contexto.",
-      "freezeStructureUnchanged": "Las funcionalidades siguen cayendo en la misma estructura compartida, así que la complejidad accidental que el congelamiento no toca se sigue acumulando.",
-      "freezeBigBatch": "Los cambios que pospone un congelamiento salen después en lotes más grandes, y los lotes grandes fallan más seguido.",
+      "freezeQuietHeads": "Sin migraciones en curso mientras dura la pausa, los ingenieros cargan menos piezas en movimiento y bajan los cambios de contexto.",
+      "freezeStructureUnchanged": "Las funcionalidades siguen cayendo en la misma estructura compartida, así que la complejidad accidental que la pausa no toca se sigue acumulando.",
+      "freezeBigBatch": "Los cambios que se posponen mientras el presupuesto está agotado salen después en lotes más grandes, y los lotes grandes fallan más seguido.",
       "freezeEvidenceDiligence": "Un año de reportes de SLO y revisiones de incidentes contesta rápido las preguntas del due diligence, lo que ayuda un poco a la ronda.",
       "buyBorrowedLicence": "Una plataforma con licencia trae controles maduros, certificaciones e historial de incidentes que tomaría años construir en casa.",
       "buyLessToCarry": "Operar una integración exige saber mucho menos que operar un ledger, un flujo de tarjetas y su cumplimiento.",
