@@ -132,7 +132,7 @@
       "press": "The board would press here:",
       "senseiPending": "The sensei is reading your ADR…",
       "senseiTitle": "The sensei's notes:",
-      "standalone": "Standalone review: a fixed rubric reads your ADR. Embedded in Dojo, a sensei reads it instead.",
+      "standalone": "A fixed rubric reads your ADR, standalone and in Dojo. When Dojo offers a sensei, its notes appear alongside the board.",
       "closing": "There was no right answer. There was a better-argued one.",
       "readNext": "WHAT TO READ NEXT",
       "editAdr": "Revise the ADR",
