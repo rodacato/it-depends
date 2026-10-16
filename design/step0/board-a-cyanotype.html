@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cyanotype Set</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root { --blue:#1E3F66; --line:#F5F7F2; --vellum:#EDEBE3; --red:#D2412F; --graphite:#5A5A5A; --ground:#1E3F66; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:#1a3557; color:var(--line); font-family:'IBM Plex Mono', monospace; }
+  .lbl { font-family:'Barlow Condensed', sans-serif; font-weight:500; letter-spacing:.04em; text-transform:uppercase; }
+  .spaced { letter-spacing:.28em; }
+  .mono { font-family:'IBM Plex Mono', monospace; }
+  header.board { padding:28px 32px 8px; display:flex; gap:28px; align-items:baseline; }
+  header.board h1 { font:600 34px/1 'Barlow Condensed'; letter-spacing:.06em; text-transform:uppercase; margin:0; }
+  header.board p { margin:0; font-size:12px; opacity:.75; max-width:70ch; }
+  .caption { padding:18px 32px 8px; font:500 15px 'Barlow Condensed'; letter-spacing:.18em; text-transform:uppercase; opacity:.8; }
+  .wrap { padding:0 16px; }
+  .frame { position:relative; width:1440px; height:900px; transform-origin:0 0; background:var(--blue); overflow:hidden; }
+  .frame svg { position:absolute; inset:0; }
+
+  /* vellum overlays: translucent drafting film, taped down at an angle, never a floating card */
+  .vellum { position:absolute; background:rgba(237,235,227,.94); color:#1E3F66; border:1px solid rgba(90,90,90,.35); }
+  .vellum::before, .vellum::after { content:''; position:absolute; width:58px; height:18px; background:rgba(237,235,227,.55); border:1px solid rgba(90,90,90,.25); }
+  .vellum::before { top:-9px; left:22px; transform:rotate(-4deg); }
+  .vellum::after { top:-9px; right:22px; transform:rotate(5deg); }
+  .briefing { left:1000px; top:58px; width:404px; padding:16px 20px 12px; transform:rotate(-1.4deg); }
+  .briefing .kicker { font:500 11px 'IBM Plex Mono'; letter-spacing:.08em; color:var(--graphite); }
+  .briefing h2 { font:600 26px/1 'Barlow Condensed'; text-transform:uppercase; letter-spacing:.03em; margin:6px 0 4px; }
+  .briefing .voice { font-size:10.5px; line-height:1.4; color:var(--graphite); margin:0 0 8px; }
+  .ctx { display:grid; grid-template-columns:auto 1fr auto 1fr; gap:1px 10px; font-size:10px; border-top:1px solid #1E3F66; border-bottom:1px solid #1E3F66; padding:5px 0; margin-bottom:8px; }
+  .ctx dt { color:var(--graphite); text-transform:uppercase; letter-spacing:.06em; }
+  .ctx dd { margin:0; }
+  .dilemma { font:500 17px/1.1 'Barlow Condensed'; margin:0 0 10px; }
+  .opt { position:relative; display:grid; grid-template-columns:26px 1fr; gap:0 10px; padding:6px 0; border-top:1px dashed rgba(30,63,102,.4); }
+  .opt .tag { width:22px; height:22px; border:1.4px solid #1E3F66; border-radius:50%; display:grid; place-items:center; font:600 13px 'Barlow Condensed'; }
+  .opt h3 { margin:0 0 2px; font:600 15px/1.05 'Barlow Condensed'; text-transform:uppercase; letter-spacing:.03em; }
+  .opt p { margin:0; font-size:9.8px; line-height:1.38; }
+  .opt p b { font-weight:500; letter-spacing:.06em; color:var(--graphite); }
+  .opt.hover::before { content:''; position:absolute; left:-14px; top:6px; bottom:6px; width:7px; border:1.4px solid var(--graphite); border-right:none; }
+  .opt.hover .note { position:absolute; right:0; top:-8px; font:italic 10px 'IBM Plex Mono'; color:var(--graphite); }
+  .rationale { margin-top:8px; font-size:10.5px; color:var(--graphite); border-bottom:1px solid #1E3F66; padding-bottom:3px; }
+
+  .tag-note { left:610px; top:560px; width:286px; padding:12px 14px 10px; transform:rotate(1.6deg); font-size:10.5px; line-height:1.45; }
+  .tag-note h4 { margin:0 0 4px; font:600 15px 'Barlow Condensed'; text-transform:uppercase; letter-spacing:.04em; color:var(--red); }
+  .tag-note .src { margin-top:6px; color:var(--graphite); font-size:9.5px; }
+  .issued { left:1012px; top:70px; width:390px; padding:16px 20px 14px; transform:rotate(-1.4deg); }
+  .issued .kicker { font:500 11px 'IBM Plex Mono'; letter-spacing:.08em; color:var(--graphite); }
+  .issued h2 { font:600 24px/1 'Barlow Condensed'; text-transform:uppercase; margin:6px 0 6px; }
+  .issued blockquote { margin:0; font-size:11px; line-height:1.45; border-left:2px solid var(--red); padding-left:10px; }
+  .issued .voice { font-size:11px; color:var(--graphite); margin:10px 0 0; }
+  .inspection { left:1030px; top:330px; width:356px; padding:12px 16px; transform:rotate(.8deg); font-size:10.5px; line-height:1.45; }
+  .inspection b { font:600 14px 'Barlow Condensed'; letter-spacing:.06em; text-transform:uppercase; }
+</style>
+</head>
+<body>
+<header class="board">
+  <h1>Direction A · Cyanotype Set</h1>
+  <p>The brief, played straight. Plan-oblique city on blueprint ground, vellum overlays taped at an angle, title block as the ADR log. Same moment as the other boards: Sheet 1, the payments dilemma.</p>
+</header>
+
+<div class="caption">Frame 1 · Decision preview: hovering option C, drawn as dashed pencil on the site</div>
+<div class="wrap"><div class="frame" id="f1">
+  <svg id="s1" viewBox="0 0 1440 900" width="1440" height="900"></svg>
+  <div class="vellum briefing">
+    <div class="kicker">SHEET 1 OF 8 · Q1, YEAR 1 · REVERSIBILITY</div>
+    <h2>Checkout needs to take money</h2>
+    <p class="voice">Three engineers, one database, zero regrets. So far. Launch is in six weeks and nobody has written a line of payments code.</p>
+    <dl class="ctx">
+      <dt>Team</dt><dd>3 founders</dd>
+      <dt>Traffic</dt><dd>~40 orders/day</dd>
+      <dt>Runway</dt><dd>14 months</dd>
+      <dt>Rules</dt><dd>none. Yet.</dd>
+      <dt>Deadline</dt><dd>launch, week 6</dd><dt>Doors</dt><dd>some one-way</dd>
+    </dl>
+    <p class="dilemma">How does the money get in, and which of these doors can you walk back through?</p>
+    <div class="opt"><div class="tag">A</div><div><h3>Hosted checkout, wired into the monolith</h3><p><b>OPTIMIZES</b> launch in two weeks; trivially undone.<br><b>COSTS</b> vendor fee on every order; their checkout page, not yours.</p></div></div>
+    <div class="opt"><div class="tag">B</div><div><h3>A payments module behind a port</h3><p><b>OPTIMIZES</b> swapping vendors later without surgery.<br><b>COSTS</b> one extra week; an abstraction with exactly one implementation.</p></div></div>
+    <div class="opt hover"><div class="tag">C</div><div><h3>Own payments-service and ledger</h3><p><b>OPTIMIZES</b> control and margin, eventually.<br><b>COSTS</b> the whole six weeks; card data in scope. A one-way door.</p><span class="note">previewing on site ↙</span></div></div>
+    <div class="rationale">Because ______________________________ (one sentence)</div>
+  </div>
+</div></div>
+
+<div class="caption">Frame 2 · After the time-lapse: option B issued as Rev A, six months later</div>
+<div class="wrap"><div class="frame" id="f2">
+  <svg id="s2" viewBox="0 0 1440 900" width="1440" height="900"></svg>
+  <div class="vellum issued">
+    <div class="kicker">REV A ISSUED · TIME-LAPSE: SIX MONTHS</div>
+    <h2>Payments as a module behind a port</h2>
+    <blockquote>“Because we may outgrow the vendor before we outgrow the monolith, and a port costs a week, not a quarter.”</blockquote>
+    <p class="voice">Two revision clouds. One of them will matter in Year 2.</p>
+  </div>
+  <div class="vellum inspection"><b>Site inspection, Q3 Y1</b><br>Checkout district congested every Friday after 18:00. Not yet a problem. Noted, in pencil.</div>
+  <div class="vellum tag-note">
+    <h4>Complexity +6 · why?</h4>
+    Assumption: a port with a single adapter costs about one engineer-week now and pays back only if the vendor changes. For a team of three that week is 1/18 of the runway to launch.
+    <div class="src">SRC · ousterhout-apsd-ch4 · nygard-adr · bezos-2015-doors</div>
+  </div>
+</div></div>
+
+<script src="common.js"></script>
+<script>
+const { C } = D;
+const L = C.line;
+
+function frameChrome(revs) {
+  let s = D.defs(L);
+  s += `<rect width="1440" height="900" fill="${C.blue}"/>`;
+  s += `<rect width="1440" height="900" filter="url(#paper-coarse)"/><rect width="1440" height="900" filter="url(#paper)"/>`;
+  // faint survey grid: the empty lots the company has not grown into yet
+  let grid = `<g stroke="${L}" stroke-opacity=".07" stroke-width=".6">`;
+  for (let x = 60; x < 990; x += 30) grid += `<line x1="${x}" y1="60" x2="${x}" y2="760"/>`;
+  for (let y = 60; y < 760; y += 30) grid += `<line x1="60" y1="${y}" x2="990" y2="${y}"/>`;
+  s += grid + `</g>`;
+  s += D.sheetFrame(1440, 900, { ink: L });
+  s += D.northArrow(940, 112, { ink: L });
+  s += D.scaleBar(780, 740, { ink: L, caption: 'SCALE · ORDERS / DAY' });
+  s += titleBlock(revs);
+  return s;
+}
+
+function titleBlock(revs) {
+  const x = 1000, y = 618, w = 384, h = 246;
+  let s = `<g stroke="${L}" fill="none"><rect x="${x}" y="${y}" width="${w}" height="${h}" stroke-width="1.8" fill="${C.blue}"/>`;
+  s += `<line x1="${x}" y1="${y + 46}" x2="${x + w}" y2="${y + 46}" stroke-width="1"/>`;
+  s += `<line x1="${x}" y1="${y + 84}" x2="${x + w}" y2="${y + 84}" stroke-width="1"/>`;
+  s += `<line x1="${x + 128}" y1="${y + 46}" x2="${x + 128}" y2="${y + 84}" stroke-width=".8"/>`;
+  s += `<line x1="${x + 256}" y1="${y + 46}" x2="${x + 256}" y2="${y + 84}" stroke-width=".8"/>`;
+  s += `<line x1="${x}" y1="${y + 104}" x2="${x + w}" y2="${y + 104}" stroke-width=".8"/>`;
+  for (let i = 1; i <= 5; i++) s += `<line x1="${x}" y1="${y + 104 + i * 24}" x2="${x + w}" y2="${y + 104 + i * 24}" stroke-width=".5" stroke-opacity=".5"/>`;
+  s += `<line x1="${x + 34}" y1="${y + 84}" x2="${x + 34}" y2="${y + 224}" stroke-width=".6"/>`;
+  s += `<line x1="${x + 104}" y1="${y + 84}" x2="${x + 104}" y2="${y + 224}" stroke-width=".6"/>`;
+  s += `<line x1="${x}" y1="${y + 224}" x2="${x + w}" y2="${y + 224}" stroke-width="1"/></g>`;
+  s += `<text x="${x + 12}" y="${y + 22}" class="lbl" font-size="22" font-weight="700" fill="${L}">IT DEPENDS</text>`;
+  s += `<text x="${x + 12}" y="${y + 38}" class="mono" font-size="9.5" fill="${L}" fill-opacity=".8">MERCADITO · PLATFORM SITE PLAN</text>`;
+  s += `<text x="${x + w - 12}" y="${y + 24}" text-anchor="end" class="lbl" font-size="26" font-weight="700" fill="${L}">A-01</text>`;
+  const cell = (cx, k, v) => `<text x="${cx}" y="${y + 60}" class="mono" font-size="8" fill="${L}" fill-opacity=".65">${k}</text><text x="${cx}" y="${y + 77}" class="lbl" font-size="15" fill="${L}">${v}</text>`;
+  s += cell(x + 10, 'SHEET', '1 OF 8') + cell(x + 138, 'QUARTER', revs.length ? 'Q3 · YEAR 1' : 'Q1 · YEAR 1') + cell(x + 266, 'DRAWN BY', 'YOU, ARCHITECT');
+  s += `<text x="${x + 10}" y="${y + 98}" class="mono" font-size="8.5" fill="${L}" fill-opacity=".8">REV</text><text x="${x + 42}" y="${y + 98}" class="mono" font-size="8.5" fill="${L}" fill-opacity=".8">ISSUED</text><text x="${x + 112}" y="${y + 98}" class="mono" font-size="8.5" fill="${L}" fill-opacity=".8">DESCRIPTION · ADR</text>`;
+  if (!revs.length) {
+    s += `<text x="${x + 112}" y="${y + 121}" class="mono" font-size="10" fill="${L}" fill-opacity=".75">No revisions issued.</text>`;
+    s += `<text x="${x + 112}" y="${y + 135}" class="mono" font-size="10" fill="${L}" fill-opacity=".75">The site is waiting on you.</text>`;
+  }
+  revs.forEach((r, i) => {
+    const ry = y + 121 + i * 24;
+    s += `<text x="${x + 12}" y="${ry}" class="lbl" font-size="15" font-weight="600" fill="${C.red}">${r[0]}</text>`;
+    s += `<text x="${x + 42}" y="${ry}" class="mono" font-size="10" fill="${L}">${r[1]}</text>`;
+    s += `<text x="${x + 112}" y="${ry}" class="mono" font-size="10" fill="${L}">${r[2]}</text>`;
+  });
+  s += `<text x="${x + 10}" y="${y + 239}" class="mono" font-size="8.5" fill="${L}" fill-opacity=".7">THE TITLE BLOCK IS THE ADR LOG · CHECKED: REVIEW BOARD</text>`;
+  return s;
+}
+
+function city({ floors, issued }) {
+  let s = '';
+  // storefront district: the monolith's lot
+  s += D.district([[240, 196], [780, 196], [780, 690], [240, 690]], { ink: L, label: 'DISTRICT · mercadito-app', lx: 252, ly: 214 });
+  // public API road from the clients at the west edge
+  const api = [[60, 400], [380, 400]];
+  s += D.road(api, { ink: L });
+  s += `<text x="70" y="384" class="lbl" font-size="13" fill="${L}" fill-opacity=".85">web + mobile clients</text>`;
+  s += `<text x="70" y="424" class="mono" font-size="9.5" fill="${L}" fill-opacity=".7">ROAD · public HTTP API</text>`;
+  // water main to the reservoir
+  s += `<g stroke="${L}" stroke-width="1"><line x1="476" y1="440" x2="476" y2="566"/><line x1="484" y1="440" x2="484" y2="566"/></g>`;
+  s += D.reservoir(480, 606, 104, 38, { ink: L, level: issued ? 0.72 : 0.45, label: 'shared Postgres', sub: issued ? 'orders · users · payments' : 'orders · users' });
+  s += D.building(380, 340, 200, 100, floors, { ink: L, label: 'mercadito-app', sub: issued ? 'monolith · 5 eng' : 'monolith · 3 eng' });
+  if (issued) {
+    s += D.building(600, 396, 120, 70, 2, { ink: L, label: 'payments module', sub: 'PaymentsPort → 1 adapter' });
+    // the port: socket symbol on the module wall
+    s += `<g stroke="${L}" fill="none" stroke-width="1.2"><line x1="580" y1="420" x2="596" y2="420"/><path d="M596,413 a7,7 0 0 1 0,14"/></g>`;
+    // road to the vendor, off our lot
+    s += D.road([[720, 432], [850, 432], [850, 262], [880, 262]], { ink: L, width: 12 });
+    s += D.particles([[720, 432], [850, 432], [850, 262], [880, 262]], 22, { ink: L, seed: 11, spread: 2.5 });
+  }
+  s += D.particles(api, issued ? 90 : 26, { ink: L, seed: 5, spread: 3.5, stress: issued ? 0.06 : 0 });
+  return s;
+}
+
+function vendorLot(dash) {
+  let s = `<rect x="868" y="178" width="108" height="118" fill="url(#hatch)" stroke="${L}" stroke-width=".8" ${dash ? 'stroke-dasharray="6 5"' : ''}/>`;
+  s += D.building(882, 214, 80, 54, 4, { ink: L, dash: dash ? '6 5' : '', label: 'card processor', sub: 'vendor · off-site', labelBelow: true });
+  s += `<text x="872" y="172" class="mono" font-size="9" fill="${L}" fill-opacity=".7">NOT OURS</text>`;
+  return s;
+}
+
+function gauges(now, before) {
+  const names = ['TEAM VELOCITY', 'COMPLEXITY', 'COST', 'RELIABILITY', 'COGNITIVE LOAD'];
+  let s = `<text x="64" y="782" class="mono" font-size="8.5" fill="${L}" fill-opacity=".7">FORCES · RELATIVE 0–100, NOT MEASUREMENTS</text>`;
+  names.forEach((n, i) => {
+    s += D.gauge(64 + i * 184, 806, 158, n, now[i], { ink: L, prev: before ? before[i] : null });
+  });
+  return s;
+}
+
+// Frame 1: before, with option C previewed as dashed pencil
+(() => {
+  let s = frameChrome([]);
+  s += city({ floors: 3, issued: false });
+  const P = '7 5';
+  s += `<g opacity=".78">`;
+  s += D.road([[580, 420], [690, 420], [690, 470], [800, 470]], { ink: L, width: 12, dash: P, opacity: .9 });
+  s += D.building(800, 430, 130, 92, 3, { ink: L, dash: P, label: 'payments-service', sub: 'proposed · new team of 0' });
+  s += D.reservoir(866, 650, 64, 26, { ink: L, dash: P, level: 0.2, label: 'ledger DB', sub: 'proposed' });
+  s += `<g stroke="${L}" stroke-dasharray="${P}"><line x1="862" y1="540" x2="862" y2="622"/><line x1="870" y1="540" x2="870" y2="622"/></g>`;
+  s += D.rail(690, 560, 820, 560, { ink: L, dash: '4 4' });
+  s += `<text x="690" y="580" class="mono" font-size="9" fill="${L}">RAIL · payment-events queue</text>`;
+  s += vendorLot(true);
+  s += `</g>`;
+  // margin note in the architect's hand
+  s += `<path d="M740,284 C800,300 830,340 846,410" fill="none" stroke="${L}" stroke-width=".9" marker-end="url(#arrow-ink)"/>`;
+  s += `<text x="560" y="262" class="mono" font-size="10" fill="${L}">+6 wks. PCI scope moves in-house.</text>`;
+  s += `<text x="560" y="276" class="mono" font-size="10" fill="${L}" fill-opacity=".75">Hard to un-build once card data lands.</text>`;
+  s += gauges([74, 18, 22, 52, 20]);
+  // preview ghosts on gauges: where option C would move them
+  [[64, 46], [248, 41], [432, 44], [616, 60], [800, 44]].forEach(([gx, v]) => {
+    const vx = gx + 158 * v / 100;
+    s += `<path d="M${vx},${818} l-4.5,8 h9 z" fill="none" stroke="${L}" stroke-dasharray="2 1.5"/>`;
+  });
+  document.getElementById('s1').innerHTML = s;
+})();
+
+// Frame 2: after the time-lapse, option B issued as Rev A
+(() => {
+  let s = frameChrome([['A', 'Q1 Y1', 'Payments behind a port']]);
+  s += city({ floors: 5, issued: true });
+  s += vendorLot(false);
+  // revision clouds around what changed
+  s += `<path d="${D.cloudPath(578, 384, 158, 120, { r: 12, seed: 3 })}" fill="none" stroke="${C.red}" stroke-width="1.8"/>`;
+  s += D.delta(752, 380, 'A');
+  s += `<path d="${D.cloudPath(842, 172, 140, 140, { r: 12, seed: 9 })}" fill="none" stroke="${C.red}" stroke-width="1.8"/>`;
+  s += D.delta(1000, 170, 'A');
+  s += `<path d="${D.cloudPath(372, 286, 216, 60, { r: 10, seed: 21, pad: 6 })}" fill="none" stroke="${C.red}" stroke-width="1.4" stroke-opacity=".8"/>`;
+  s += `<text x="380" y="268" class="mono" font-size="9.5" fill="${C.red}">+2 FLOORS · 5 ENGINEERS</text>`;
+  // red leader from the assumption tag to the change it explains
+  s += `<path d="M690,566 C684,540 676,520 664,506" fill="none" stroke="${C.red}" stroke-width="1.2" marker-start="url(#dot-red)" marker-end="url(#arrow-red)"/>`;
+  s += gauges([68, 24, 27, 58, 27], [74, 18, 22, 52, 20]);
+  document.getElementById('s2').innerHTML = s;
+})();
+
+D.fit('.frame', 1440);
+</script>
+</body>
+</html>

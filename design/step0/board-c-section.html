@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Section Cut</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root { --blue:#1E3F66; --line:#F5F7F2; --vellum:#EDEBE3; --red:#D2412F; --graphite:#5A5A5A; --ground:#1E3F66; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:#16304f; color:var(--line); font-family:'IBM Plex Mono', monospace; }
+  .lbl { font-family:'Barlow Condensed', sans-serif; font-weight:500; letter-spacing:.04em; text-transform:uppercase; }
+  .spaced { letter-spacing:.28em; }
+  .mono { font-family:'IBM Plex Mono', monospace; }
+  header.board { padding:28px 32px 8px; display:flex; gap:28px; align-items:baseline; }
+  header.board h1 { font:600 34px/1 'Barlow Condensed'; letter-spacing:.06em; text-transform:uppercase; margin:0; }
+  header.board p { margin:0; font-size:12px; opacity:.75; max-width:72ch; }
+  .caption { padding:18px 32px 8px; font:500 15px 'Barlow Condensed'; letter-spacing:.18em; text-transform:uppercase; opacity:.8; }
+  .wrap { padding:0 16px; }
+  .frame { position:relative; width:1440px; height:900px; transform-origin:0 0; background:var(--blue); overflow:hidden; }
+  .frame svg { position:absolute; inset:0; }
+  .vellum { position:absolute; background:rgba(237,235,227,.94); color:#1E3F66; border:1px solid rgba(90,90,90,.35); }
+  .vellum::before { content:''; position:absolute; width:58px; height:18px; top:-9px; left:40%; background:rgba(237,235,227,.55); border:1px solid rgba(90,90,90,.25); transform:rotate(-3deg); }
+  .brief { left:62px; top:58px; width:372px; padding:14px 18px 12px; transform:rotate(1.1deg); }
+  .brief .k { font-size:10.5px; letter-spacing:.08em; color:var(--graphite); }
+  .brief h2 { font:600 26px/1 'Barlow Condensed'; text-transform:uppercase; margin:5px 0 4px; }
+  .brief .v { font-size:10.5px; color:var(--graphite); margin:0 0 8px; line-height:1.4; }
+  .brief ol { list-style:none; margin:0; padding:0; }
+  .brief li { border-top:1px dashed rgba(30,63,102,.4); padding:6px 0 6px 30px; position:relative; font-size:9.8px; line-height:1.38; }
+  .brief li i { position:absolute; left:0; top:7px; width:20px; height:20px; border:1.4px solid #1E3F66; border-radius:50%; display:grid; place-items:center; font:600 12px 'Barlow Condensed'; font-style:normal; }
+  .brief li b { display:block; font:600 14.5px/1.05 'Barlow Condensed'; text-transform:uppercase; margin-bottom:2px; }
+  .brief li.hot { outline:1.4px dashed var(--graphite); outline-offset:-1px; }
+  .brief li u { text-decoration:none; color:var(--graphite); letter-spacing:.06em; }
+  .issued { left:62px; top:62px; width:360px; padding:14px 18px; transform:rotate(1.1deg); font-size:10.5px; line-height:1.45; }
+  .issued h2 { font:600 22px/1 'Barlow Condensed'; text-transform:uppercase; margin:5px 0 6px; }
+  .issued blockquote { margin:0; border-left:2px solid var(--red); padding-left:10px; }
+  .issued .k { font-size:10.5px; letter-spacing:.08em; color:var(--graphite); }
+</style>
+</head>
+<body>
+<header class="board">
+  <h1>Direction C · Section Cut</h1>
+  <p>Reinterpretation: the system drawn as a building section instead of a plan. Services stand above grade and rise floor by floor; data and queues live below grade, where cracks start. The skyline is the most readable time-lapse; topology is the least.</p>
+</header>
+<div class="caption">Frame 1 · Decision preview: hovering option C, the new tower and its basement drawn dashed</div>
+<div class="wrap"><div class="frame">
+  <svg id="s1" viewBox="0 0 1440 900" width="1440" height="900"></svg>
+  <div class="vellum brief">
+    <div class="k">SHEET 1 OF 8 · Q1 YEAR 1 · REVERSIBILITY</div>
+    <h2>Checkout needs to take money</h2>
+    <p class="v">3 founders · ~40 orders/day · 14 months of runway · launch in week 6. Three engineers, one database, zero regrets. So far.</p>
+    <ol>
+      <li><i>A</i><b>Hosted checkout in the monolith</b><u>OPTIMIZES</u> launch in two weeks; trivially undone. <u>COSTS</u> a fee on every order.</li>
+      <li><i>B</i><b>Payments module behind a port</b><u>OPTIMIZES</u> swapping vendors later. <u>COSTS</u> a week; one-implementation abstraction.</li>
+      <li class="hot"><i>C</i><b>Own payments-service + ledger</b><u>OPTIMIZES</u> control, eventually. <u>COSTS</u> all six weeks; card data in scope. One-way door.</li>
+    </ol>
+  </div>
+</div></div>
+<div class="caption">Frame 2 · After the time-lapse: option B issued as Rev A, six months later</div>
+<div class="wrap"><div class="frame">
+  <svg id="s2" viewBox="0 0 1440 900" width="1440" height="900"></svg>
+  <div class="vellum issued">
+    <div class="k">REV A ISSUED · TIME-LAPSE: SIX MONTHS</div>
+    <h2>Payments as a module behind a port</h2>
+    <blockquote>“Because we may outgrow the vendor before we outgrow the monolith.”</blockquote>
+    <p style="color:#5A5A5A;margin:8px 0 0">Assumption tag (hover): complexity +6. A one-adapter port costs a week now. SRC ousterhout-apsd-ch4</p>
+  </div>
+</div></div>
+
+<script src="common.js"></script>
+<script>
+const { C } = D;
+const L = C.line;
+const GL = 470; // grade line
+
+function elevation(x, w, floors, { fh = 26, dash = '', label = '', sub = '', hatch = false } = {}) {
+  const H = floors * fh, top = GL - H;
+  const da = dash ? `stroke-dasharray="${dash}"` : '';
+  let s = `<g stroke="${L}" fill="none" ${da}>`;
+  s += `<rect x="${x}" y="${top}" width="${w}" height="${H}" stroke-width="1.5" fill="${hatch ? 'url(#hatch)' : 'none'}"/>`;
+  for (let i = 1; i < floors; i++) s += `<line x1="${x}" y1="${GL - i * fh}" x2="${x + w}" y2="${GL - i * fh}" stroke-width=".8" stroke-opacity=".6"/>`;
+  // windows: one bay per ~22px, per floor
+  const bays = Math.floor((w - 12) / 22);
+  for (let f = 0; f < floors; f++) for (let b = 0; b < bays; b++) {
+    s += `<rect x="${x + 10 + b * 22}" y="${GL - (f + 1) * fh + 7}" width="12" height="${fh - 13}" stroke-width=".6" stroke-opacity=".75"/>`;
+  }
+  s += `<rect x="${x + w * 0.6}" y="${top - 12}" width="${w * 0.25}" height="12" stroke-width=".9"/>`;
+  s += `<line x1="${x + w * 0.3}" y1="${top}" x2="${x + w * 0.3}" y2="${top - 26}" stroke-width=".9"/>`;
+  // piles under the building
+  for (let px = x + 12; px < x + w; px += 26) s += `<line x1="${px}" y1="${GL}" x2="${px}" y2="${GL + 48}" stroke-width=".7" stroke-opacity=".6"/>`;
+  s += `</g>`;
+  if (label) s += `<text x="${x}" y="${top - 34}" class="lbl" font-size="16" fill="${L}">${label}</text>`;
+  if (sub) s += `<text x="${x}" y="${top - 20}" class="mono" font-size="9.5" fill="${L}" fill-opacity=".75">${sub}</text>`;
+  return s;
+}
+
+function tank(x, y, w, h, level, { dash = '', label = '', sub = '' } = {}) {
+  const da = dash ? `stroke-dasharray="${dash}"` : '';
+  const wl = y + h * (1 - level);
+  let s = `<g stroke="${L}" fill="none" ${da}><path d="M${x},${y} V${y + h - 14} q0,14 14,14 H${x + w - 14} q14,0 14,-14 V${y}" stroke-width="1.5"/>`;
+  s += `<line x1="${x - 8}" y1="${y}" x2="${x + w + 8}" y2="${y}" stroke-width="1.5"/>`;
+  if (!dash) {
+    let p = `M${x + 2},${wl}`;
+    for (let i = 0; i < (w - 4) / 10; i++) p += ' q2.5,-3 5,0 t5,0';
+    s += `<path d="${p}" stroke-width="1"/>`;
+    for (let yy = wl + 10; yy < y + h - 4; yy += 8) s += `<line x1="${x + 6}" y1="${yy}" x2="${x + w - 6}" y2="${yy}" stroke-width=".5" stroke-opacity=".45"/>`;
+  }
+  s += `</g>`;
+  if (label) s += `<text x="${x + w + 14}" y="${y + 22}" class="lbl" font-size="15" fill="${L}">${label}</text>`;
+  if (sub) s += `<text x="${x + w + 14}" y="${y + 36}" class="mono" font-size="9.5" fill="${L}" fill-opacity=".75">${sub}</text>`;
+  return s;
+}
+
+function tunnel(x1, x2, y, { dash = '', label = '' } = {}) {
+  const da = dash ? `stroke-dasharray="${dash}"` : '';
+  let s = `<g stroke="${L}" fill="none" ${da}><line x1="${x1}" y1="${y - 14}" x2="${x2}" y2="${y - 14}" stroke-width="1.3"/><line x1="${x1}" y1="${y + 14}" x2="${x2}" y2="${y + 14}" stroke-width="1.3"/>`;
+  for (let i = 0; i < 3; i++) s += `<rect x="${x1 + 30 + i * 34}" y="${y - 8}" width="30" height="16" stroke-width=".9"/>`;
+  s += `</g>`;
+  if (label) s += `<text x="${x1}" y="${y + 30}" class="mono" font-size="9.5" fill="${L}">${label}</text>`;
+  return s;
+}
+
+// Surveyor's level rod as a force gauge: relative 0-100.
+function rod(x, label, value, prev) {
+  const top = 556, h = 250;
+  let s = `<rect x="${x}" y="${top}" width="16" height="${h}" fill="none" stroke="${L}" stroke-width="1"/>`;
+  for (let i = 0; i < 20; i++) if (i % 2 === 0) s += `<rect x="${x + (i % 4 === 0 ? 0 : 8)}" y="${top + i * h / 20}" width="8" height="${h / 20}" fill="${L}" fill-opacity=".85"/>`;
+  const vy = top + h - (h * value) / 100;
+  s += `<line x1="${x - 8}" y1="${vy}" x2="${x + 30}" y2="${vy}" stroke="${L}" stroke-width="1.6"/>`;
+  s += `<text x="${x + 34}" y="${vy + 4}" class="mono" font-size="10" fill="${L}">${value}</text>`;
+  if (prev !== undefined) {
+    const py = top + h - (h * prev) / 100;
+    s += `<line x1="${x - 8}" y1="${py}" x2="${x + 24}" y2="${py}" stroke="${L}" stroke-opacity=".5" stroke-dasharray="3 2"/>`;
+    s += `<line x1="${x - 4}" y1="${py}" x2="${x - 4}" y2="${vy}" stroke="${C.red}" stroke-width="1.4" marker-end="url(#arrow-red)"/>`;
+  }
+  s += `<text transform="translate(${x + 8},${top + h + 12}) rotate(0)" text-anchor="middle" class="mono" font-size="8.5" fill="${L}" fill-opacity=".85">${label}</text>`;
+  return s;
+}
+
+function chrome(revs, quarter) {
+  let s = D.defs(L);
+  s += `<rect width="1440" height="900" fill="${C.blue}"/><rect width="1440" height="900" filter="url(#paper-coarse)"/><rect width="1440" height="900" filter="url(#paper)"/>`;
+  s += D.sheetFrame(1440, 900, { ink: L });
+  // grade line and earth
+  s += `<line x1="56" y1="${GL}" x2="1384" y2="${GL}" stroke="${L}" stroke-width="2.4"/>`;
+  s += `<rect x="56" y="${GL}" width="1328" height="10" fill="url(#hatch)"/>`;
+  s += `<text x="1376" y="${GL + 26}" text-anchor="end" class="mono" font-size="9.5" fill="${L}">GRADE ±0.00 · USERS ABOVE, DATA BELOW</text>`;
+  s += `<text x="470" y="${GL + 30}" class="lbl spaced" font-size="12" fill="${L}" fill-opacity=".8">BELOW GRADE · DATA AND QUEUES</text>`;
+  // property line marker
+  s += `<line x1="1010" y1="120" x2="1010" y2="620" stroke="${L}" stroke-width="1" stroke-dasharray="18 5 3 5 3 5"/>`;
+  s += `<text x="1018" y="134" class="mono" font-size="9" fill="${L}" fill-opacity=".75">PROPERTY LINE · beyond: NOT OURS</text>`;
+  s += `<text x="70" y="540" class="mono" font-size="8.5" fill="${L}" fill-opacity=".75">FORCES · LEVEL RODS · RELATIVE 0–100</text>`;
+  // title block
+  const x = 1040, y = 650, w = 344, h = 214;
+  s += `<g stroke="${L}" fill="${C.blue}"><rect x="${x}" y="${y}" width="${w}" height="${h}" stroke-width="1.8"/></g><g stroke="${L}">`;
+  [44, 80, 100].forEach((yy) => s += `<line x1="${x}" y1="${y + yy}" x2="${x + w}" y2="${y + yy}" stroke-width=".9"/>`);
+  s += `<line x1="${x + 172}" y1="${y + 44}" x2="${x + 172}" y2="${y + 80}" stroke-width=".8"/></g>`;
+  s += `<text x="${x + 12}" y="${y + 22}" class="lbl" font-size="22" font-weight="700" fill="${L}">IT DEPENDS</text><text x="${x + 12}" y="${y + 37}" class="mono" font-size="9" fill="${L}" fill-opacity=".8">MERCADITO · LONGITUDINAL SECTION</text>`;
+  s += `<text x="${x + w - 12}" y="${y + 26}" text-anchor="end" class="lbl" font-size="26" font-weight="700" fill="${L}">S-01</text>`;
+  s += `<text x="${x + 12}" y="${y + 58}" class="mono" font-size="8" fill="${L}" fill-opacity=".65">SHEET</text><text x="${x + 12}" y="${y + 75}" class="lbl" font-size="15" fill="${L}">1 OF 8</text>`;
+  s += `<text x="${x + 184}" y="${y + 58}" class="mono" font-size="8" fill="${L}" fill-opacity=".65">QUARTER</text><text x="${x + 184}" y="${y + 75}" class="lbl" font-size="15" fill="${L}">${quarter}</text>`;
+  s += `<text x="${x + 12}" y="${y + 94}" class="mono" font-size="8.5" fill="${L}" fill-opacity=".8">REV   ISSUED   DESCRIPTION · ADR</text>`;
+  if (!revs.length) s += `<text x="${x + 12}" y="${y + 122}" class="mono" font-size="10" fill="${L}" fill-opacity=".75">No revisions issued. The site is waiting on you.</text>`;
+  revs.forEach((r, i) => s += `<text x="${x + 14}" y="${y + 122 + i * 22}" class="lbl" font-size="15" font-weight="600" fill="${C.red}">${r[0]}</text><text x="${x + 50}" y="${y + 122 + i * 22}" class="mono" font-size="10" fill="${L}">${r[1]}    ${r[2]}</text>`);
+  return s;
+}
+
+function traffic(x1, x2, n, seed, stress = 0) {
+  return D.particles([[x1, GL - 6], [x2, GL - 6]], n, { ink: L, seed, spread: 3, stress });
+}
+
+const NAMES = ['VELOCITY', 'COMPLEX.', 'COST', 'RELIAB.', 'COG. LOAD'];
+
+// Frame 1
+(() => {
+  let s = chrome([], 'Q1 · YEAR 1');
+  s += traffic(56, 520, 30, 3);
+  s += `<text x="460" y="${GL - 16}" text-anchor="end" class="mono" font-size="9.5" fill="${L}" fill-opacity=".8">clients → public HTTP API</text>`;
+  s += elevation(520, 190, 3, { label: 'mercadito-app', sub: 'monolith · 3 engineers' });
+  s += `<g stroke="${L}" stroke-width="1"><line x1="606" y1="${GL + 48}" x2="606" y2="590"/><line x1="614" y1="${GL + 48}" x2="614" y2="590"/></g>`;
+  s += tank(540, 590, 150, 110, 0.4, { label: 'shared Postgres', sub: 'orders · users' });
+  const P = '7 5';
+  s += `<g opacity=".8">`;
+  s += elevation(790, 150, 3, { dash: P, label: 'payments-service', sub: 'proposed · team of 0' });
+  s += tank(810, 610, 110, 80, 0, { dash: P, label: 'ledger DB', sub: 'proposed' });
+  s += tunnel(710, 790, 548, { dash: '4 4', label: 'payment-events queue' });
+  s += elevation(1080, 120, 7, { dash: P, hatch: true, label: 'card network', sub: 'vendor' });
+  s += `</g>`;
+  s += `<text x="740" y="178" class="mono" font-size="10" fill="${L}">+6 wks. PCI scope moves in-house.</text>`;
+  s += `<text x="740" y="192" class="mono" font-size="10" fill="${L}" fill-opacity=".75">You can't un-pour a foundation.</text>`;
+  [74, 18, 22, 52, 20].forEach((v, i) => s += rod(80 + i * 72, NAMES[i], v));
+  document.getElementById('s1').innerHTML = s;
+})();
+
+// Frame 2
+(() => {
+  let s = chrome([['A', 'Q1 Y1', 'Payments behind a port']], 'Q3 · YEAR 1');
+  s += traffic(56, 520, 90, 3, 0.05);
+  s += elevation(520, 190, 5, { label: 'mercadito-app', sub: 'monolith · 5 engineers' });
+  s += elevation(710, 110, 2, { label: 'payments module', sub: 'PaymentsPort → 1 adapter' });
+  s += traffic(820, 1080, 26, 9);
+  s += `<g stroke="${L}" stroke-width="1"><line x1="606" y1="${GL + 48}" x2="606" y2="590"/><line x1="614" y1="${GL + 48}" x2="614" y2="590"/></g>`;
+  s += tank(540, 590, 150, 110, 0.68, { label: 'shared Postgres', sub: 'orders · users · payments' });
+  s += elevation(1080, 120, 7, { hatch: true, label: 'card processor', sub: 'vendor · off-site' });
+  s += `<path d="${D.cloudPath(706, 414, 118, 60, { r: 11, seed: 5, pad: 8 })}" fill="none" stroke="${C.red}" stroke-width="1.9"/>`;
+  s += D.delta(846, 404, 'A');
+  s += `<path d="${D.cloudPath(820, 440, 250, 34, { r: 11, seed: 6, pad: 8 })}" fill="none" stroke="${C.red}" stroke-width="1.7"/>`;
+  s += `<path d="${D.cloudPath(518, 326, 194, 66, { r: 10, seed: 15, pad: 6 })}" fill="none" stroke="${C.red}" stroke-width="1.4"/>`;
+  s += `<text x="640" y="306" class="mono" font-size="9.5" fill="${C.red}">+2 FLOORS</text>`;
+  // hairline crack starting at the shared reservoir: small, early, easy to ignore
+  s += `<path d="M690,640 l14,-6 l6,9 l12,-4 l5,7" fill="none" stroke="${C.red}" stroke-width="1.1"/>`;
+  s += `<text x="730" y="656" class="mono" font-size="9.5" fill="${C.red}">hairline: payments now share the reservoir</text>`;
+  [[68, 74], [24, 18], [27, 22], [58, 52], [27, 20]].forEach(([v, p], i) => s += rod(80 + i * 72, NAMES[i], v, p));
+  document.getElementById('s2').innerHTML = s;
+})();
+
+D.fit('.frame', 1440);
+</script>
+</body>
+</html>

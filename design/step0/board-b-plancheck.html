@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plan Check</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root { --blue:#1E3F66; --line:#F5F7F2; --vellum:#EDEBE3; --red:#D2412F; --graphite:#5A5A5A; --ground:#EDEBE3; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:#d9d6cb; color:var(--blue); font-family:'IBM Plex Mono', monospace; }
+  .lbl { font-family:'Barlow Condensed', sans-serif; font-weight:500; letter-spacing:.04em; text-transform:uppercase; }
+  .spaced { letter-spacing:.28em; }
+  .mono { font-family:'IBM Plex Mono', monospace; }
+  header.board { padding:28px 32px 8px; display:flex; gap:28px; align-items:baseline; }
+  header.board h1 { font:600 34px/1 'Barlow Condensed'; letter-spacing:.06em; text-transform:uppercase; margin:0; }
+  header.board p { margin:0; font-size:12px; color:var(--graphite); max-width:70ch; }
+  .caption { padding:18px 32px 8px; font:500 15px 'Barlow Condensed'; letter-spacing:.18em; text-transform:uppercase; color:var(--graphite); }
+  .wrap { padding:0 16px; }
+  .frame { position:relative; width:1440px; height:900px; transform-origin:0 0; background:var(--vellum); overflow:hidden; }
+  .frame svg { position:absolute; inset:0; }
+</style>
+</head>
+<body>
+<header class="board">
+  <h1>Direction B · Plan Check</h1>
+  <p>Reinterpretation: the whiteprint a reviewer has marked up. Light vellum ground, blue ink, solid poché for what is built, red pencil for every revision. The options are drawn as alternate plans, so the dilemma is read as drawings, not text.</p>
+</header>
+<div class="caption">Frame 1 · Decision preview: hovering ALT C, overlaid dashed on the site plan</div>
+<div class="wrap"><div class="frame"><svg id="s1" viewBox="0 0 1440 900" width="1440" height="900"></svg></div></div>
+<div class="caption">Frame 2 · After the time-lapse: ALT B issued as Rev A, six months later</div>
+<div class="wrap"><div class="frame"><svg id="s2" viewBox="0 0 1440 900" width="1440" height="900"></svg></div></div>
+
+<script src="common.js"></script>
+<script>
+const { C } = D;
+const B = C.blue;
+
+function poche(x, y, w, h, floors, { dash = '', label = '', ghost = false } = {}) {
+  const da = dash ? `stroke-dasharray="${dash}"` : '';
+  let s = `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${ghost ? 'none' : B}" stroke="${B}" stroke-width="1.6" ${da}/>`;
+  // stacked hairline offsets: one per floor above ground, read like a stepped section
+  for (let i = 1; i < Math.min(floors, 6); i++) s += `<rect x="${x - i * 3}" y="${y - i * 3}" width="${w}" height="${h}" fill="none" stroke="${B}" stroke-width=".6" stroke-opacity=".5" ${da}/>`;
+  const tc = ghost ? B : C.vellum;
+  if (label) s += `<text x="${x + 10}" y="${y + 22}" class="lbl" font-size="16" font-weight="600" fill="${tc}">${label}</text>`;
+  s += `<text x="${x + w - 10}" y="${y + h - 10}" text-anchor="end" class="mono" font-size="11" fill="${tc}">${floors}F</text>`;
+  return s;
+}
+
+function stippleReservoir(cx, cy, rx, ry, { dash = '', label = '', seed = 2 } = {}) {
+  const r = D.rng(seed);
+  const da = dash ? `stroke-dasharray="${dash}"` : '';
+  let s = `<ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" fill="none" stroke="${B}" stroke-width="1.6" ${da}/>`;
+  if (!dash) for (let i = 0; i < rx * ry / 18; i++) {
+    const a = r() * Math.PI * 2, d = Math.sqrt(r());
+    s += `<circle cx="${(cx + Math.cos(a) * d * (rx - 4)).toFixed(1)}" cy="${(cy + Math.sin(a) * d * (ry - 4)).toFixed(1)}" r=".9" fill="${B}" fill-opacity=".65"/>`;
+  }
+  if (label) s += `<text x="${cx}" y="${cy + ry + 18}" text-anchor="middle" class="lbl" font-size="15" fill="${B}">${label}</text>`;
+  return s;
+}
+
+function vendor(x, y, label, dash) {
+  const da = dash ? `stroke-dasharray="${dash}"` : '';
+  return `<rect x="${x}" y="${y}" width="120" height="90" fill="url(#hatch)" stroke="${B}" stroke-width="1" ${da}/>
+    <text x="${x}" y="${y - 8}" class="mono" font-size="10" fill="${B}">${label}</text>
+    <text x="${x + 60}" y="${y + 52}" text-anchor="middle" class="lbl spaced" font-size="12" fill="${B}">NOT OURS</text>`;
+}
+
+// The site plan in local coordinates (0..1100 x 0..460). Variant draws one alternate.
+function site(variant, { floors = 3, dash = '', base = true, traffic = 30 } = {}) {
+  let s = '';
+  if (base) {
+    s += D.district([[180, 30], [640, 30], [640, 430], [180, 430]], { ink: B, label: 'LOT · mercadito-app', lx: 192, ly: 50 });
+    s += D.road([[0, 200], [240, 200]], { ink: B, width: 16 });
+    s += D.particles([[0, 200], [240, 200]], traffic, { ink: B, seed: 4, spread: 4 });
+    s += `<g stroke="${B}" stroke-width="1.2"><line x1="326" y1="270" x2="326" y2="320"/><line x1="334" y1="270" x2="334" y2="320"/></g>`;
+    s += stippleReservoir(330, 352, 84, 30, { label: 'shared Postgres' });
+    s += poche(240, 120, 180, 150, floors, { label: 'mercadito-app' });
+  }
+  const g = dash ? { dash, ghost: true } : {};
+  if (variant === 'A') {
+    s += D.road([[420, 160], [880, 160], [880, 130], [900, 130]], { ink: B, width: 12, dash });
+    s += vendor(900, 80, 'hosted checkout · vendor', dash);
+  }
+  if (variant === 'B') {
+    s += poche(440, 200, 130, 80, 2, { ...g, label: 'payments module' });
+    s += `<g stroke="${B}" fill="none" stroke-width="1.4"><line x1="420" y1="240" x2="434" y2="240"/><path d="M434,233 a7,7 0 0 1 0,14"/></g>`;
+    s += D.road([[570, 240], [760, 240], [760, 130], [900, 130]], { ink: B, width: 12, dash });
+    s += vendor(900, 80, 'card processor · vendor', dash);
+  }
+  if (variant === 'C') {
+    s += D.district([[680, 190], [880, 190], [880, 450], [680, 450]], { ink: B, label: 'LOT · payments', lx: 690, ly: 208, dash: dash || undefined });
+    s += D.road([[420, 250], [700, 250]], { ink: B, width: 12, dash });
+    s += poche(710, 220, 140, 100, 3, { ...g, label: 'payments-service' });
+    s += stippleReservoir(780, 396, 60, 22, { dash: dash || '', label: 'ledger DB' });
+    s += D.rail(560, 300, 700, 300, { ink: B, dash });
+    s += `<text x="560" y="322" class="mono" font-size="9.5" fill="${B}">RAIL · payment-events queue</text>`;
+    s += D.road([[850, 240], [960, 240], [960, 170]], { ink: B, width: 10, dash });
+    s += vendor(900, 80, 'card network · vendor', dash);
+  }
+  return s;
+}
+
+function sheetChrome(revs, quarter) {
+  let s = D.defs(B);
+  s += `<rect width="1440" height="900" fill="${C.vellum}"/>`;
+  s += `<rect width="1440" height="900" filter="url(#paper)" opacity=".9" style="mix-blend-mode:multiply"/>`;
+  s += D.sheetFrame(1440, 900, { ink: B, cols: 14, rows: 8 });
+  // vertical title strip on the right edge
+  const x = 1222, y = 36, w = 182, h = 828;
+  s += `<g stroke="${B}" fill="none"><rect x="${x}" y="${y}" width="${w}" height="${h}" stroke-width="1.8"/>`;
+  [110, 170, 230, 560, 640, 720].forEach((yy) => s += `<line x1="${x}" y1="${y + yy}" x2="${x + w}" y2="${y + yy}" stroke-width="1"/>`);
+  s += `</g>`;
+  s += `<text x="${x + 14}" y="${y + 42}" class="lbl" font-size="30" font-weight="700" fill="${B}">IT DEPENDS</text>`;
+  s += `<text x="${x + 14}" y="${y + 62}" class="mono" font-size="9.5" fill="${B}">MERCADITO</text><text x="${x + 14}" y="${y + 76}" class="mono" font-size="9.5" fill="${B}">PLATFORM · SITE PLAN</text>`;
+  s += `<text x="${x + 14}" y="${y + 132}" class="mono" font-size="8.5" fill="${C.graphite}">QUARTER</text><text x="${x + 14}" y="${y + 156}" class="lbl" font-size="20" fill="${B}">${quarter}</text>`;
+  s += `<text x="${x + 14}" y="${y + 192}" class="mono" font-size="8.5" fill="${C.graphite}">DRAWN · CHECKED</text><text x="${x + 14}" y="${y + 216}" class="lbl" font-size="17" fill="${B}">YOU · REVIEW BOARD</text>`;
+  s += `<text x="${x + 14}" y="${y + 254}" class="mono" font-size="8.5" fill="${C.graphite}">REVISIONS · ADR LOG</text>`;
+  if (!revs.length) {
+    s += `<text x="${x + 14}" y="${y + 280}" class="mono" font-size="10" fill="${C.graphite}">No revisions issued.</text><text x="${x + 14}" y="${y + 294}" class="mono" font-size="10" fill="${C.graphite}">The site is waiting</text><text x="${x + 14}" y="${y + 308}" class="mono" font-size="10" fill="${C.graphite}">on you.</text>`;
+  }
+  revs.forEach((r, i) => {
+    const ry = y + 284 + i * 64;
+    s += D.delta(x + 26, ry, r[0], C.red, 24);
+    s += `<text x="${x + 48}" y="${ry - 4}" class="mono" font-size="9.5" fill="${C.red}">${r[1]}</text>`;
+    r[2].forEach((ln, j) => s += `<text x="${x + 48}" y="${ry + 12 + j * 13}" class="mono" font-size="10" fill="${B}">${ln}</text>`);
+  });
+  s += `<text x="${x + 14}" y="${y + 584}" class="mono" font-size="8.5" fill="${C.graphite}">SCALE</text>`;
+  s += D.scaleBar(x + 18, y + 610, { ink: B, seg: 34, n: 4 });
+  s += `<text x="${x + 14}" y="${y + 664}" class="mono" font-size="8.5" fill="${C.graphite}">NORTH</text>`;
+  s += D.northArrow(x + 120, y + 686, { ink: B, r: 18 });
+  s += `<text x="${x + 14}" y="${y + 744}" class="mono" font-size="8.5" fill="${C.graphite}">SHEET</text>`;
+  s += `<text x="${x + 14}" y="${y + 806}" class="lbl" font-size="64" font-weight="700" fill="${B}">A-01</text>`;
+  s += `<text x="${x + 128}" y="${y + 806}" class="mono" font-size="10" fill="${B}">1 / 8</text>`;
+  return s;
+}
+
+function generalNotes(lines, x, y, title) {
+  let s = `<text x="${x}" y="${y}" class="lbl spaced" font-size="13" font-weight="600" fill="${B}">${title}</text>`;
+  s += `<line x1="${x}" y1="${y + 6}" x2="${x + 300}" y2="${y + 6}" stroke="${B}"/>`;
+  lines.forEach((l, i) => s += `<text x="${x}" y="${y + 24 + i * 15}" class="mono" font-size="10.5" fill="${B}"><tspan fill="${C.graphite}">${i + 1}.</tspan> ${l}</text>`);
+  return s;
+}
+
+// Frame 1
+(() => {
+  let s = sheetChrome([], 'Q1 · YEAR 1');
+  s += `<text x="64" y="94" class="lbl" font-size="40" font-weight="700" fill="${B}">CHECKOUT NEEDS TO TAKE MONEY</text>`;
+  s += `<text x="64" y="116" class="mono" font-size="11" fill="${C.graphite}">SHEET 1 · REVERSIBILITY · Three engineers, one database, zero regrets. So far.</text>`;
+  s += generalNotes(['Team: 3 founders. Traffic: ~40 orders/day.', 'Runway: 14 months. Launch: week 6.', 'Regulation: none, until card data is ours.', 'Some of these doors only open one way.'], 860, 72, 'GENERAL NOTES');
+  s += `<g transform="translate(64,150)">${site('C', { dash: '7 5', base: false })}${site(null)}</g>`;
+  // pencil note
+  s += `<text x="962" y="470" class="mono" font-size="10.5" fill="${C.graphite}">ALT C shown dashed: +6 weeks,</text><text x="962" y="484" class="mono" font-size="10.5" fill="${C.graphite}">PCI scope moves in-house.</text>`;
+  // alternates row
+  s += `<line x1="56" y1="612" x2="1210" y2="612" stroke="${B}" stroke-width="1.4"/>`;
+  s += `<text x="64" y="634" class="lbl spaced" font-size="13" font-weight="600" fill="${B}">ALTERNATES · HOVER TO OVERLAY ON SITE</text>`;
+  const alts = [
+    ['A', 'Hosted checkout in the monolith', 'launch in two weeks; trivially undone', 'a fee on every order; their page, not yours'],
+    ['B', 'Payments module behind a port', 'swapping vendors later without surgery', 'a week; an abstraction with one implementation'],
+    ['C', 'Own payments-service + ledger', 'control and margin, eventually', 'the whole six weeks; card data in scope'],
+  ];
+  alts.forEach(([k, t, o, c], i) => {
+    const x = 64 + i * 384, y = 648;
+    const hot = k === 'C';
+    s += `<rect x="${x}" y="${y}" width="360" height="200" fill="none" stroke="${hot ? C.graphite : B}" stroke-width="${hot ? 1.6 : .8}" ${hot ? 'stroke-dasharray="2 3"' : ''}/>`;
+    s += `<g transform="translate(${x + 8},${y + 8}) scale(.2)">${site(k, { traffic: 12 })}</g>`;
+    s += `<circle cx="${x + 252}" cy="${y + 24}" r="13" fill="none" stroke="${B}" stroke-width="1.4"/><text x="${x + 252}" y="${y + 30}" text-anchor="middle" class="lbl" font-size="16" font-weight="600" fill="${B}">${k}</text>`;
+    s += `<text x="${x + 10}" y="${y + 120}" class="lbl" font-size="17" font-weight="600" fill="${B}">${t}</text>`;
+    s += `<text x="${x + 10}" y="${y + 142}" class="mono" font-size="9.5" fill="${C.graphite}">OPTIMIZES</text><text x="${x + 80}" y="${y + 142}" class="mono" font-size="10" fill="${B}">${o}</text>`;
+    s += `<text x="${x + 10}" y="${y + 160}" class="mono" font-size="9.5" fill="${C.graphite}">COSTS</text><text x="${x + 80}" y="${y + 160}" class="mono" font-size="10" fill="${B}">${c}</text>`;
+    if (hot) s += `<text x="${x + 10}" y="${y + 188}" class="mono" font-size="10" fill="${C.graphite}">Because _______________________________</text>`;
+  });
+  document.getElementById('s1').innerHTML = s;
+})();
+
+// Frame 2
+(() => {
+  let s = sheetChrome([['A', 'Q1 Y1 · issued', ['Payments as a', 'module behind', 'a port']]], 'Q3 · YEAR 1');
+  s += `<text x="64" y="94" class="lbl" font-size="40" font-weight="700" fill="${B}">REV A · SIX MONTHS LATER</text>`;
+  s += `<text x="64" y="116" class="mono" font-size="11" fill="${C.graphite}">Time-lapse: six months. Two clouds. One of them will matter in Year 2.</text>`;
+  s += `<g transform="translate(64,150)">${site('B', { floors: 5, traffic: 80 })}</g>`;
+  s += `<path d="${D.cloudPath(500, 344, 140, 96, { r: 12, seed: 4 })}" fill="none" stroke="${C.red}" stroke-width="1.9"/>`;
+  s += D.delta(660, 338, 'A');
+  s += `<path d="${D.cloudPath(820, 222, 260, 124, { r: 13, seed: 8 })}" fill="none" stroke="${C.red}" stroke-width="1.9"/>`;
+  s += D.delta(1100, 214, 'A');
+  s += `<path d="${D.cloudPath(290, 262, 194, 164, { r: 11, seed: 13, pad: 8 })}" fill="none" stroke="${C.red}" stroke-width="1.4"/>`;
+  s += `<text x="292" y="240" class="mono" font-size="10" fill="${C.red}">+2F · 5 engineers now</text>`;
+  // red pencil markup comments
+  s += `<path d="M640,470 C700,520 760,540 820,548" fill="none" stroke="${C.red}" stroke-width="1.2" marker-start="url(#dot-red)" marker-end="url(#arrow-red)"/>`;
+  s += `<text x="828" y="546" class="mono" font-size="10.5" fill="${C.red}">① Complexity +6. A port with one adapter</text>`;
+  s += `<text x="828" y="560" class="mono" font-size="10.5" fill="${C.red}">   costs a week now; pays only if the vendor</text>`;
+  s += `<text x="828" y="574" class="mono" font-size="10.5" fill="${C.red}">   changes. SRC ousterhout-apsd-ch4</text>`;
+  s += `<text x="828" y="594" class="mono" font-size="10.5" fill="${C.graphite}">② Checkout lot congested Fridays after 18:00.</text>`;
+  // force schedule replaces the alternates row
+  s += `<line x1="56" y1="612" x2="1210" y2="612" stroke="${B}" stroke-width="1.4"/>`;
+  s += `<text x="64" y="634" class="lbl spaced" font-size="13" font-weight="600" fill="${B}">FORCE SCHEDULE · RELATIVE 0–100</text>`;
+  const rows = [['Team velocity', 74, 68], ['Complexity', 18, 24], ['Cost', 22, 27], ['Reliability', 52, 58], ['Cognitive load', 20, 27]];
+  s += `<g class="mono" font-size="9" fill="${C.graphite}"><text x="64" y="660">FORCE</text><text x="250" y="660">REV —</text><text x="320" y="660">REV A</text><text x="390" y="660">Δ</text><text x="440" y="660">0</text><text x="980" y="660">100</text></g>`;
+  rows.forEach(([n, a, b], i) => {
+    const y = 684 + i * 32;
+    s += `<line x1="64" y1="${y + 10}" x2="1000" y2="${y + 10}" stroke="${B}" stroke-width=".4" stroke-opacity=".5"/>`;
+    s += `<text x="64" y="${y}" class="lbl" font-size="16" fill="${B}">${n}</text>`;
+    s += `<text x="250" y="${y}" class="mono" font-size="11" fill="${C.graphite}">${a}</text><text x="320" y="${y}" class="mono" font-size="11" fill="${B}">${b}</text>`;
+    s += `<text x="390" y="${y}" class="mono" font-size="11" fill="${C.red}">${b - a > 0 ? '+' : ''}${b - a}</text>`;
+    const sx = (v) => 440 + v * 5.4;
+    s += `<rect x="440" y="${y - 10}" width="${sx(a) - 440}" height="8" fill="none" stroke="${B}" stroke-width=".7" stroke-dasharray="2 2"/>`;
+    s += `<rect x="440" y="${y - 10}" width="${sx(b) - 440}" height="8" fill="${B}"/>`;
+    s += `<line x1="${sx(a)}" y1="${y - 14}" x2="${sx(b)}" y2="${y - 14}" stroke="${C.red}" stroke-width="1.3" marker-end="url(#arrow-red)"/>`;
+  });
+  document.getElementById('s2').innerHTML = s;
+})();
+
+D.fit('.frame', 1440);
+</script>
+</body>
+</html>

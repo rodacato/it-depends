@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Time-lapse Prototype</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root { --blue:#1E3F66; --line:#F5F7F2; --vellum:#EDEBE3; --red:#D2412F; --graphite:#5A5A5A; --ground:#1E3F66; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:#1a3557; color:var(--line); font-family:'IBM Plex Mono', monospace; }
+  .lbl { font-family:'Barlow Condensed', sans-serif; font-weight:500; letter-spacing:.04em; text-transform:uppercase; }
+  .spaced { letter-spacing:.28em; }
+  .mono { font-family:'IBM Plex Mono', monospace; }
+  .wrap { padding:16px; }
+  .frame { position:relative; width:1440px; height:900px; transform-origin:0 0; background:var(--blue); overflow:hidden; }
+  .frame svg { position:absolute; inset:0; }
+  .vellum { position:absolute; background:rgba(237,235,227,.94); color:#1E3F66; border:1px solid rgba(90,90,90,.35); }
+  .vellum::before { content:''; position:absolute; width:58px; height:18px; top:-9px; left:24px; background:rgba(237,235,227,.55); border:1px solid rgba(90,90,90,.25); transform:rotate(-4deg); }
+  .panel { left:1004px; top:66px; width:396px; padding:16px 20px 14px; }
+  .panel .k { font-size:10.5px; letter-spacing:.08em; color:var(--graphite); }
+  .panel h2 { font:600 25px/1 'Barlow Condensed'; text-transform:uppercase; margin:6px 0 8px; }
+  .panel .opt { border-top:1px dashed rgba(30,63,102,.4); padding:7px 0 7px 32px; position:relative; font-size:10px; line-height:1.4; }
+  .panel .opt i { position:absolute; left:0; top:8px; width:22px; height:22px; border:1.4px solid #1E3F66; border-radius:50%; display:grid; place-items:center; font:600 13px 'Barlow Condensed'; font-style:normal; }
+  .panel .opt b { display:block; font:600 15px/1.05 'Barlow Condensed'; text-transform:uppercase; }
+  .panel .opt.sel i { background:#1E3F66; color:#EDEBE3; }
+  .panel .why { margin-top:8px; font-size:10.5px; border-bottom:1px solid #1E3F66; padding-bottom:3px; min-height:18px; }
+  .panel .why span { color:var(--graphite); }
+  .issued blockquote { margin:0; font-size:11px; line-height:1.45; border-left:2px solid var(--red); padding-left:10px; }
+  .controls { padding:10px 18px; font:500 13px 'Barlow Condensed'; letter-spacing:.14em; text-transform:uppercase; display:flex; gap:18px; align-items:center; }
+  .controls button { font:inherit; letter-spacing:inherit; color:var(--line); background:none; border:1px solid var(--line); padding:6px 14px; cursor:pointer; }
+</style>
+</head>
+<body>
+<div class="controls"><button id="replay">Replay time-lapse</button><span id="clock" class="mono" style="letter-spacing:0">t = 0.0 s</span><span style="opacity:.7">Prototype · Direction A · 10 s · SVG stand-in for the PixiJS renderer</span></div>
+<div class="wrap"><div class="frame">
+  <svg id="svg" viewBox="0 0 1440 900" width="1440" height="900"></svg>
+  <div class="vellum panel" id="brief">
+    <div class="k">SHEET 1 OF 8 · Q1, YEAR 1 · REVERSIBILITY</div>
+    <h2>Checkout needs to take money</h2>
+    <div class="opt"><i>A</i><b>Hosted checkout in the monolith</b>Launch in two weeks; a fee on every order.</div>
+    <div class="opt sel"><i>B</i><b>Payments module behind a port</b>Swap vendors later; one week, one-implementation abstraction.</div>
+    <div class="opt"><i>C</i><b>Own payments-service + ledger</b>Control, eventually; six weeks, card data in scope.</div>
+    <div class="why"><span>Because </span><em id="why" style="font-style:normal"></em></div>
+  </div>
+  <div class="vellum panel issued" id="issued">
+    <div class="k">REV A ISSUED · TIME-LAPSE: SIX MONTHS</div>
+    <h2>Payments as a module behind a port</h2>
+    <blockquote>Two revision clouds. One of them will matter in Year 2.</blockquote>
+  </div>
+</div></div>
+
+<script src="common.js"></script>
+<script>
+const { C } = D;
+const L = C.line;
+const DURATION = 10;
+const RATIONALE = 'we may outgrow the vendor before we outgrow the monolith.';
+
+const clamp = (v, a = 0, b = 1) => Math.max(a, Math.min(b, v));
+const seg = (t, a, b) => clamp((t - a) / (b - a));
+// Mechanical ease: decisive start, precise stop. No overshoot.
+const ease = (x) => 1 - Math.pow(1 - x, 3);
+const lerp = (a, b, x) => a + (b - a) * x;
+
+const API = [[60, 400], [380, 400]];
+const VENDOR_ROAD = [[720, 432], [850, 432], [850, 262], [880, 262]];
+
+function polyLen(p) { let l = 0; for (let i = 1; i < p.length; i++) l += Math.hypot(p[i][0] - p[i - 1][0], p[i][1] - p[i - 1][1]); return l; }
+function pointAt(p, u) {
+  let target = u * polyLen(p);
+  for (let i = 1; i < p.length; i++) {
+    const l = Math.hypot(p[i][0] - p[i - 1][0], p[i][1] - p[i - 1][1]);
+    if (target <= l) { const k = target / l; return [p[i - 1][0] + (p[i][0] - p[i - 1][0]) * k, p[i - 1][1] + (p[i][1] - p[i - 1][1]) * k]; }
+    target -= l;
+  }
+  return p[p.length - 1];
+}
+
+function titleBlock() {
+  const x = 1000, y = 618, w = 384;
+  let s = `<g stroke="${L}" fill="none"><rect x="${x}" y="${y}" width="${w}" height="246" stroke-width="1.8" fill="${C.blue}"/>`;
+  [46, 84].forEach((d) => s += `<line x1="${x}" y1="${y + d}" x2="${x + w}" y2="${y + d}" stroke-width="1"/>`);
+  s += `<line x1="${x + 128}" y1="${y + 46}" x2="${x + 128}" y2="${y + 84}" stroke-width=".8"/><line x1="${x + 256}" y1="${y + 46}" x2="${x + 256}" y2="${y + 84}" stroke-width=".8"/>`;
+  s += `<line x1="${x}" y1="${y + 104}" x2="${x + w}" y2="${y + 104}" stroke-width=".8"/>`;
+  for (let i = 1; i <= 5; i++) s += `<line x1="${x}" y1="${y + 104 + i * 24}" x2="${x + w}" y2="${y + 104 + i * 24}" stroke-width=".5" stroke-opacity=".5"/>`;
+  s += `<line x1="${x + 34}" y1="${y + 84}" x2="${x + 34}" y2="${y + 224}" stroke-width=".6"/><line x1="${x + 104}" y1="${y + 84}" x2="${x + 104}" y2="${y + 224}" stroke-width=".6"/><line x1="${x}" y1="${y + 224}" x2="${x + w}" y2="${y + 224}" stroke-width="1"/></g>`;
+  s += `<text x="${x + 12}" y="${y + 22}" class="lbl" font-size="22" font-weight="700" fill="${L}">IT DEPENDS</text><text x="${x + 12}" y="${y + 38}" class="mono" font-size="9.5" fill="${L}" fill-opacity=".8">MERCADITO · PLATFORM SITE PLAN</text>`;
+  s += `<text x="${x + w - 12}" y="${y + 24}" text-anchor="end" class="lbl" font-size="26" font-weight="700" fill="${L}">A-01</text>`;
+  s += `<text x="${x + 10}" y="${y + 60}" class="mono" font-size="8" fill="${L}" fill-opacity=".65">SHEET</text><text x="${x + 10}" y="${y + 77}" class="lbl" font-size="15" fill="${L}">1 OF 8</text>`;
+  s += `<text x="${x + 138}" y="${y + 60}" class="mono" font-size="8" fill="${L}" fill-opacity=".65">QUARTER</text><text id="tbq" x="${x + 138}" y="${y + 77}" class="lbl" font-size="15" fill="${L}">Q1 · YEAR 1</text>`;
+  s += `<text x="${x + 266}" y="${y + 60}" class="mono" font-size="8" fill="${L}" fill-opacity=".65">DRAWN BY</text><text x="${x + 266}" y="${y + 77}" class="lbl" font-size="15" fill="${L}">YOU, ARCHITECT</text>`;
+  s += `<text x="${x + 10}" y="${y + 98}" class="mono" font-size="8.5" fill="${L}" fill-opacity=".8">REV</text><text x="${x + 42}" y="${y + 98}" class="mono" font-size="8.5" fill="${L}" fill-opacity=".8">ISSUED</text><text x="${x + 112}" y="${y + 98}" class="mono" font-size="8.5" fill="${L}" fill-opacity=".8">DESCRIPTION · ADR</text>`;
+  s += `<g id="tbEmpty"><text x="${x + 112}" y="${y + 121}" class="mono" font-size="10" fill="${L}" fill-opacity=".75">No revisions issued.</text><text x="${x + 112}" y="${y + 135}" class="mono" font-size="10" fill="${L}" fill-opacity=".75">The site is waiting on you.</text></g>`;
+  s += `<clipPath id="inkClip"><rect id="inkRect" x="${x}" y="${y + 106}" width="0" height="22"/></clipPath>`;
+  s += `<g clip-path="url(#inkClip)"><text x="${x + 12}" y="${y + 121}" class="lbl" font-size="15" font-weight="600" fill="${C.red}">A</text><text x="${x + 42}" y="${y + 121}" class="mono" font-size="10" fill="${L}">Q1 Y1</text><text x="${x + 112}" y="${y + 121}" class="mono" font-size="10" fill="${L}">Payments behind a port</text></g>`;
+  s += `<text x="${x + 10}" y="${y + 239}" class="mono" font-size="8.5" fill="${L}" fill-opacity=".7">THE TITLE BLOCK IS THE ADR LOG · CHECKED: REVIEW BOARD</text>`;
+  return s;
+}
+
+function staticLayer() {
+  let s = D.defs(L);
+  s += `<rect width="1440" height="900" fill="${C.blue}"/><rect width="1440" height="900" filter="url(#paper-coarse)"/><rect width="1440" height="900" filter="url(#paper)"/>`;
+  let grid = `<g stroke="${L}" stroke-opacity=".07" stroke-width=".6">`;
+  for (let x = 60; x < 990; x += 30) grid += `<line x1="${x}" y1="60" x2="${x}" y2="760"/>`;
+  for (let y = 60; y < 760; y += 30) grid += `<line x1="60" y1="${y}" x2="990" y2="${y}"/>`;
+  s += grid + `</g>`;
+  s += D.sheetFrame(1440, 900, { ink: L });
+  s += D.northArrow(940, 112, { ink: L });
+  s += D.scaleBar(780, 740, { ink: L, caption: 'SCALE · ORDERS / DAY' });
+  s += D.district([[240, 196], [780, 196], [780, 690], [240, 690]], { ink: L, label: 'DISTRICT · mercadito-app', lx: 252, ly: 214 });
+  s += D.road(API, { ink: L });
+  s += `<text x="70" y="384" class="lbl" font-size="13" fill="${L}" fill-opacity=".85">web + mobile clients</text><text x="70" y="424" class="mono" font-size="9.5" fill="${L}" fill-opacity=".7">ROAD · public HTTP API</text>`;
+  s += `<g stroke="${L}" stroke-width="1"><line x1="476" y1="440" x2="476" y2="566"/><line x1="484" y1="440" x2="484" y2="566"/></g>`;
+  s += `<text x="64" y="782" class="mono" font-size="8.5" fill="${L}" fill-opacity=".7">FORCES · RELATIVE 0–100, NOT MEASUREMENTS</text>`;
+  s += titleBlock();
+  s += `<g id="reservoir"></g><g id="preview"></g><g id="monolith"></g><g id="annex"></g><g id="vendor"></g><g id="vroad"></g>`;
+  s += `<g id="traffic"></g><g id="clouds"></g><g id="gauges"></g><g id="stamp"></g>`;
+  return s;
+}
+
+const svg = document.getElementById('svg');
+svg.innerHTML = staticLayer();
+const $ = (id) => document.getElementById(id);
+
+// pre-seeded particles: phase and lateral offset never change, so the scene is deterministic
+const rand = D.rng(42);
+const apiParticles = Array.from({ length: 110 }, () => ({ p: rand(), off: (rand() - 0.5) * 7, v: 0.8 + rand() * 0.4 }));
+const vendorParticles = Array.from({ length: 30 }, () => ({ p: rand(), off: (rand() - 0.5) * 5, v: 0.8 + rand() * 0.4 }));
+
+function drawLine(points, k, { width = 1.3, color = L } = {}) {
+  const p = points.map((q) => q.join(',')).join(' ');
+  return `<polyline points="${p}" fill="none" stroke="${color}" stroke-width="${width}" pathLength="1" stroke-dasharray="1 1" stroke-dashoffset="${1 - k}"/>`;
+}
+
+function render(t) {
+  $('clock').textContent = `t = ${t.toFixed(1)} s`;
+  const months = Math.round(lerp(0, 6, ease(seg(t, 1.2, 6))));
+
+  // vellum overlays: briefing types its rationale, then slides off; the issue note slides in
+  const typed = Math.floor(RATIONALE.length * seg(t, 0.1, 0.9));
+  $('why').textContent = RATIONALE.slice(0, typed);
+  const out = ease(seg(t, 1.0, 1.5));
+  $('brief').style.transform = `translateX(${out * 460}px) rotate(${-1.4 + out * 4}deg)`;
+  const inn = ease(seg(t, 8.4, 8.9));
+  $('issued').style.transform = `translateX(${(1 - inn) * 460}px) rotate(-1.4deg)`;
+
+  // dashed pencil preview of option B, until the time-lapse starts building it for real
+  const pv = t < 1.4;
+  $('preview').innerHTML = pv ? `<g opacity=".8">${D.building(600, 396, 120, 70, 2, { ink: L, dash: '7 5', label: 'payments module', sub: 'proposed' })}${D.road(VENDOR_ROAD, { ink: L, width: 12, dash: '7 5' })}</g>` : '';
+
+  // monolith rises floor by floor: each floor takes 0.35 s, then holds
+  const f1 = seg(t, 2.0, 2.35), f2 = seg(t, 3.6, 3.95);
+  const floors = 3 + ease(f1) + ease(f2);
+  $('monolith').innerHTML = D.building(380, 340, 200, 100, floors, { ink: L, label: 'mercadito-app', sub: `monolith · ${floors >= 5 ? 5 : floors >= 4 ? 4 : 3} eng` });
+
+  // annex: footprint pen-drawn, then rises two floors
+  const fp = seg(t, 1.4, 2.2);
+  let annex = '';
+  if (fp > 0 && fp < 1) annex = drawLine([[600, 396], [720, 396], [720, 466], [600, 466], [600, 396]], ease(fp));
+  if (fp >= 1) {
+    const af = ease(seg(t, 2.6, 2.95)) + ease(seg(t, 3.1, 3.45));
+    annex = D.building(600, 396, 120, 70, Math.max(0.05, af), { ink: L, label: af > 0.5 ? 'payments module' : '', sub: af > 0.5 ? 'PaymentsPort → 1 adapter' : '' });
+    if (af > 1.5) annex += `<g stroke="${L}" fill="none" stroke-width="1.2"><line x1="580" y1="420" x2="596" y2="420"/><path d="M596,413 a7,7 0 0 1 0,14"/></g>`;
+  }
+  $('annex').innerHTML = annex;
+
+  // vendor lot and road are inked in sequence
+  const vl = seg(t, 3.8, 4.6), vr = seg(t, 4.4, 5.4);
+  let vendor = '';
+  if (vl > 0) {
+    vendor += drawLine([[868, 178], [976, 178], [976, 296], [868, 296], [868, 178]], ease(vl), { width: .8 });
+    if (vl >= 1) vendor += `<rect x="868" y="178" width="108" height="118" fill="url(#hatch)"/>` + D.building(882, 214, 80, 54, 4, { ink: L, label: 'card processor', sub: 'vendor · off-site' }) + `<text x="872" y="172" class="mono" font-size="9" fill="${L}" fill-opacity=".7">NOT OURS</text>`;
+  }
+  $('vendor').innerHTML = vendor;
+  $('vroad').innerHTML = vr >= 1 ? D.road(VENDOR_ROAD, { ink: L, width: 12 }) : vr > 0 ? drawLine(VENDOR_ROAD, ease(vr), { width: 12 }) : '';
+
+  // reservoir level follows the data that now lands in it
+  const lvl = lerp(0.45, 0.72, ease(seg(t, 2, 6)));
+  $('reservoir').innerHTML = D.reservoir(480, 606, 104, 38, { ink: L, level: lvl, label: 'shared Postgres', sub: t > 3 ? 'orders · users · payments' : 'orders · users' });
+
+  // traffic: density swells over the time-lapse; dense flow slows and starts to redden near the door
+  const density = lerp(26, 110, ease(seg(t, 1.2, 6)));
+  const timeScale = t > 1.2 && t < 6 ? 3.2 : 1;
+  let tr = '';
+  const clock = t * 0.09;
+  apiParticles.slice(0, Math.round(density)).forEach((q, i) => {
+    const slow = 1 - 0.35 * (density / 110);
+    const u = (q.p + clock * q.v * timeScale * slow) % 1;
+    const [x, y] = pointAt(API, u);
+    const hot = density > 80 && u > 0.82 && i % 5 === 0;
+    tr += `<circle cx="${x.toFixed(1)}" cy="${(y + q.off).toFixed(1)}" r="1.7" fill="${hot ? C.red : L}"/>`;
+  });
+  if (vr >= 1) vendorParticles.forEach((q) => {
+    const u = (q.p + clock * q.v * timeScale) % 1;
+    const [x, y] = pointAt(VENDOR_ROAD, u);
+    tr += `<circle cx="${x.toFixed(1)}" cy="${(y + q.off * .3).toFixed(1)}" r="1.5" fill="${L}"/>`;
+  });
+  $('traffic').innerHTML = tr;
+
+  // forces move with the time-lapse; the ghost marks where they started
+  const from = [74, 18, 22, 52, 20], to = [68, 24, 27, 58, 27];
+  const names = ['TEAM VELOCITY', 'COMPLEXITY', 'COST', 'RELIABILITY', 'COGNITIVE LOAD'];
+  const gk = ease(seg(t, 1.4, 6));
+  let g = '';
+  names.forEach((n, i) => {
+    const v = Math.round(lerp(from[i], to[i], gk));
+    g += D.gauge(64 + i * 184, 806, 158, n, v, { ink: L, prev: t > 1.4 ? from[i] : null });
+  });
+  $('gauges').innerHTML = g;
+
+  // revision clouds sketch themselves around what changed, one after another
+  const clouds = [
+    [D.cloudPath(578, 384, 158, 120, { r: 12, seed: 3 }), 6.0, 6.9, 1.8, [752, 380]],
+    [D.cloudPath(842, 172, 140, 140, { r: 12, seed: 9 }), 6.6, 7.5, 1.8, [1000, 170]],
+    [D.cloudPath(372, 286, 216, 60, { r: 10, seed: 21, pad: 6 }), 7.2, 8.0, 1.4, null],
+  ];
+  let cl = '';
+  clouds.forEach(([d, a, b, w, dl]) => {
+    const k = ease(seg(t, a, b));
+    if (k <= 0) return;
+    cl += `<path d="${d}" fill="none" stroke="${C.red}" stroke-width="${w}" pathLength="1" stroke-dasharray="1 1" stroke-dashoffset="${1 - k}"/>`;
+    if (dl && k >= 1) cl += D.delta(dl[0], dl[1], 'A');
+  });
+  if (t > 8.0) cl += `<text x="380" y="268" class="mono" font-size="9.5" fill="${C.red}">+2 FLOORS · 5 ENGINEERS</text>`;
+  $('clouds').innerHTML = cl;
+
+  // time-lapse stamp: counter rolls while the city grows
+  let st = '';
+  if (t > 1.2 && t < 8.4) {
+    const q = months < 3 ? 'Q1' : months < 6 ? 'Q2' : 'Q3';
+    st += `<rect x="520" y="70" width="290" height="62" fill="${C.blue}" stroke="${L}" stroke-width="1.4"/>`;
+    st += `<text x="536" y="94" class="mono" font-size="10" fill="${L}" fill-opacity=".8">TIME-LAPSE: SIX MONTHS</text>`;
+    st += `<text x="536" y="122" class="lbl" font-size="26" font-weight="600" fill="${L}">${q} · YEAR 1</text>`;
+    st += `<text x="796" y="122" text-anchor="end" class="mono" font-size="12" fill="${L}">MONTH ${months}/6</text>`;
+    for (let i = 0; i < 6; i++) st += `<rect x="${680 + i * 19}" y="80" width="14" height="6" fill="${i < months ? L : 'none'}" stroke="${L}" stroke-width=".8"/>`;
+  }
+  $('stamp').innerHTML = st;
+  $('tbq').textContent = t > 6 ? 'Q3 · YEAR 1' : 'Q1 · YEAR 1';
+
+  // the title block row is inked last: the decision becomes part of the record
+  const ink = ease(seg(t, 8.6, 9.6));
+  $('tbEmpty').style.display = ink > 0 ? 'none' : '';
+  $('inkRect').setAttribute('width', 384 * ink);
+}
+
+const params = new URLSearchParams(location.search);
+const frozen = params.has('t') ? parseFloat(params.get('t')) : null;
+const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+let start = performance.now();
+
+function loop(now) {
+  const t = Math.min(DURATION, (now - start) / 1000);
+  render(t);
+  if (t < DURATION) requestAnimationFrame(loop);
+}
+if (frozen !== null) render(frozen);
+else if (reduced) render(DURATION);
+else requestAnimationFrame(loop);
+$('replay').onclick = () => { start = performance.now(); requestAnimationFrame(loop); };
+
+D.fit('.frame', 1440 + 32);
+</script>
+</body>
+</html>
