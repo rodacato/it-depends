@@ -81,6 +81,26 @@ describe('effect timing', () => {
   });
 });
 
+describe('effects that depend on what was built', () => {
+  const finaleWith = (firstOptionId: string, finaleOptionId: string) =>
+    campaign.chapters.map((c, i) => ({
+      chapterId: c.id,
+      optionId: c.id === 'reversibility' ? firstOptionId : c.id === 'finale' ? finaleOptionId : c.dilemma.options[i % 2]!.id,
+    }));
+  const appliedIds = (decisions: { chapterId: string; optionId: string }[]) =>
+    simulate(campaign, decisions, { seed: 1 }).snapshots.flatMap((s) => s.applied.map((e) => e.effectId));
+
+  it('a payments team that inherits its own ledger skips the cutover', () => {
+    expect(appliedIds(finaleWith('payments-port', 'platform-team'))).toContain('platform-cutover-risk');
+    expect(appliedIds(finaleWith('own-service', 'platform-team'))).not.toContain('platform-cutover-risk');
+  });
+
+  it('buying a platform costs a retirement only if you built your own service', () => {
+    expect(appliedIds(finaleWith('own-service', 'buy-platform'))).toContain('buy-retire-own-service');
+    expect(appliedIds(finaleWith('hosted-checkout', 'buy-platform'))).not.toContain('buy-retire-own-service');
+  });
+});
+
 describe('topology', () => {
   it('options change the site as declared', () => {
     const t = simulate(campaign, decide('own-service'), { seed: 1 });

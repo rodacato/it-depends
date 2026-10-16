@@ -84,6 +84,11 @@ export function checkCampaign(campaign: Campaign, locales: LocaleBundle[]): stri
         checkEffect(e, ow);
         if (e.timing.kind === 'conditional' && !eventIds.has(e.timing.eventId)) problems.push(`${ow} effect ${e.id}: unknown event ${e.timing.eventId}`);
         for (const v of Object.keys(e.byVariant ?? {})) if (!variantIds.has(v)) problems.push(`${ow} effect ${e.id}: unknown variant ${v}`);
+        const { has, lacks } = e.onlyIf ?? {};
+        const builtSomewhere = (id: string) => reachable.some((t) => t.components.some((c) => c.id === id));
+        const builtEverywhere = (id: string) => reachable.every((t) => t.components.some((c) => c.id === id));
+        if (has && !builtSomewhere(has)) problems.push(`${ow} effect ${e.id}: onlyIf.has ${has} is never on the site, so it never applies`);
+        if (lacks && builtEverywhere(lacks)) problems.push(`${ow} effect ${e.id}: onlyIf.lacks ${lacks} is always on the site, so it never applies`);
       }
       for (const topology of reachable) {
         let after: Topology;

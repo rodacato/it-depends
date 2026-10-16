@@ -106,6 +106,8 @@ export const EffectSchema = z.object({
   anchor: Id.optional(),
   assumption: TextKey,
   sources: z.array(Id).min(1, 'an effect needs at least one source'),
+  // Applies only if the site as built before this decision has, or lacks, a component.
+  onlyIf: z.object({ has: Id.optional(), lacks: Id.optional() }).optional(),
 });
 export type Effect = z.infer<typeof EffectSchema>;
 
@@ -129,7 +131,7 @@ export const EventSchema = z.object({
     z.object({ kind: z.literal('scheduled'), quarter: z.number().int().min(0) }),
     ThresholdSchema,
   ]),
-  effects: z.array(EffectSchema.extend({ timing: z.object({ kind: z.literal('immediate') }) })),
+  effects: z.array(EffectSchema.omit({ onlyIf: true }).extend({ timing: z.object({ kind: z.literal('immediate') }) })),
   regulation: z.enum(REGULATION_LEVELS).optional(),
   anchor: Id.optional(),
 });
@@ -190,7 +192,7 @@ export const ChapterSchema = z.object({
 });
 export type Chapter = z.infer<typeof ChapterSchema>;
 
-export const DriftSchema = EffectSchema.omit({ timing: true, byVariant: true }).extend({
+export const DriftSchema = EffectSchema.omit({ timing: true, byVariant: true, onlyIf: true }).extend({
   fromQuarter: z.number().int().min(0),
   toQuarter: z.number().int().min(0),
   // add: delta per quarter; multiply: the value is multiplied by delta each quarter (growth curves).

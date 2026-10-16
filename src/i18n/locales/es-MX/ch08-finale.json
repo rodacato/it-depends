@@ -16,12 +16,12 @@
       "readNext": "Un librero de cierre para todo el juego de planos: Nygard para el ADR que acabas de escribir; Richards y Ford, y luego The Hard Parts, para analizar trade-offs; Team Topologies para el equipo que quizá acabas de crear; Building Evolutionary Architectures para las fitness functions que mantienen honesto todo esto; el libro de SRE para los presupuestos de error; Wardley para decidir qué construir y qué comprar; y de vuelta a la carta de la puerta de un solo sentido, donde empezó todo.",
       "options": {
         "platform-team": {
-          "title": "Separar pagos en un equipo de plataforma, con servicio y ledger propios",
+          "title": "Darle pagos a un equipo de plataforma, con servicio y ledger propios",
           "optimizes": "Un solo dueño que rinde cuentas, un ledger que el auditor puede leer y los pagos fuera del plato de todos los demás.",
-          "costs": "Un trimestre de reorganización y migración, una ventana de corte y un equipo nuevo en la nómina. Difícil de desandar."
+          "costs": "Un trimestre de reorganización y un equipo nuevo en la nómina; si pagos todavía vive en el monolito, también una migración con ventana de corte. Difícil de desandar."
         },
         "strangle-payments": {
-          "title": "Estrangular pagos fuera del monolito, vigilado por fitness functions",
+          "title": "Sacar del monolito lo que queda de pagos, poco a poco y vigilado por fitness functions",
           "optimizes": "Nada de big bang bajo supervisión; cada paso chico, probado y reversible.",
           "costs": "El regulador recibe un roadmap, no una unidad. Dos rutas de código por un rato, y el beneficio llega después de la junta de consejo."
         },
@@ -33,7 +33,7 @@
         "buy-platform": {
           "title": "Comprar una plataforma de pagos con licencia y volverse su cliente",
           "optimizes": "Tomar prestados su licencia, sus controles y su historial de auditorías; mucho menos que operar.",
-          "costs": "Una comisión sobre cada pago, su roadmap y un contrato largo. Sigues respondiendo por un proveedor que no operas. El proveedor queda fuera de esta hoja (en el sitio ya no cabe otro); aquí payments-service es solo el adaptador delgado hacia él."
+          "costs": "Una comisión sobre cada pago, su roadmap y un contrato largo. Sigues respondiendo por un proveedor que no operas. Si construiste tu propio servicio de pagos, retirarlo también es parte del precio. El proveedor queda fuera de esta hoja (en el sitio ya no cabe otro); aquí payments-service es solo el adaptador delgado hacia él."
         }
       },
       "events": {
@@ -58,7 +58,7 @@
   },
   "assumptions": {
     "finale": {
-      "platformMoveEatsQuarter": "Formar un equipo de pagos, mover gente y migrar el ledger se come casi un trimestre de quienes participan y frena a todos los que dependen de ellos.",
+      "platformMoveEatsQuarter": "Formar un equipo de pagos, mover gente y entregarle el código y la guardia se come casi un trimestre de quienes participan y frena a todos los que dependen de ellos.",
       "platformNewSeam": "Un servicio con ledger propio agrega una frontera de red, una migración de datos y un contrato que cada cliente tiene que respetar.",
       "platformHeadcount": "Un equipo de plataforma de seis a ocho personas, con su infraestructura y su guardia, cuesta bastante más que los pagos repartidos en el monolito.",
       "platformCutoverRisk": "Mover saldos de la base compartida a un ledger nuevo exige una ventana de doble escritura o de conciliación, y con dinero esas ventanas muerden.",
@@ -69,7 +69,7 @@
       "strangleSlowTax": "El ruteo, el tráfico en sombra y las verificaciones en paralelo frenan un poco cada cambio de pagos mientras dure el estrangulamiento.",
       "strangleFitnessFunctions": "Las verificaciones automáticas de dependencias, saldos del ledger y latencia cuestan tiempo de ingeniería para construirlas y tiempo de CI para correrlas.",
       "strangleTwoPaths": "Durante varios trimestres unos pagos van por la ruta vieja y otros por la nueva, y las dos tienen que seguir siendo correctas.",
-      "strangleStillEveryones": "Hasta que termine la extracción, el código de pagos sigue en el monolito y cada equipo que lo toca tiene que entenderlo.",
+      "strangleStillEveryones": "Hasta que termine la extracción, la lógica de pagos que sigue en el monolito (reembolsos, disputas, reglas de cobro) es de cada equipo que la toca, y todos tienen que entenderla.",
       "strangleSeamsPay": "Con las costuras puestas y vigiladas, el monolito pierde su módulo más enredado y la complejidad baja de forma medible.",
       "strangleOpenFinding": "Un requisito del regulador respaldado solo por un roadmap se lee como hallazgo abierto en el due diligence, y los términos lo reflejan.",
       "freezeStopsFeatures": "Dos trimestres sin cambios estructurales y con foco en confiabilidad dejan poca capacidad para el roadmap que aprobó el consejo.",
@@ -85,6 +85,7 @@
       "buyDataMigration": "Los pagos, reembolsos y disputas históricos hay que migrarlos o conciliarlos entre dos sistemas durante el cambio.",
       "buyTakeRate": "La plataforma cobra un porcentaje de cada pago, que con el volumen del año 3 supera lo que cuesta el equipo que reemplaza.",
       "buyLockIn": "A los dos trimestres, el contrato, los datos y la integración hacen caro irse, y los términos de renovación lo reflejan.",
+      "buyRetireOwnService": "Retirar un servicio y un ledger propios exige migrar sus saldos y reubicar a quienes los operaban: la puerta del capítulo 1 sí era de un solo sentido.",
       "buyMarginDiligence": "Los inversionistas leen la comisión de un proveedor sobre cada pago como margen bruto más bajo para siempre, y ajustan el precio de la ronda.",
       "seriesBCloses": "La Serie B agrega unos dos años de runway al ritmo de gasto actual."
     }

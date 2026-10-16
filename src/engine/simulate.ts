@@ -240,14 +240,21 @@ function decide(
   if (!option) throw new Error(`unknown option ${decision.optionId} in ${chapter.id}`);
   const revision = revisionLetter(state.revisions.length);
   state.revisions.push({ letter: revision, chapterId: chapter.id, optionId: option.id, quarter: step });
+  const built = new Set(state.topology.components.map((c) => c.id));
   state.topology = applyTopologyChanges(state.topology, option.topology);
   const origin: OptionOrigin = { kind: 'option', chapterId: chapter.id, optionId: option.id, revision, decidedAt: step };
   for (const effect of option.effects) {
+    if (!siteAllows(effect, built)) continue;
     const weighted = { ...effect, delta: deltaFor(effect, variantId) };
     if (effect.timing.kind === 'immediate') applyOptionEffect(state, applied, weighted, origin, 'immediate', quarter);
     else if (effect.timing.kind === 'delayed') state.pending.push({ effect: weighted, origin, dueStep: step + effect.timing.afterQuarters });
     else state.conditionals.push({ effect: weighted, origin });
   }
+}
+
+function siteAllows(effect: Effect, built: ReadonlySet<string>): boolean {
+  const { has, lacks } = effect.onlyIf ?? {};
+  return (has === undefined || built.has(has)) && (lacks === undefined || !built.has(lacks));
 }
 
 function applyOptionEffect(
