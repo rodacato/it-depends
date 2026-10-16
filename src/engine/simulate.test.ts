@@ -63,6 +63,17 @@ describe('effect timing', () => {
     expect(without.snapshots.flatMap((s) => s.applied).some((e) => e.effectId === 'hosted-outage-is-yours')).toBe(false);
   });
 
+  it('a threshold event never fires before its own chapter decides, whatever the seed', () => {
+    const data = campaign.chapters.find((c) => c.id === 'data')!;
+    // The last option of every chapter grows demand fastest, which once fired reservoir-dry a quarter early.
+    const decisions = campaign.chapters.map((c) => ({ chapterId: c.id, optionId: c.dilemma.options.at(-1)!.id }));
+    for (let seed = 0; seed < 300; seed++) {
+      const t = simulate(campaign, decisions, { seed });
+      const dry = t.snapshots.flatMap((s) => s.incidents).find((i) => i.eventId === 'reservoir-dry');
+      if (dry) expect(dry.quarter).toBeGreaterThan(data.quarter);
+    }
+  });
+
   it('threshold events fire once', () => {
     const t = simulate(campaign, decide('payments-port'), { seed: 1 });
     const rush = t.snapshots.flatMap((s) => s.incidents).filter((i) => i.eventId === 'first-friday-rush');

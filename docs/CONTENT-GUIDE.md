@@ -38,6 +38,8 @@ Quarter 0 is Q1 of Year 1. `snapshots[q]` is the start of quarter q; a decision 
 | 7 | `tech-debt` | 9 → 11 | deliberate debt with a repayment plan | none required; may `updateComponent` `mercadito-app` | `colombia-launch` (q10), `regulator-licence` (q11, regulation → licensed) |
 | 8 | `finale` | 11 → 12 | an open case, full ADR | district `payments` again (upserts), `payments-service`, `ledger-db`; no new vendors | `series-b` (q12, runway +24) |
 
+An event never fires before the quarter after its own chapter's decision, even when its threshold is met earlier, so the chapter's conditional effects always get the chance to react. A scheduled event at or before its chapter's quarter fails validation.
+
 Cross-chapter consequences to wire in (conditional effects on earlier options reacting to later events) are part of each chapter's events: when you own an event, mention in your report which earlier options should react to it, and the integrator adds those conditionals.
 
 ## Checking your work
