@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { deltaTone } from '../engine/queries';
 import type { AppliedEffect } from '../engine/simulate';
 import { sourceById } from '../content';
 import type { I18n } from './i18n';
@@ -49,22 +50,26 @@ export function AssumptionTag({ x, y, title, effects, empty, hint, testId }: Pro
       <h4 className="lbl">{title}</h4>
       {effects.length === 0 && <p className="mono">{empty}</p>}
       <ul>
-        {effects.slice(0, 5).map((e, i) => (
-          <li key={`${e.effectId}-${e.quarter}-${i}`}>
-            <div className="mono row">
-              <b className={e.delta < 0 ? 'neg' : 'pos'}>
-                {formatDelta(i18n, e)} {targetLabel(i18n, e)}
-              </b>
-              <span>· {originLabel(i18n, e)}</span>
-            </div>
-            <p className="mono">
-              <span className="k">{t('ui.tag.assumption')}</span> {t(e.assumption)}
-            </p>
-            <p className="mono src">
-              {t('ui.tag.source')} {e.sources.map((s) => sourceById(s)?.title ?? s).join(' · ')}
-            </p>
-          </li>
-        ))}
+        {effects.slice(0, 5).map((e, i) => {
+          const tone = deltaTone(e.target, e.delta);
+          return (
+            <li key={`${e.effectId}-${e.quarter}-${i}`}>
+              <div className="mono row">
+                <b className={tone}>
+                  {formatDelta(i18n, e)} {targetLabel(i18n, e)}
+                  {tone !== 'neutral' && ` (${t(`ui.tag.${tone}`)})`}
+                </b>
+                <span>· {originLabel(i18n, e)}</span>
+              </div>
+              <p className="mono">
+                <span className="k">{t('ui.tag.assumption')}</span> {t(e.assumption)}
+              </p>
+              <p className="mono src">
+                {t('ui.tag.source')} {e.sources.map((s) => sourceById(s)?.title ?? s).join(' · ')}
+              </p>
+            </li>
+          );
+        })}
       </ul>
       {effects.length > 5 && <p className="mono more">{t('ui.tag.more', { n: effects.length - 5 })}</p>}
       {hint && <p className="mono hint">{hint}</p>}

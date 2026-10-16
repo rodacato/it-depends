@@ -1182,8 +1182,12 @@ label.rationale input {
   font-weight: 500;
 }
 
-.tag .row b.neg {
+.tag .row b.worse {
   color: var(--red);
+}
+
+.tag .row b.neutral {
+  color: var(--graphite);
 }
 
 .tag p {

@@ -55,6 +55,8 @@
     },
     "tag": {
       "assumption": "Assumption:",
+      "better": "better",
+      "worse": "worse",
       "source": "SRC",
       "more": "+{n} more. Hover the force gauges for the rest.",
       "componentTitle": "{name} · what changed",

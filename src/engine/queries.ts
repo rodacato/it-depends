@@ -1,4 +1,4 @@
-import type { Campaign, Chapter, Decision, ForceId, Forces } from './schema';
+import type { Campaign, Chapter, Decision, EffectTarget, ForceId, Forces, NumericContextKey } from './schema';
 import { FORCE_IDS } from './schema';
 import type { AppliedEffect, Snapshot, Timeline } from './simulate';
 import { simulate } from './simulate';
@@ -26,6 +26,24 @@ export function forceDelta(a: Forces, b: Forces): Forces {
   const out = { ...a };
   for (const f of FORCE_IDS) out[f] = b[f] - a[f];
   return out;
+}
+
+export type DeltaTone = 'better' | 'worse' | 'neutral';
+
+// Team size and orders per day are neither good nor bad on their own, so they stay out.
+const BETTER_WHEN_HIGHER: Partial<Record<ForceId | NumericContextKey, boolean>> = {
+  velocity: true,
+  reliability: true,
+  runwayMonths: true,
+  complexity: false,
+  cost: false,
+  cognitiveLoad: false,
+};
+
+export function deltaTone(target: EffectTarget, delta: number): DeltaTone {
+  const higherIsBetter = BETTER_WHEN_HIGHER['force' in target ? target.force : target.context];
+  if (delta === 0 || higherIsBetter === undefined) return 'neutral';
+  return delta > 0 === higherIsBetter ? 'better' : 'worse';
 }
 
 export function traceForce(timeline: Timeline, from: number, to: number, force: ForceId): AppliedEffect[] {

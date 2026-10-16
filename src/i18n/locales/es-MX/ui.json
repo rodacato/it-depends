@@ -55,6 +55,8 @@
     },
     "tag": {
       "assumption": "Supuesto:",
+      "better": "mejor",
+      "worse": "peor",
       "source": "FUENTE",
       "more": "+{n} más. Pasa el cursor por los indicadores de fuerzas para ver el resto.",
       "componentTitle": "{name} · qué cambió",
