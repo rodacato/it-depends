@@ -1,0 +1,144 @@
+{
+  "company": {
+    "name": "Mercadito",
+    "pitch": "Un marketplace para vendedores de barrio, con pagos. Tres fundadores, una base de datos, una fecha de lanzamiento.",
+    "role": "Te contrataron como arquitecta o arquitecto. Es tu primer día y tu primer plano."
+  },
+  "kinds": {
+    "service": "servicio",
+    "module": "módulo",
+    "database": "base de datos",
+    "queue": "cola",
+    "vendor": "proveedor · fuera del predio"
+  },
+  "components": {
+    "mercadito-app": { "name": "mercadito-app", "role": "monolito" },
+    "shared-postgres": { "name": "Postgres compartido", "role": "una base de datos para todo" },
+    "hosted-checkout": { "name": "checkout alojado", "role": "página de pago del proveedor" },
+    "payments-module": { "name": "módulo de pagos", "role": "PaymentsPort, un adaptador" },
+    "card-processor": { "name": "procesador de tarjetas", "role": "API del proveedor" },
+    "payments-service": { "name": "payments-service", "role": "servicio propio" },
+    "ledger-db": { "name": "ledger DB", "role": "base de datos propia de pagos" },
+    "payment-events": { "name": "cola payment-events", "role": "entrega asíncrona" },
+    "card-network": { "name": "red de tarjetas", "role": "conexión directa con el adquirente" },
+    "clients": { "name": "clientes web + móvil", "role": "el mundo exterior" }
+  },
+  "districts": {
+    "storefront": "tienda",
+    "payments": "pagos"
+  },
+  "assumptions": {
+    "company": {
+      "ordersGrowthYear1": "Después del lanzamiento, los pedidos se duplican más o menos cada trimestre del Año 1. Típico de un marketplace que encuentra sus primeras ciudades; nadie lo prometió.",
+      "ordersGrowthYear2": "En el Año 2 el crecimiento baja a cerca de 60% por trimestre: los barrios fáciles se acaban.",
+      "ordersGrowthYear3": "El Año 3 crece cerca de 35% por trimestre: ya es un negocio, no un cohete.",
+      "hiringYear1": "Entra una persona de ingeniería por trimestre en el Año 1. Contratar es lento cuando nadie te conoce.",
+      "hiringYear2": "Cuatro personas por trimestre en el Año 2, después de la ronda semilla.",
+      "hiringYear3": "Unas catorce personas por trimestre en el Año 3, hasta llegar a unas 80 al final.",
+      "featureSediment": "Cada trimestre de funcionalidades deja un poco de complejidad accidental, sea cual sea la arquitectura.",
+      "coordinationCost": "Pasando de unas 20 personas, los caminos de comunicación crecen más rápido que el equipo; cada trimestre suma carga de coordinación.",
+      "burn": "La empresa quema unos tres meses de runway por trimestre hasta que los ingresos la alcanzan.",
+      "demandNoise": "La demanda varía hasta 6% de un trimestre a otro, por razones que ninguna arquitectura controla.",
+      "congestion": "Un componente que trabaja por encima de su capacidad se nota en incidentes: timeouts, reintentos, viernes furiosos."
+    },
+    "reversibility": {
+      "hostedShipsFast": "Un checkout alojado es cuestión de días de integración, no de semanas. Fácil de deshacer: siempre puedes construir el tuyo después.",
+      "hostedRunsHardPart": "El proveedor se encarga de guardar tarjetas, revisar fraude y cumplir normas, lo difícil de hacer bien con tres personas.",
+      "hostedUxCeiling": "Su página de pago, su flujo. Cada cambio de UX se vuelve un ticket de soporte para alguien más.",
+      "hostedFeeScales": "La comisión es un porcentaje de cada pedido. Es barata con 40 pedidos al día y se nota con 400.",
+      "hostedOutageIsYours": "Cuando el checkout del proveedor se cae, nadie puede pagar y no hay alternativa a la cual cambiar.",
+      "portCostsAWeek": "Un puerto con un solo adaptador cuesta como una semana de una persona antes del lanzamiento, de seis.",
+      "portOneImplementation": "Una interfaz con una sola implementación es una abstracción que pagas antes de que te pague.",
+      "portEngineeringTime": "La semana del puerto es una semana de tres sueldos que no se gastó en funcionalidades.",
+      "portNewConcept": "Un concepto más que aprender: dónde viven los pagos y cómo se usa el puerto.",
+      "portTestedSeam": "Una costura clara permite probar pagos de forma aislada; bajan las regresiones en el checkout.",
+      "portOutageNoFallback": "El puerto aceptaría un segundo procesador, pero solo existe un adaptador. Durante la caída, la puerta está ahí y el pasillo no.",
+      "serviceEatsRunway": "Construir un servicio de pagos, su ledger y sus despliegues se lleva las seis semanas completas para tres personas.",
+      "serviceDistributed": "Dos desplegables, una llamada de red, una cola y dos bases de datos: complejidad de sistemas distribuidos desde el día uno.",
+      "serviceInfrastructure": "Una segunda base de datos, una cola y sus ambientes, pagados desde el primer mes.",
+      "serviceNewFailureModes": "Las llamadas de red fallan, las colas se atoran, los eventos llegan dos veces. Nuevas formas de fallar antes de que haya tráfico que lo justifique.",
+      "serviceTwoSystems": "Tres personas cargan ahora dos sistemas en la cabeza, más el contrato entre ellos.",
+      "serviceDelaysLaunch": "El lanzamiento se recorre unas seis semanas: cerca de dos meses de runway sin ingresos.",
+      "servicePciScope": "Manejar datos de tarjeta directamente mete a la empresa en el alcance de PCI DSS: auditorías, controles y la gente que los opera.",
+      "serviceQueuesThroughOutage": "Con ledger propio y una cola, los pedidos se pueden aceptar y liquidar cuando la red se recupere.",
+      "outageRefunds": "Una caída de dos horas del procesador un sábado: reembolsos, disculpas, un poco de confianza perdida.",
+      "fridayPeak": "El tráfico del viernes en la noche es como tres veces el promedio diario. El monolito es el primero en notarlo."
+    }
+  },
+  "sources": {
+    "fsa": "Características de arquitectura, análisis de trade-offs y por qué todo en arquitectura es un trade-off.",
+    "hardParts": "Granularidad, propiedad de los datos y las fuerzas que separan o juntan servicios.",
+    "apsd": "Módulos profundos, ocultamiento de información y la complejidad como suma de dependencias y oscuridad.",
+    "boringTech": "Fichas de innovación: gasta novedad solo donde te compra algo.",
+    "teamTopologies": "La carga cognitiva como restricción de diseño; formas de equipo y modos de interacción.",
+    "evolutionary": "Fitness functions: verificaciones automáticas que mantienen honesta a una arquitectura mientras cambia.",
+    "nygardAdr": "El formato ADR: contexto, decisión, estado, consecuencias. Corto, versionado y junto al código.",
+    "bezosDoors": "Decisiones Tipo 1 (puerta de un solo sentido) y Tipo 2 (puerta de dos sentidos), y por qué merecen velocidades distintas.",
+    "lrm": "Decide en el último momento responsable: lo bastante tarde para saber más, lo bastante temprano para poder actuar.",
+    "conway": "Los sistemas tienden a reflejar la estructura de comunicación de las organizaciones que los construyen.",
+    "brooks": "La complejidad esencial pertenece al problema; la accidental es la que agregamos nosotros.",
+    "monolithFirst": "Empieza con un monolito y divide cuando entiendas las fronteras.",
+    "tilkov": "El contrapunto: dividir un monolito después es tan difícil que quizá convenga empezar con fronteras.",
+    "ddia": "Replicación, particionado, modelos de consistencia y los trade-offs entre ellos.",
+    "cap": "El teorema CAP revisitado: la elección real es qué hacer durante una partición.",
+    "debtQuadrant": "Imprudente o prudente, deliberada o accidental: no toda la deuda técnica es igual.",
+    "cunningham": "La metáfora original de la deuda: entregar pronto está bien si la pagas refactorizando.",
+    "pciDss": "El estándar de seguridad de la industria de tarjetas: qué cambia cuando guardas, procesas o transmites datos de tarjeta.",
+    "model": "Nuestras propias estimaciones. Muestran la dirección y el tamaño aproximado de un efecto, nunca una medición."
+  },
+  "terms": {
+    "context": "equipo, ingenier, fundador, persona, gente, pedidos, tráfico, runway, dinero, efectivo, lanzamiento, fecha, semana, mes, regulación, escala",
+    "forces": "velocidad, rapidez, complejidad, costo, comisión, confiabilidad, caída, cognitiv, carga, riesgo, mantenimiento, lock-in, acoplamiento, latencia, cumplimiento, más lento, más rápido, más barato, caro",
+    "reversibility": "puerta, revers, revertir, deshacer, regresar, rollback, un solo sentido, dos sentidos, lock-in, amarrad, cambiar, reemplazar, migrar, después, irreversible, salida"
+  },
+  "chapters": {
+    "reversibility": {
+      "title": "El checkout tiene que cobrar",
+      "concept": "Reversibilidad: puertas de un sentido y de dos sentidos, y el último momento responsable.",
+      "voice": "Tres ingenieros, una base de datos, cero arrepentimientos. Por ahora.",
+      "briefing": "El lanzamiento es en seis semanas y nadie ha escrito una línea de código de pagos. Algunos caminos de entrada son fáciles de desandar. Uno no.",
+      "dilemma": "¿Por dónde entra el dinero, y por cuál de estas puertas puedes regresar?",
+      "disagreement": "Aquí los expertos no coinciden. Unos dicen que un puerto es un seguro barato; otros llaman generalidad especulativa a una interfaz con una sola implementación. Ambos tienen razón en alguna empresa.",
+      "readNext": "Empieza por el pasaje de la 'puerta de un solo sentido' en la carta de Amazon de 2015, luego el último momento responsable, y después escribe tu primer ADR de verdad en el formato de Nygard.",
+      "variants": {
+        "regulated-fintech": "fintech regulada de 80 ingenieros"
+      },
+      "options": {
+        "hosted-checkout": {
+          "title": "Checkout alojado, conectado al monolito",
+          "optimizes": "Lanzar en dos semanas; se deshace sin esfuerzo.",
+          "costs": "Una comisión en cada pedido; su página de pago, no la tuya."
+        },
+        "payments-port": {
+          "title": "Un módulo de pagos detrás de un puerto",
+          "optimizes": "Cambiar de proveedor después sin cirugía.",
+          "costs": "Una semana extra; una abstracción con exactamente una implementación."
+        },
+        "own-service": {
+          "title": "payments-service y ledger propios",
+          "optimizes": "Control y margen, algún día.",
+          "costs": "Las seis semanas completas; datos de tarjeta en alcance. Una puerta de un solo sentido."
+        }
+      },
+      "events": {
+        "processor-outage": "Sábado, 14:10. El procesador de tarjetas se cae dos horas.",
+        "first-friday-rush": "Primer viernes de prisa. El checkout se arrastra después de las 18:00."
+      },
+      "inspections": {
+        "checkout-fridays": "Inspección de obra: el distrito de checkout se congestiona cada viernes después de las 18:00. Todavía no es problema. Anotado, a lápiz."
+      },
+      "review": {
+        "which-door": "¿Qué parte de esta decisión es una puerta de un solo sentido, y qué parte podrías desandar?",
+        "what-given-up": "¿A qué renunciaste, y quién lo paga?",
+        "when-revisit": "¿Qué te haría revisar esta decisión, y cómo te darías cuenta?"
+      },
+      "rubric": {
+        "grounded-context": "El contexto nombra las restricciones que realmente dieron forma a la elección (equipo, tráfico, runway, fecha).",
+        "names-reversibility": "La decisión dice qué tan difícil es deshacerla.",
+        "names-tradeoff": "Las consecuencias nombran al menos una fuerza que empeoró, no solo las que mejoraron.",
+        "names-given-up": "Aquello a lo que se renunció está escrito en una oración completa.",
+        "revisit-trigger": "El disparador para revisar es una condición que alguien podría notar, no un deseo."
+      }
+    }
+  }
+}

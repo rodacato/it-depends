@@ -1,0 +1,144 @@
+{
+  "company": {
+    "name": "Mercadito",
+    "pitch": "A marketplace for neighbourhood sellers, with payments. Three founders, one database, a launch date.",
+    "role": "You were hired as the architect. It is your first day and your first drawing."
+  },
+  "kinds": {
+    "service": "service",
+    "module": "module",
+    "database": "database",
+    "queue": "queue",
+    "vendor": "vendor · off-site"
+  },
+  "components": {
+    "mercadito-app": { "name": "mercadito-app", "role": "monolith" },
+    "shared-postgres": { "name": "shared Postgres", "role": "one database for everything" },
+    "hosted-checkout": { "name": "hosted checkout", "role": "vendor's payment page" },
+    "payments-module": { "name": "payments module", "role": "PaymentsPort, one adapter" },
+    "card-processor": { "name": "card processor", "role": "vendor API" },
+    "payments-service": { "name": "payments-service", "role": "own service" },
+    "ledger-db": { "name": "ledger DB", "role": "payments' own database" },
+    "payment-events": { "name": "payment-events queue", "role": "async hand-off" },
+    "card-network": { "name": "card network", "role": "direct acquirer link" },
+    "clients": { "name": "web + mobile clients", "role": "the outside world" }
+  },
+  "districts": {
+    "storefront": "storefront",
+    "payments": "payments"
+  },
+  "assumptions": {
+    "company": {
+      "ordersGrowthYear1": "After launch, orders roughly double every quarter in Year 1. Typical of a marketplace finding its first cities; nobody promised it.",
+      "ordersGrowthYear2": "Year 2 growth slows to about 60% a quarter as the easy neighbourhoods run out.",
+      "ordersGrowthYear3": "Year 3 grows about 35% a quarter: a business now, not a rocket.",
+      "hiringYear1": "One engineer joins per quarter in Year 1. Hiring is slow when nobody has heard of you.",
+      "hiringYear2": "Four engineers a quarter in Year 2, after the seed round.",
+      "hiringYear3": "About fourteen engineers a quarter in Year 3, to reach roughly 80 by the end.",
+      "featureSediment": "Every quarter of features leaves a little accidental complexity behind, whatever the architecture.",
+      "coordinationCost": "Past about 20 people, communication paths grow faster than headcount; every quarter adds coordination load.",
+      "burn": "The company burns about three months of runway per quarter until revenue catches up.",
+      "demandNoise": "Demand varies quarter to quarter by up to 6%, for reasons no architecture controls.",
+      "congestion": "A component running past its capacity shows up as incidents: timeouts, retries, angry Fridays."
+    },
+    "reversibility": {
+      "hostedShipsFast": "A hosted checkout is days of integration, not weeks. Easy to undo: you can always build your own later.",
+      "hostedRunsHardPart": "The vendor runs card storage, fraud checks and compliance, which are hard to get right with three people.",
+      "hostedUxCeiling": "Their checkout page, their flow. Every UX change becomes a support ticket to someone else.",
+      "hostedFeeScales": "The fee is a percentage of every order. It is cheap at 40 orders a day and noticeable at 400.",
+      "hostedOutageIsYours": "When the vendor's checkout goes down, nobody can pay, and there is no fallback to switch to.",
+      "portCostsAWeek": "A port with one adapter costs about one engineer-week before launch, out of six.",
+      "portOneImplementation": "An interface with exactly one implementation is an abstraction you pay for before it pays you.",
+      "portEngineeringTime": "The week spent on the port is a week of three salaries not spent on features.",
+      "portNewConcept": "One more concept to learn: where payments live and how the port is meant to be used.",
+      "portTestedSeam": "A clear seam makes payments testable in isolation; checkout regressions drop.",
+      "portOutageNoFallback": "The port could take a second processor, but only one adapter exists. During an outage, the door is there and the corridor is not.",
+      "serviceEatsRunway": "Building a payments service, its ledger and its deploys takes the whole six weeks for three people.",
+      "serviceDistributed": "Two deployables, a network call, a queue and two databases: distributed systems complexity on day one.",
+      "serviceInfrastructure": "A second database, a queue and their environments, paid from the first month.",
+      "serviceNewFailureModes": "Network calls fail, queues back up, events arrive twice. New failure modes before there is traffic to justify them.",
+      "serviceTwoSystems": "Three people now carry two systems in their heads, plus the contract between them.",
+      "serviceDelaysLaunch": "Launch slips by about six weeks: roughly two months of runway spent with no revenue.",
+      "servicePciScope": "Handling card data directly puts the company in PCI DSS scope: audits, controls, and the people to run them.",
+      "serviceQueuesThroughOutage": "With an own ledger and a queue, orders can be accepted and settled after the network recovers.",
+      "outageRefunds": "A two-hour processor outage on a Saturday: refunds, apologies, a little lost trust.",
+      "fridayPeak": "Friday evening traffic runs about three times the daily average. The monolith notices first."
+    }
+  },
+  "sources": {
+    "fsa": "Architecture characteristics, trade-off analysis, and why everything in architecture is a trade-off.",
+    "hardParts": "Granularity, data ownership and the forces that pull services apart or together.",
+    "apsd": "Deep modules, information hiding, and complexity as the sum of dependencies and obscurity.",
+    "boringTech": "Innovation tokens: spend novelty only where it buys you something.",
+    "teamTopologies": "Cognitive load as a design constraint; team shapes and interaction modes.",
+    "evolutionary": "Fitness functions: automated checks that keep an architecture honest as it changes.",
+    "nygardAdr": "The ADR format: context, decision, status, consequences. Short, versioned, kept with the code.",
+    "bezosDoors": "Type 1 (one-way door) and Type 2 (two-way door) decisions, and why they deserve different speeds.",
+    "lrm": "Decide at the last responsible moment: late enough to know more, early enough to still act.",
+    "conway": "Systems tend to mirror the communication structure of the organisations that build them.",
+    "brooks": "Essential complexity belongs to the problem; accidental complexity is the one we add.",
+    "monolithFirst": "Start with a monolith and split once the boundaries are understood.",
+    "tilkov": "The counterpoint: splitting a monolith later is so hard that you may want to start with boundaries.",
+    "ddia": "Replication, partitioning, consistency models and the trade-offs between them.",
+    "cap": "The CAP theorem revisited: the real choice is about what to do during a partition.",
+    "debtQuadrant": "Reckless or prudent, deliberate or inadvertent: not all technical debt is the same.",
+    "cunningham": "The original debt metaphor: shipping early is fine if you pay it back by refactoring.",
+    "pciDss": "The card industry's security standard: what changes when you store, process or transmit card data.",
+    "model": "Our own estimates. They show the direction and rough size of an effect, never a measurement."
+  },
+  "terms": {
+    "context": "team, engineer, founder, people, orders, traffic, runway, cash, money, launch, deadline, week, month, regulation, scale",
+    "forces": "velocity, speed, complexity, cost, fee, reliability, outage, cognitive, load, risk, maintenance, lock-in, coupling, latency, compliance, slower, faster, cheaper, expensive",
+    "reversibility": "door, revers, revert, undo, walk back, roll back, rollback, one-way, two-way, lock-in, locked, swap, replace, migrate, later, irreversible, exit"
+  },
+  "chapters": {
+    "reversibility": {
+      "title": "Checkout needs to take money",
+      "concept": "Reversibility: one-way and two-way doors, and the last responsible moment.",
+      "voice": "Three engineers, one database, zero regrets. So far.",
+      "briefing": "Launch is in six weeks and nobody has written a line of payments code. Some of the ways in are easy to walk back out of. One is not.",
+      "dilemma": "How does the money get in, and which of these doors can you walk back through?",
+      "disagreement": "Experts disagree here. Some argue a port is cheap insurance; others call a one-implementation interface speculative generality. Both are right in some company.",
+      "readNext": "Start with the 'one-way door' passage of the 2015 Amazon letter, then the last responsible moment, then write your first real ADR in Nygard's format.",
+      "variants": {
+        "regulated-fintech": "80-engineer regulated fintech"
+      },
+      "options": {
+        "hosted-checkout": {
+          "title": "Hosted checkout, wired into the monolith",
+          "optimizes": "Launch in two weeks; trivially undone.",
+          "costs": "A fee on every order; their checkout page, not yours."
+        },
+        "payments-port": {
+          "title": "A payments module behind a port",
+          "optimizes": "Swapping vendors later without surgery.",
+          "costs": "One extra week; an abstraction with exactly one implementation."
+        },
+        "own-service": {
+          "title": "Own payments-service and ledger",
+          "optimizes": "Control and margin, eventually.",
+          "costs": "The whole six weeks; card data in scope. A one-way door."
+        }
+      },
+      "events": {
+        "processor-outage": "Saturday, 14:10. The card processor is down for two hours.",
+        "first-friday-rush": "First Friday rush. Checkout slows to a crawl after 18:00."
+      },
+      "inspections": {
+        "checkout-fridays": "Site inspection: checkout district congested every Friday after 18:00. Not yet a problem. Noted, in pencil."
+      },
+      "review": {
+        "which-door": "Which part of this decision is a one-way door, and which part could you walk back?",
+        "what-given-up": "What did you give up, and who pays for it?",
+        "when-revisit": "What would make you revisit this, and how would you know?"
+      },
+      "rubric": {
+        "grounded-context": "The context names the constraints that actually shaped the choice (team, traffic, runway, deadline).",
+        "names-reversibility": "The decision says how hard it is to undo.",
+        "names-tradeoff": "The consequences name at least one force that got worse, not only the ones that got better.",
+        "names-given-up": "What was given up is written down in a full sentence.",
+        "revisit-trigger": "The revisit trigger is a condition someone could notice, not a hope."
+      }
+    }
+  }
+}

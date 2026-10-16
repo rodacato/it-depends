@@ -1,0 +1,108 @@
+{
+  "id": "mercadito",
+  "initialContext": { "teamSize": 3, "ordersPerDay": 40, "runwayMonths": 14, "regulation": "none" },
+  "initialForces": { "velocity": 74, "complexity": 18, "cost": 22, "reliability": 52, "cognitiveLoad": 20 },
+  "initialTopology": {
+    "districts": [{ "id": "storefront" }],
+    "components": [
+      { "id": "mercadito-app", "kind": "service", "district": "storefront", "loadShare": 1, "capacity": 700 },
+      { "id": "shared-postgres", "kind": "database", "district": "storefront", "loadShare": 1, "capacity": 2400 }
+    ],
+    "connections": [
+      { "id": "public-api", "kind": "road", "from": "clients", "to": "mercadito-app" },
+      { "id": "app-db", "kind": "pipe", "from": "mercadito-app", "to": "shared-postgres" }
+    ]
+  },
+  "drifts": [
+    {
+      "id": "orders-growth-year1",
+      "target": { "context": "ordersPerDay" },
+      "delta": 2,
+      "mode": "multiply",
+      "fromQuarter": 1,
+      "toQuarter": 4,
+      "anchor": "mercadito-app",
+      "assumption": "assumptions.company.ordersGrowthYear1",
+      "sources": ["model"]
+    },
+    {
+      "id": "orders-growth-year2",
+      "target": { "context": "ordersPerDay" },
+      "delta": 1.6,
+      "mode": "multiply",
+      "fromQuarter": 5,
+      "toQuarter": 8,
+      "anchor": "mercadito-app",
+      "assumption": "assumptions.company.ordersGrowthYear2",
+      "sources": ["model"]
+    },
+    {
+      "id": "orders-growth-year3",
+      "target": { "context": "ordersPerDay" },
+      "delta": 1.35,
+      "mode": "multiply",
+      "fromQuarter": 9,
+      "toQuarter": 12,
+      "anchor": "mercadito-app",
+      "assumption": "assumptions.company.ordersGrowthYear3",
+      "sources": ["model"]
+    },
+    {
+      "id": "hiring-year1",
+      "target": { "context": "teamSize" },
+      "delta": 1,
+      "fromQuarter": 1,
+      "toQuarter": 4,
+      "assumption": "assumptions.company.hiringYear1",
+      "sources": ["model"]
+    },
+    {
+      "id": "hiring-year2",
+      "target": { "context": "teamSize" },
+      "delta": 4,
+      "fromQuarter": 5,
+      "toQuarter": 8,
+      "assumption": "assumptions.company.hiringYear2",
+      "sources": ["model", "team-topologies"]
+    },
+    {
+      "id": "hiring-year3",
+      "target": { "context": "teamSize" },
+      "delta": 14,
+      "fromQuarter": 9,
+      "toQuarter": 12,
+      "assumption": "assumptions.company.hiringYear3",
+      "sources": ["model", "team-topologies"]
+    },
+    {
+      "id": "feature-sediment",
+      "target": { "force": "complexity" },
+      "delta": 1,
+      "fromQuarter": 1,
+      "toQuarter": 12,
+      "assumption": "assumptions.company.featureSediment",
+      "sources": ["apsd", "brooks-silver-bullet"]
+    },
+    {
+      "id": "coordination-cost",
+      "target": { "force": "cognitiveLoad" },
+      "delta": 1,
+      "fromQuarter": 5,
+      "toQuarter": 12,
+      "assumption": "assumptions.company.coordinationCost",
+      "sources": ["team-topologies", "conway"]
+    },
+    {
+      "id": "burn",
+      "target": { "context": "runwayMonths" },
+      "delta": -3,
+      "fromQuarter": 1,
+      "toQuarter": 12,
+      "assumption": "assumptions.company.burn",
+      "sources": ["model"]
+    }
+  ],
+  "demandNoise": { "amount": 0.06, "assumption": "assumptions.company.demandNoise", "sources": ["model"] },
+  "congestion": { "reliabilityDelta": -8, "assumption": "assumptions.company.congestion", "sources": ["fsa", "model"] },
+  "totalQuarters": 12
+}
