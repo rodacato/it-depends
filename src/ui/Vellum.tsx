@@ -34,7 +34,7 @@ export function Vellum({ x, y, w, h, rotate = -1.2, children, className = '', la
     >
       <span className="tape tape-l" aria-hidden="true" />
       <span className="tape tape-r" aria-hidden="true" />
-      {children}
+      <div className="vellum-body">{children}</div>
     </motion.section>
   );
 }

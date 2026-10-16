@@ -6,7 +6,8 @@ import { connectHost } from '../host';
 import { Campaign } from './Campaign';
 import { I18nProvider, makeI18n } from './i18n';
 import type { Progress } from './progress';
-import { loadProgress, safeStorage, saveProgress } from './progress';
+import { loadProgress, restoreFromHost, safeStorage, saveProgress } from './progress';
+import { campaign } from '../content';
 
 type Boot = { status: 'loading' } | { status: 'ready'; bridge: HostBridge; session: HostSession };
 
@@ -18,6 +19,9 @@ export function App() {
   useEffect(() => {
     connectHost().then(({ bridge, session }) => {
       if (session.locale && LOCALES.length) setLocaleState(detectLocale([session.locale]));
+      if (session.mode === 'embedded') {
+        setLoaded((prev) => ({ ...prev, progress: restoreFromHost(prev.progress, session.progress, campaign.chapters.map((c) => c.id)) }));
+      }
       setBoot({ status: 'ready', bridge, session });
     });
   }, []);

@@ -29,6 +29,8 @@ export interface ChapterScene {
   leaders: LeaderMark[];
   changes: ChangeSet;
   late: DelayedConsequence[];
+  // Components that newly congested during this window: the only ones lettered "at capacity".
+  congested: string[];
 }
 
 // Clouds mark what this revision changed; growth and congestion already show as height and red traffic.
@@ -85,7 +87,12 @@ export function buildScene(timeline: Timeline, window: ChapterWindow, order: Slo
       effects: items.map((i) => i.effect),
     });
   }
-  return { models, clouds, leaders, changes, late };
+  const congested = timeline.snapshots
+    .filter((s) => s.quarter > window.start && s.quarter <= window.end)
+    .flatMap((s) => s.incidents)
+    .filter((i) => i.kind === 'congestion' && i.anchor)
+    .map((i) => i.anchor!);
+  return { models, clouds, leaders, changes, late, congested };
 }
 
 export type Playhead = { kind: 'start' } | { kind: 'end' } | { kind: 'playing'; state: TimelapseState };

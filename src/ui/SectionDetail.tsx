@@ -45,13 +45,18 @@ export function SectionDetail({ snapshot, componentId, changed, letter, onClose 
   const fromClients = neighbours.some((n) => n.id === CLIENTS_NODE);
 
   const parts: ReactNode[] = [];
+  const labels = new LabelPlacer();
   let x = 250;
   const buildingX: Record<string, number> = {};
+  let focusTop: [number, number] | null = null;
   for (const c of above) {
     const w = c.kind === 'service' ? 170 : 110;
     const floors = Math.min(12, floorsFor(load(c.id)));
+    const top = GRADE - floors * FH;
     buildingX[c.id] = x + w / 2;
-    parts.push(<Elevation key={c.id} x={x} w={w} floors={floors} hot={stress(c.id) >= 1} label={name(c.id)} role={role(c)} load={loadLine(c.id)} focus={c.id === componentId} />);
+    if (c.id === componentId) focusTop = [x + w, top];
+    const text = { label: name(c.id), role: role(c), load: loadLine(c.id) };
+    parts.push(<Elevation key={c.id} x={x} w={w} floors={floors} hot={stress(c.id) >= 1} {...text} labelY={labels.place(x, top - 40, text)} focus={c.id === componentId} />);
     x += w + 46;
   }
   let bx = 240;
@@ -68,13 +73,17 @@ export function SectionDetail({ snapshot, componentId, changed, letter, onClose 
   }
   const vw = vendors.length > 1 ? 52 : 110;
   vendors.slice(0, 3).forEach((v, i) => {
-    parts.push(<Elevation key={v.id} x={812 + i * (vw + 6)} w={vw} floors={6} hatch label={name(v.id)} role={vendors.length > 1 ? '' : role(v)} load={vendors.length > 1 ? '' : t('kinds.vendor')} focus={v.id === componentId} />);
+    const vx = 812 + i * (vw + 6);
+    const text = { label: name(v.id), role: vendors.length > 1 ? '' : role(v), load: '' };
+    parts.push(<Elevation key={v.id} x={vx} w={vw} floors={6} hatch {...text} labelY={labels.place(vx, GRADE - 6 * FH - 40, text)} focus={v.id === componentId} />);
   });
-  const focusX = buildingX[componentId];
 
   return (
-    <g className="section-detail" data-testid="section-detail">
-      <rect x={CITY_VIEW.x + 6} y={CITY_VIEW.y + 6} width={CITY_VIEW.w - 12} height={CITY_VIEW.h - 12} className="detail-ground" />
+    <g className="section-detail" data-testid="section-detail" clipPath="url(#detail-clip)">
+      <clipPath id="detail-clip">
+        <rect x={CITY_VIEW.x} y={CITY_VIEW.y} width={CITY_VIEW.w} height={CITY_VIEW.h} />
+      </clipPath>
+      <rect x={CITY_VIEW.x} y={CITY_VIEW.y} width={CITY_VIEW.w} height={CITY_VIEW.h} className="detail-ground" />
       <rect x={CITY_VIEW.x + 14} y={CITY_VIEW.y + 14} width={CITY_VIEW.w - 28} height={CITY_VIEW.h - 28} className="pen border" pathLength={1} />
       <text x={CITY_VIEW.x + 34} y={CITY_VIEW.y + 46} className="lbl title">
         {t('ui.detail.title', { name: name(componentId) })}
@@ -84,16 +93,16 @@ export function SectionDetail({ snapshot, componentId, changed, letter, onClose 
       </text>
       <line x1={70} y1={GRADE} x2={985} y2={GRADE} className="pen grade" pathLength={1} />
       <rect x={70} y={GRADE} width={915} height={9} className="earth" />
-      <text x={980} y={GRADE - 8} textAnchor="end" className="mono dim">
+      <text x={84} y={GRADE + 26} className="mono dim">
         {t('ui.detail.grade')}
       </text>
-      <text x={980} y={GRADE + 26} textAnchor="end" className="mono dim">
+      <text x={84} y={GRADE + 40} className="mono dim">
         {t('ui.detail.belowGrade')}
       </text>
       {vendors.length > 0 && (
         <g>
-          <line x1={800} y1={120} x2={800} y2={620} className="pen property" pathLength={1} />
-          <text x={808} y={138} className="mono dim">
+          <line x1={800} y1={150} x2={800} y2={620} className="pen property" pathLength={1} />
+          <text x={808} y={612} className="mono dim">
             {t('ui.city.notOurs')}
           </text>
         </g>
@@ -107,8 +116,8 @@ export function SectionDetail({ snapshot, componentId, changed, letter, onClose 
         </g>
       )}
       {parts}
-      {changed && focusX !== undefined && (
-        <g className="detail-delta" transform={`translate(${focusX + 118}, ${GRADE - 210})`}>
+      {changed && focusTop && (
+        <g className="detail-delta" transform={`translate(${focusTop[0] + 14}, ${focusTop[1] - 6})`}>
           <path d="M0,-12 L11,8 L-11,8 Z" />
           <text y={5} textAnchor="middle" className="lbl">
             {letter}
@@ -123,7 +132,7 @@ export function SectionDetail({ snapshot, componentId, changed, letter, onClose 
           <line x1="0" y1="0" x2="0" y2="6" stroke="var(--line)" strokeWidth=".7" strokeOpacity=".5" />
         </pattern>
       </defs>
-      <foreignObject x={CITY_VIEW.x + CITY_VIEW.w - 220} y={CITY_VIEW.y + 26} width={190} height={34}>
+      <foreignObject x={CITY_VIEW.x + CITY_VIEW.w - 214} y={CITY_VIEW.y + CITY_VIEW.h - 52} width={190} height={34}>
         <button type="button" className="ink-button lbl light small" onClick={onClose} data-testid="detail-close">
           {t('ui.detail.back')}
         </button>
@@ -132,14 +141,33 @@ export function SectionDetail({ snapshot, componentId, changed, letter, onClose 
   );
 }
 
-function Elevation(p: { x: number; w: number; floors: number; label: string; role: string; load: string; hot?: boolean; hatch?: boolean; focus?: boolean }) {
+interface LabelText {
+  label: string;
+  role: string;
+  load: string;
+}
+
+// Lettering above roofs is stacked upward until it clears what is already lettered, then tied back with a leader.
+class LabelPlacer {
+  private boxes: { x0: number; x1: number; y: number }[] = [];
+
+  place(x: number, y: number, text: LabelText): number {
+    const width = Math.max(text.label.length * 8, text.role.length * 6.1, text.load.length * 6.1);
+    let yy = y;
+    while (this.boxes.some((b) => x < b.x1 + 8 && b.x0 < x + width && Math.abs(b.y - yy) < 52)) yy -= 54;
+    this.boxes.push({ x0: x, x1: x + width, y: yy });
+    return yy;
+  }
+}
+
+function Elevation(p: LabelText & { x: number; w: number; floors: number; labelY: number; hot?: boolean; hatch?: boolean; focus?: boolean }) {
   const H = p.floors * FH;
   const top = GRADE - H;
   const bays = Math.floor((p.w - 16) / 24);
   const cls = `pen ${p.hot ? 'hot' : ''} ${p.focus ? 'focus' : ''}`;
   return (
     <g>
-      <rect x={p.x} y={top} width={p.w} height={H} className={cls} fill={p.hatch ? 'url(#detail-hatch)' : 'var(--blue)'} pathLength={1} />
+      <rect x={p.x} y={top} width={p.w} height={H} className={`${cls} ${p.hatch ? 'hatched' : 'solid'}`} pathLength={1} />
       {Array.from({ length: p.floors - 1 }, (_, i) => (
         <line key={`f${i}`} x1={p.x} y1={GRADE - (i + 1) * FH} x2={p.x + p.w} y2={GRADE - (i + 1) * FH} className={`${cls} thin`} pathLength={1} />
       ))}
@@ -151,13 +179,14 @@ function Elevation(p: { x: number; w: number; floors: number; label: string; rol
       {Array.from({ length: Math.floor(p.w / 30) }, (_, i) => (
         <line key={`p${i}`} x1={p.x + 14 + i * 30} y1={GRADE} x2={p.x + 14 + i * 30} y2={GRADE + 40} className="pen thin dim" pathLength={1} />
       ))}
-      <text x={p.x} y={top - 48} className={`lbl name ${p.hot ? 'red' : ''}`}>
+      {p.labelY < top - 40 && <line x1={p.x + 4} y1={p.labelY + 30} x2={p.x + 4} y2={top - 14} className="leader" />}
+      <text x={p.x} y={p.labelY - 8} className={`lbl name ${p.hot ? 'red' : ''}`}>
         {p.label}
       </text>
-      <text x={p.x} y={top - 34} className="mono dim">
+      <text x={p.x} y={p.labelY + 6} className="mono dim">
         {p.role}
       </text>
-      <text x={p.x} y={top - 21} className={`mono ${p.hot ? 'red' : 'dim'}`}>
+      <text x={p.x} y={p.labelY + 19} className={`mono ${p.hot ? 'red' : 'dim'}`}>
         {p.load}
       </text>
     </g>

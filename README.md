@@ -45,6 +45,12 @@ npm run e2e
 
 The build writes `dist/` with relative paths (it works from any GitHub Pages path and inside an iframe) and generates `scroll.json`, the Dojo manifest.
 
+The e2e suite covers the main flow in English and Spanish, reduced motion, all eight sheets end to end, the section drawing, and the course embedded in a mock Dojo host (handshake, host locale, progress, completion). To re-record the README demo:
+
+```bash
+RECORD=1 npx playwright test e2e/record.spec.ts
+```
+
 ## How it is built
 
 - `src/engine`: a pure, deterministic simulation. Same decisions and seed, same city. No LLM inside. [ADR 1](docs/adr/0001-deterministic-simulation.md)

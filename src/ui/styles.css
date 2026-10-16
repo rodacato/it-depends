@@ -483,6 +483,14 @@ button {
 
 /* ---------- vellum ---------- */
 
+.vellum-body {
+  /* Panels never cover the title block: long text scrolls inside the film instead. */
+  max-height: 528px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(30, 63, 102, 0.4) transparent;
+}
+
 .vellum {
   position: absolute;
   background: rgba(237, 235, 227, 0.95);
@@ -1200,8 +1208,12 @@ label.rationale input {
   animation: pen-draw 0.9s var(--mechanical) both;
 }
 
-.section-detail rect.pen[fill] {
+.section-detail .pen.solid {
   fill: var(--blue);
+}
+
+.section-detail .pen.hatched {
+  fill: url(#detail-hatch);
 }
 
 .section-detail .pen.thin {
@@ -1237,6 +1249,12 @@ label.rationale input {
 .section-detail .pen.water,
 .section-detail .train {
   animation-delay: 0.4s;
+}
+
+.section-detail .leader {
+  stroke: var(--line);
+  stroke-width: 0.7;
+  stroke-dasharray: 2 3;
 }
 
 .section-detail .earth {
@@ -1306,13 +1324,17 @@ label.rationale input {
 
 .stamp {
   position: absolute;
-  left: 64px;
-  top: 70px;
-  width: 248px;
+  left: 60px;
+  top: 74px;
+  width: 222px;
   border: 1.4px solid var(--line);
   background: var(--blue);
   padding: 8px 12px 8px;
   z-index: 4;
+}
+
+.stamp .row .mono {
+  font-size: 10.5px;
 }
 
 .stamp .k {
@@ -1321,13 +1343,15 @@ label.rationale input {
 }
 
 .stamp .row {
+  white-space: nowrap;
+  gap: 8px;
   display: flex;
   justify-content: space-between;
   align-items: baseline;
 }
 
 .stamp .big {
-  font-size: 26px;
+  font-size: 22px;
   font-weight: 600;
 }
 
@@ -1338,7 +1362,7 @@ label.rationale input {
 }
 
 .stamp .ticks i {
-  width: 16px;
+  width: 13px;
   height: 6px;
   border: 0.8px solid var(--line);
 }

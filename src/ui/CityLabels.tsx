@@ -17,10 +17,11 @@ interface Props {
   onSelect: (id: string) => void;
   interactive: boolean;
   camera: Camera;
+  congested: string[];
 }
 
 // Lettering and hit areas over the canvas. Real software names, never a city vocabulary to translate.
-export function CityLabels({ preview, base, target, growth, clouds, cloudProgress, hovered, onHover, onSelect, interactive, camera }: Props) {
+export function CityLabels({ preview, base, target, growth, clouds, cloudProgress, hovered, onHover, onSelect, interactive, camera, congested }: Props) {
   const { t, has } = useI18n();
   const name = (id: string) => (has(`components.${id}.name`) ? t(`components.${id}.name`) : id);
   const clip = (s: string) => (s.length > 30 ? `${s.slice(0, 29)}…` : s);
@@ -75,7 +76,7 @@ export function CityLabels({ preview, base, target, growth, clouds, cloudProgres
             <text x={x} y={y + 13} className="mono dim" fontSize={9.5}>
               {role(id, target.kinds[id] ?? 'service')}
             </text>
-            {(target.stress[id] ?? 0) >= 1 && (
+            {(target.stress[id] ?? 0) >= 1 && congested.includes(id) && (
               <text x={x} y={y + 26} className="mono red" fontSize={9.5}>
                 {t('ui.city.atCapacity')}
               </text>

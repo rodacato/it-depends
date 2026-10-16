@@ -53,3 +53,30 @@ export function safeStorage(): Storage | null {
     return null;
   }
 }
+
+const UnitStateSchema = z.object({
+  optionId: z.string(),
+  rationale: z.string().max(600).optional(),
+  adr: AdrSchema.optional(),
+});
+
+// Embedded, the host's record of earlier visits wins: rebuild decisions, rationales and ADRs from unit states.
+export function restoreFromHost(local: Progress, host: Record<string, { completed: boolean; state?: unknown }>, chapterIds: readonly string[]): Progress {
+  const restored = chapterIds.flatMap((id) => {
+    const unit = host[id];
+    const state = UnitStateSchema.safeParse(unit?.state);
+    return unit && state.success ? [{ id, completed: unit.completed, ...state.data }] : [];
+  });
+  if (!restored.length) return local;
+  const done = restored.filter((r) => r.completed).map((r) => r.id);
+  const next = chapterIds.find((id) => !done.includes(id));
+  return {
+    ...local,
+    started: true,
+    decisions: restored.map((r) => ({ chapterId: r.id, optionId: r.optionId })),
+    rationales: Object.fromEntries(restored.map((r) => [r.id, r.rationale ?? ''])),
+    adrs: Object.fromEntries(restored.flatMap((r) => (r.adr ? [[r.id, r.adr]] : []))),
+    completed: done,
+    current: next && !restored.some((r) => r.id === next) ? { chapterId: next, phase: 'briefing' } : { chapterId: done.at(-1) ?? chapterIds[0]!, phase: 'review' },
+  };
+}

@@ -121,6 +121,7 @@ export function SiteSheet(p: Props) {
         }}
         interactive={p.interactive && p.playhead.kind !== 'playing' && !zoomed}
         camera={camera}
+        congested={p.playhead.kind === 'start' ? [] : p.scene.congested}
       />
       {sectionOpen && zoomed && (
         <svg className="detail-layer" viewBox="0 0 1440 900" width={1440} height={900}>
@@ -146,7 +147,7 @@ export function SiteSheet(p: Props) {
         compact={p.compact}
       />
       {p.playhead.kind === 'playing' && <TimelapseStamp state={p.playhead.state} startQuarter={p.window.start} quarters={p.window.end - p.window.start} />}
-      {p.children}
+      {!zoomed && p.children}
       {hovered && hoveredBounds && !zoomed && (
         <AssumptionTag
           x={place(hoveredBounds.x + hoveredBounds.w + 22, 0)[0]}

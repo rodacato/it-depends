@@ -5,8 +5,18 @@ import { StandaloneBridge } from './StandaloneBridge';
 
 export type { HostBridge, HostSession } from './HostBridge';
 
+type Connection = { bridge: HostBridge; session: HostSession };
+
+let connection: Promise<Connection> | null = null;
+
+// One handshake per page load, even when React mounts effects twice.
+export function connectHost(win: Window = window): Promise<Connection> {
+  connection ??= connect(win);
+  return connection;
+}
+
 // Embedded only when framed AND given a host origin; otherwise, or if the handshake times out, standalone.
-export async function connectHost(win: Window = window): Promise<{ bridge: HostBridge; session: HostSession }> {
+async function connect(win: Window): Promise<Connection> {
   const hostOrigin = new URLSearchParams(win.location.search).get('host');
   const framed = win.parent !== win;
   if (framed && hostOrigin && isOrigin(hostOrigin)) {
