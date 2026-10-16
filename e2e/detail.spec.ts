@@ -6,7 +6,7 @@ test.use({ locale: 'es-MX', reducedMotion: 'reduce' });
 // The busiest section: the monolith late in a campaign, with modules, queues and a vendor around it.
 test('section drawing of the monolith stays legible on a crowded site', async ({ page }) => {
   test.setTimeout(120_000);
-  await page.goto('/');
+  await page.goto('/?walkthrough=off');
   await page.getByTestId('begin').click();
   for (let sheet = 1; sheet <= 4; sheet++) {
     const options = page.getByTestId('briefing').getByRole('radio');

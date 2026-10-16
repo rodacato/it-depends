@@ -17,6 +17,15 @@ describe('progress', () => {
     expect(restoreFromHost(local, { reversibility: { completed: true, state: { nope: 1 } } }, chapters)).toBe(local);
   });
 
+  it('loads a save from before the guide existed without calling it damaged', () => {
+    const older: Record<string, unknown> = { ...freshProgress('es-MX'), started: true };
+    delete older.walkthroughSeen;
+    const r = loadProgress({ getItem: () => JSON.stringify(older) });
+    expect(r.damaged).toBe(false);
+    expect(r.progress.started).toBe(true);
+    expect(r.progress.walkthroughSeen).toBe(false);
+  });
+
   it('treats damaged local storage as a fresh, flagged start', () => {
     const r = loadProgress({ getItem: () => '{not json' });
     expect(r.damaged).toBe(true);

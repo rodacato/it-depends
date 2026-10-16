@@ -37,7 +37,7 @@ try {
   const page = await context.newPage();
   await course.prepare?.(page);
   const started = Date.now();
-  await page.goto(URL);
+  await page.goto(`${URL}?walkthrough=off`);
   await page.evaluate(() => localStorage.clear());
   await page.reload();
   await page.evaluate(() => document.fonts.ready);

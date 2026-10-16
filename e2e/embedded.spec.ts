@@ -27,7 +27,7 @@ function hostPage(courseUrl: string): string {
 test.use({ locale: 'en-US', reducedMotion: 'reduce', viewport: { width: 1440, height: 900 } });
 
 test('embedded in a Dojo-like host: handshake, host locale, progress and completion', { tag: '@smoke' }, async ({ page, baseURL }) => {
-  const course = `${baseURL}/?host=${encodeURIComponent(HOST)}`;
+  const course = `${baseURL}/?host=${encodeURIComponent(HOST)}&walkthrough=off`;
   await page.route(`${HOST}/host.html`, (route) => route.fulfill({ contentType: 'text/html', body: hostPage(course) }));
   await page.goto(`${HOST}/host.html`);
   const app = page.frameLocator('#scroll');

@@ -170,7 +170,29 @@
       "confirmNo": "Keep my drawings",
       "confirmYes": "Yes, new campaign"
     },
+    "walkthrough": {
+      "kicker": "HOW TO PLAY · {n} OF {total}",
+      "steps": {
+        "decide": {
+          "title": "One decision per sheet",
+          "body": "Read the context and the dilemma. Hover an option to see it pencilled onto the city. Pick one, write one sentence of why, and issue the revision: time moves on and the consequences arrive, some of them late."
+        },
+        "forces": {
+          "title": "The forces say what changed",
+          "body": "Every decision moves these five forces, relative 0 to 100. Hover one to see what moved it, under which assumption and from which source. In the city the same works for any building or red cloud; click a building to open its section."
+        },
+        "log": {
+          "title": "The title block is your log",
+          "body": "Every revision you issue is recorded here. After the consequences you write an ADR and the review board reads it. From a revision you can restore the site, choose differently and watch both cities side by side. GUIDE replays this."
+        }
+      },
+      "next": "Next",
+      "back": "Back",
+      "skip": "Skip the guide",
+      "done": "Start drawing"
+    },
     "titleBlock": {
+      "help": "GUIDE",
       "project": "MERCADITO · PLATFORM SITE PLAN",
       "sheet": "SHEET",
       "sheetOf": "{n} OF {total}",

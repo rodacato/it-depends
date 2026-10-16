@@ -16,13 +16,14 @@ export const ProgressSchema = z.object({
   adrs: z.record(z.string(), AdrSchema),
   completed: z.array(z.string()),
   current: z.object({ chapterId: z.string(), phase: z.enum(PHASES) }).nullable(),
+  walkthroughSeen: z.boolean().default(false),
 });
 export type Progress = z.infer<typeof ProgressSchema>;
 
 const STORAGE_KEY = 'it-depends:v1';
 
 export function freshProgress(locale: string | null = null): Progress {
-  return { version: 1, seed: 20260101, locale, started: false, decisions: [], rationales: {}, adrs: {}, completed: [], current: null };
+  return { version: 1, seed: 20260101, locale, started: false, decisions: [], rationales: {}, adrs: {}, completed: [], current: null, walkthroughSeen: false };
 }
 
 export type LoadResult = { progress: Progress; damaged: boolean };
