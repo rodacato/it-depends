@@ -160,9 +160,9 @@
     "cover": {
       "kicker": "SHEET 0 · COVER · DRAWING SET FOR MERCADITO",
       "title": "It Depends",
-      "subtitle": "A course in architecture decisions, drawn as a city that grows for three years.",
+      "subtitle": "A course in architecture decisions, drawn as a city that grows for three and a half years.",
       "opening": "Sheet 1 of 8. Q1, Year 1. Three engineers, one database, zero regrets. So far.",
-      "howTo": "Each sheet is a quarter in the company's life. Hover an option to see it pencilled in, write one sentence of why, then watch the consequences arrive, some of them late.",
+      "howTo": "Each sheet moves the company forward one quarter or more. Hover an option to see it pencilled in, write one sentence of why, then watch the consequences arrive, some of them late.",
       "newCampaign": "New campaign",
       "continue": "Continue: Sheet {n}",
       "begin": "Open Sheet 1",
@@ -196,7 +196,7 @@
     },
     "complete": {
       "kicker": "DRAWING SET ISSUED · {n} REVISIONS",
-      "title": "Three years, one city, your revisions",
+      "title": "Fourteen quarters, one city, your revisions",
       "voice": "Every cloud on these sheets was a decision with a reason written next to it. Some of the reasons aged well.",
       "rewind": "Any revision can still be restored from the title block: choose differently and watch both cities grow side by side.",
       "close": "Back to the sheet"

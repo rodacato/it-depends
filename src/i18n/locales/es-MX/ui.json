@@ -160,9 +160,9 @@
     "cover": {
       "kicker": "LÁMINA 0 · PORTADA · JUEGO DE PLANOS PARA MERCADITO",
       "title": "It Depends",
-      "subtitle": "Un curso de decisiones de arquitectura, dibujado como una ciudad que crece durante tres años.",
+      "subtitle": "Un curso de decisiones de arquitectura, dibujado como una ciudad que crece durante tres años y medio.",
       "opening": "Lámina 1 de 8. T1, Año 1. Tres ingenieros, una base de datos, cero arrepentimientos. Por ahora.",
-      "howTo": "Cada lámina es un trimestre en la vida de la empresa. Pasa el cursor por una opción para verla trazada a lápiz, escribe una oración de por qué, y mira llegar las consecuencias, algunas tarde.",
+      "howTo": "Cada lámina avanza la empresa uno o más trimestres. Pasa el cursor por una opción para verla trazada a lápiz, escribe una oración de por qué, y mira llegar las consecuencias, algunas tarde.",
       "newCampaign": "Nueva campaña",
       "continue": "Continuar: lámina {n}",
       "begin": "Abrir la lámina 1",
@@ -196,7 +196,7 @@
     },
     "complete": {
       "kicker": "JUEGO DE PLANOS EMITIDO · {n} REVISIONES",
-      "title": "Tres años, una ciudad, tus revisiones",
+      "title": "Catorce trimestres, una ciudad, tus revisiones",
       "voice": "Cada nube en estas láminas fue una decisión con su razón escrita al lado. Algunas razones envejecieron bien.",
       "rewind": "Cualquier revisión se puede restaurar desde el cuadro de rotulación: elige distinto y mira crecer ambas ciudades lado a lado.",
       "close": "Volver a la lámina"
