@@ -21,7 +21,7 @@ export function AdrPanel({ chapter, number, title, letter, quarterLabel, adr, on
   const filled = ADR_FIELDS.filter((f) => adr[f].trim()).length;
   const criteriaFor = (f: AdrField) => chapter.rubric.filter((c) => c.field === f);
   return (
-    <Vellum x={548} y={50} w={856} rotate={-0.8} className="adr" label={t('ui.adr.kicker', { n: number, title })} testId="adr" from="top">
+    <Vellum x={380} y={50} w={1024} rotate={-0.8} className="adr" label={t('ui.adr.kicker', { n: number, title })} testId="adr" from="top">
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -47,7 +47,7 @@ export function AdrPanel({ chapter, number, title, letter, quarterLabel, adr, on
               <textarea
                 value={adr[f]}
                 maxLength={1200}
-                rows={f === 'context' || f === 'consequences' ? 4 : 3}
+                rows={f === 'context' || f === 'consequences' ? 3 : 2}
                 placeholder={t(`ui.adr.hints.${f}`)}
                 onChange={(e) => onChange(f, e.target.value)}
                 data-testid={`adr-${f}`}

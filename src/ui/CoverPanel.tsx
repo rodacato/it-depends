@@ -13,7 +13,7 @@ export function CoverPanel({ continueSheet, damaged, onBegin, onNewCampaign }: P
   const { t } = useI18n();
   const [confirming, setConfirming] = useState(false);
   return (
-    <Vellum x={938} y={60} w={466} rotate={-1.6} className="cover" label={t('ui.meta.title')} testId="cover">
+    <Vellum x={870} y={60} w={534} rotate={-1.6} className="cover" label={t('ui.meta.title')} testId="cover">
       <div className="kicker mono">{t('ui.cover.kicker')}</div>
       <h1 className="lbl">{t('ui.cover.title')}</h1>
       <p className="subtitle lbl">{t('ui.cover.subtitle')}</p>

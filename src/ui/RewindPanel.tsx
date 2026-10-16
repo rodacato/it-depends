@@ -20,7 +20,7 @@ export function RewindPanel({ chapter, letter, issuedOption, optionId, rationale
   const base = `chapters.${chapter.id}`;
   const ready = optionId !== null && rationale.trim().split(/\s+/).filter(Boolean).length >= MIN_RATIONALE_WORDS;
   return (
-    <Vellum x={880} y={70} w={520} rotate={1.1} className="rewind" label={t('ui.rewind.title', { letter })} testId="rewind" from="top">
+    <Vellum x={820} y={70} w={580} rotate={1.1} className="rewind" label={t('ui.rewind.title', { letter })} testId="rewind" from="top">
       <div className="kicker mono">{t('ui.rewind.kicker', { letter })}</div>
       <h2 className="lbl">{t('ui.rewind.title', { letter })}</h2>
       <p className="mono voice">{t('ui.rewind.pick')}</p>

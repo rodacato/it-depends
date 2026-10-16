@@ -31,7 +31,7 @@ export function BriefingPanel(p: Props) {
   const words = p.rationale.trim().split(/\s+/).filter(Boolean).length;
   const ready = p.selected !== null && words >= MIN_RATIONALE_WORDS;
   return (
-    <Vellum x={944} y={50} w={462} rotate={-1.1} className="briefing" label={t(`${base}.title`)} testId="briefing">
+    <Vellum x={846} y={50} w={560} rotate={-1.1} className="briefing" label={t(`${base}.title`)} testId="briefing">
       <div className="kicker mono">
         {t('ui.briefing.kicker', { n: p.chapter.number, total: p.totalSheets, quarter: p.quarterLabel, concept: t(`${base}.short`) })}
       </div>
