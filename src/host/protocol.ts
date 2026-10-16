@@ -19,8 +19,8 @@ export const InitSchema = z.object({
   nonce: z.string(),
   session: z.string().min(1),
   locale: Locale,
-  theme: z.record(z.string()),
-  progress: z.record(UnitProgressSchema),
+  theme: z.record(z.string(), z.string()),
+  progress: z.record(z.string(), UnitProgressSchema),
   capabilities: z.array(z.string()),
   userRef: z.string().nullable(),
   authenticated: z.boolean(),
@@ -28,7 +28,7 @@ export const InitSchema = z.object({
 export type InitMessage = z.infer<typeof InitSchema>;
 
 export const SetLocaleSchema = z.object({ ...Envelope, type: z.literal('setLocale'), session: z.string(), locale: Locale });
-export const SetThemeSchema = z.object({ ...Envelope, type: z.literal('setTheme'), session: z.string(), theme: z.record(z.string()) });
+export const SetThemeSchema = z.object({ ...Envelope, type: z.literal('setTheme'), session: z.string(), theme: z.record(z.string(), z.string()) });
 
 // Not in v0: the host reserves the `llm` capability and message type. This is our proposal for it,
 // used only if a future host grants `llm`; until then the course never sends it.

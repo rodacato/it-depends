@@ -12,8 +12,8 @@ export const ProgressSchema = z.object({
   locale: z.string().nullable(),
   started: z.boolean(),
   decisions: z.array(DecisionSchema),
-  rationales: z.record(z.string().max(600)),
-  adrs: z.record(AdrSchema),
+  rationales: z.record(z.string(), z.string().max(600)),
+  adrs: z.record(z.string(), AdrSchema),
   completed: z.array(z.string()),
   current: z.object({ chapterId: z.string(), phase: z.enum(PHASES) }).nullable(),
 });
