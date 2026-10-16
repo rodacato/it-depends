@@ -19,11 +19,12 @@ interface Props {
   onLocale: (locale: string) => void;
   onRestore?: (row: RevisionRow) => void;
   onNewCampaign?: () => void;
+  onHelp?: () => void;
   compact?: boolean;
 }
 
 // The title block is the ADR log: every issued decision is a revision row.
-export function TitleBlock({ sheet, sheets, quarterLabel, rows, inkLast, onLocale, onRestore, onNewCampaign, compact }: Props) {
+export function TitleBlock({ sheet, sheets, quarterLabel, rows, inkLast, onLocale, onRestore, onNewCampaign, onHelp, compact }: Props) {
   const { t, locale } = useI18n();
   return (
     <div className="title-block" style={{ left: TITLE_BLOCK.x, top: TITLE_BLOCK.y, width: TITLE_BLOCK.w, height: TITLE_BLOCK.h }} data-testid="title-block">
@@ -85,11 +86,18 @@ export function TitleBlock({ sheet, sheets, quarterLabel, rows, inkLast, onLocal
       </div>
       <div className="tb-foot mono">
         <span>{t('ui.titleBlock.footer')}</span>
-        {onNewCampaign && (
-          <button type="button" className="link" onClick={onNewCampaign}>
-            {t('ui.titleBlock.newCampaign')}
-          </button>
-        )}
+        <span className="tb-actions">
+          {onHelp && (
+            <button type="button" className="link" onClick={onHelp} data-testid="help">
+              {t('ui.titleBlock.help')}
+            </button>
+          )}
+          {onNewCampaign && (
+            <button type="button" className="link" onClick={onNewCampaign}>
+              {t('ui.titleBlock.newCampaign')}
+            </button>
+          )}
+        </span>
       </div>
     </div>
   );

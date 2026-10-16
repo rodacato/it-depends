@@ -16,7 +16,7 @@ for (const loc of locales) {
     test.use({ locale: loc.tag });
 
     test('cover → briefing → time-lapse → ADR → review → rewind', async ({ page }) => {
-      await page.goto('/');
+      await page.goto('/?walkthrough=off');
       await expect(page.getByTestId('cover')).toBeVisible();
       await expect(page.getByTestId('title-block')).toBeVisible();
       await page.waitForTimeout(1200);
@@ -119,7 +119,7 @@ test.describe('reduced motion', () => {
   test.use({ locale: 'en-US', reducedMotion: 'reduce' });
 
   test('the time-lapse becomes a before/after with clouds drawn statically', async ({ page }) => {
-    await page.goto('/');
+    await page.goto('/?walkthrough=off');
     await page.getByTestId('begin').click();
     await page.getByTestId('option-hosted-checkout').click();
     await page.getByTestId('rationale').fill('launch matters more than fees right now');

@@ -28,6 +28,7 @@ import { finalState, timelapseAt, timelapseDuration } from './timelapse';
 import type { RevisionRow } from './TitleBlock';
 import { usePrefersReducedMotion, useClock } from './useClock';
 import { Vellum } from './Vellum';
+import { Walkthrough, walkthroughDisabled } from './Walkthrough';
 
 interface Props {
   bridge: HostBridge;
@@ -67,6 +68,8 @@ export function Campaign({ bridge, session, progress, setProgress, setLocale, da
   const [rewind, setRewind] = useState<RewindState | null>(null);
   const [confirmReset, setConfirmReset] = useState(false);
   const [finished, setFinished] = useState(false);
+  const [guideRequested, setGuideRequested] = useState(false);
+  const [guideOff] = useState(() => walkthroughDisabled(globalThis.location?.search ?? ''));
 
   const timeline = useMemo(
     () => simulate(campaign, progress.decisions, { seed: progress.seed, untilQuarter: window.end }),
@@ -190,7 +193,7 @@ export function Campaign({ bridge, session, progress, setProgress, setLocale, da
     setSelected(null);
     setDraft('');
     setOpened(false);
-    setProgress((p) => ({ ...freshProgress(p.locale), started: false }));
+    setProgress((p) => ({ ...freshProgress(p.locale), started: false, walkthroughSeen: p.walkthroughSeen }));
   }
 
   function startRewind(chapterId: string, revLetter: string) {
@@ -210,6 +213,12 @@ export function Campaign({ bridge, session, progress, setProgress, setLocale, da
     }));
     setAdrDraft(emptyAdr());
     setRewind(null);
+  }
+
+  const showGuide = guideRequested || (phase === 'briefing' && !rewind && !progress.walkthroughSeen && !guideOff);
+  function closeGuide() {
+    setGuideRequested(false);
+    setProgress((p) => ({ ...p, walkthroughSeen: true }));
   }
 
   const results = useMemo(() => evaluateAdr(progress.adrs[chapter.id] ?? emptyAdr(), chapter.rubric, i18n.terms), [progress.adrs, chapter, i18n]);
@@ -254,6 +263,7 @@ export function Campaign({ bridge, session, progress, setProgress, setLocale, da
       onLocale={setLocale}
       onRestore={phase === 'review' || phase === 'consequences' ? (r) => startRewind(r.chapterId, r.letter) : undefined}
       onNewCampaign={() => setConfirmReset(true)}
+      onHelp={phase === 'cover' ? undefined : () => setGuideRequested(true)}
     >
       <AnimatePresence>
         {phase === 'cover' && <CoverPanel key="cover" continueSheet={continueSheet} damaged={damaged} onBegin={begin} onNewCampaign={newCampaign} />}
@@ -350,6 +360,7 @@ export function Campaign({ bridge, session, progress, setProgress, setLocale, da
           </Vellum>
         )}
       </AnimatePresence>
+      {showGuide && <Walkthrough onDone={closeGuide} />}
       {phase === 'timelapse' && !reduced && (
         <button type="button" className="skip mono" onClick={() => goPhase('consequences')} data-testid="skip">
           {t('ui.timelapse.skip')}

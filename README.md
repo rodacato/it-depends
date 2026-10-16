@@ -77,6 +77,8 @@ The overall plan is in [docs/PLAN.md](docs/PLAN.md).
 
 [Dojo](https://github.com/rodacato/dojo) is a self-hosted practice space for developers that embeds courses like this one in an iframe. It Depends speaks Dojo's scroll protocol v0. The build generates `scroll.json` from the content: one unit per chapter, locales `en` and `es-MX`. Framed with `?host=<origin>`, the course runs a `hello`/`init` handshake with a nonce, talks only to that origin and its parent window, validates every message, reports `progress` and `complete` per chapter, and follows the host's locale and theme. With no answer from the host in 3 seconds it runs standalone. Progress it reports is self-reported. See [ADR 4](docs/adr/0004-dojo-scroll-protocol.md).
 
+The first sheet opens with a three-step guide over the real sheet, shown once; GUIDE in the title block replays it. A host with its own introduction can add `walkthrough=off` to the course URL to skip it.
+
 ## Contributing
 
 A chapter is one JSON file in `src/content/chapters/` plus one text file per locale in `src/i18n/locales/<locale>/`; the engine and the UI never change. Every option must hurt somewhere, and every effect needs a falsifiable assumption and a source from `src/content/sources.json`. A new language is a new folder with the same files as `en/`. Read the [content guide](docs/CONTENT-GUIDE.md), then check your work with `npm run validate:content`, `npm run check:i18n` and `npm test` before opening a pull request.

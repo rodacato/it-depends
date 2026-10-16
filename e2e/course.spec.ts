@@ -31,7 +31,7 @@ for (const w of walks) {
     test('plays all eight sheets to a closed drawing set without errors', async ({ page }) => {
       test.setTimeout(180_000);
       const errors = collectErrors(page);
-      await page.goto('/');
+      await page.goto('/?walkthrough=off');
       await page.getByTestId('begin').click();
 
       for (let sheet = 1; sheet <= 8; sheet++) {

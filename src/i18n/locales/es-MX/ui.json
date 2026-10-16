@@ -170,7 +170,29 @@
       "confirmNo": "Conservar mis planos",
       "confirmYes": "Sí, campaña nueva"
     },
+    "walkthrough": {
+      "kicker": "CÓMO SE JUEGA · {n} DE {total}",
+      "steps": {
+        "decide": {
+          "title": "Una decisión por lámina",
+          "body": "Lee el contexto y el dilema. Pasa el cursor por una opción para verla trazada a lápiz en la ciudad. Elige una, escribe en una oración por qué, y emite la revisión: el tiempo avanza y llegan las consecuencias, algunas tarde."
+        },
+        "forces": {
+          "title": "Las fuerzas dicen qué cambió",
+          "body": "Cada decisión mueve estas cinco fuerzas, relativas de 0 a 100. Pasa el cursor por una para ver qué la movió, con qué supuesto y qué fuente. En la ciudad pasa igual con cualquier edificio o nube roja; un clic en un edificio abre su corte."
+        },
+        "log": {
+          "title": "El rótulo es tu bitácora",
+          "body": "Cada revisión que emites queda anotada aquí. Después de las consecuencias escribes un ADR y el comité lo revisa. Desde una revisión puedes restaurar la obra, elegir distinto y ver las dos ciudades lado a lado. GUÍA repite esto."
+        }
+      },
+      "next": "Siguiente",
+      "back": "Anterior",
+      "skip": "Saltar la guía",
+      "done": "A dibujar"
+    },
     "titleBlock": {
+      "help": "GUÍA",
       "project": "MERCADITO · PLANO DEL PREDIO DE LA PLATAFORMA",
       "sheet": "LÁMINA",
       "sheetOf": "{n} DE {total}",

@@ -40,6 +40,7 @@ interface Props {
   onLocale: (l: string) => void;
   onRestore?: (row: RevisionRow) => void;
   onNewCampaign?: () => void;
+  onHelp?: () => void;
   compact?: boolean;
   children?: ReactNode;
 }
@@ -144,6 +145,7 @@ export function SiteSheet(p: Props) {
         onLocale={p.onLocale}
         onRestore={p.onRestore}
         onNewCampaign={p.onNewCampaign}
+        onHelp={p.onHelp}
         compact={p.compact}
       />
       {p.playhead.kind === 'playing' && <TimelapseStamp state={p.playhead.state} startQuarter={p.window.start} quarters={p.window.end - p.window.start} />}
