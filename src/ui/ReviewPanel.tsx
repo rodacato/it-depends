@@ -10,7 +10,6 @@ interface Props {
   letter: string;
   results: CriterionResult[];
   sensei: AdrEvaluation | null | 'pending';
-  embedded: boolean;
   hasNext: boolean;
   onNext: () => void;
   onFinish: () => void;
@@ -19,7 +18,7 @@ interface Props {
 }
 
 // No verdict, no score: the board says what the ADR already answers and where it would push.
-export function ReviewPanel({ chapter, letter, results, sensei, embedded, hasNext, onNext, onFinish, onRestore, onEditAdr }: Props) {
+export function ReviewPanel({ chapter, letter, results, sensei, hasNext, onNext, onFinish, onRestore, onEditAdr }: Props) {
   const { t } = useI18n();
   const base = `chapters.${chapter.id}`;
   const met = new Set(results.filter((r) => r.met).map((r) => r.criterionId));
@@ -57,7 +56,7 @@ export function ReviewPanel({ chapter, letter, results, sensei, embedded, hasNex
           <b>{t('ui.review.senseiTitle')}</b> {sensei.summary}
         </p>
       )}
-      {!embedded && <p className="mono dim small">{t('ui.review.standalone')}</p>}
+      <p className="mono dim small">{t('ui.review.rubricNote')}</p>
       <p className="disagree mono">
         <b>{t('ui.briefing.disagreement')}</b> {t(`${base}.disagreement`)}
       </p>

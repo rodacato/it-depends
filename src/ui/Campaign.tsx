@@ -296,6 +296,7 @@ export function Campaign({ bridge, session, progress, setProgress, setLocale, da
         {phase === 'adr' && (
           <AdrPanel
             key={`adr-${chapter.id}`}
+            chapter={chapter}
             number={chapter.number}
             title={t(`chapters.${chapter.id}.title`)}
             letter={letter}
@@ -312,7 +313,6 @@ export function Campaign({ bridge, session, progress, setProgress, setLocale, da
             letter={letter}
             results={results}
             sensei={sensei}
-            embedded={session.mode === 'embedded'}
             hasNext={hasNext}
             onNext={nextSheet}
             onFinish={() => setFinished(true)}

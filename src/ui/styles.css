@@ -960,6 +960,20 @@ label.rationale input {
   text-transform: uppercase;
 }
 
+.adr-grid .criterion {
+  font-size: 9.5px;
+  line-height: 1.35;
+  color: var(--graphite);
+}
+
+.adr-grid .criterion b {
+  font-weight: 500;
+}
+
+.adr .rubric-note {
+  margin: 8px 0 0;
+}
+
 .adr-grid textarea {
   resize: none;
   border: none;

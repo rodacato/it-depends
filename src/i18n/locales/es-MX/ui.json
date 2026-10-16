@@ -122,17 +122,19 @@
         "givenUp": "La opción que no tomaste, y lo que te habría comprado.",
         "revisit": "Una condición que alguien pueda notar: un número, una fecha, un evento."
       },
+      "boardLooksFor": "El comité busca:",
+      "rubricNote": "El comité es una rúbrica fija: revisa la forma de tu ADR (palabras clave, extensión, una condición), no si el argumento es correcto.",
       "progress": "{n} de {total} secciones redactadas",
       "submit": "Enviar al comité de revisión"
     },
     "review": {
       "kicker": "COMITÉ DE REVISIÓN · REV {letter}",
       "title": "El comité de revisión tiene tres preguntas sobre la Rev {letter}.",
-      "answered": "Respondido en tu ADR:",
+      "answered": "Tu ADR lo menciona:",
       "press": "Aquí el comité insistiría:",
       "senseiPending": "El sensei está leyendo tu ADR…",
       "senseiTitle": "Notas del sensei:",
-      "standalone": "Una rúbrica fija lee tu ADR, aquí y dentro de Dojo. Cuando Dojo ofrezca un sensei, sus notas aparecerán junto al tablero.",
+      "rubricNote": "Una rúbrica fija leyó la forma de tu ADR, no su verdad: puede dar por mencionado algo mal argumentado. Juzgar el argumento te toca a ti. Cuando Dojo ofrezca un sensei, sus notas aparecerán junto al tablero.",
       "closing": "No había una respuesta correcta. Había una mejor argumentada.",
       "readNext": "QUÉ LEER DESPUÉS",
       "editAdr": "Corregir el ADR",

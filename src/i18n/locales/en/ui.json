@@ -122,17 +122,19 @@
         "givenUp": "The option you did not take, and what it would have bought you.",
         "revisit": "A condition someone could notice: a number, a date, an event."
       },
+      "boardLooksFor": "The board looks for:",
+      "rubricNote": "The board is a fixed rubric: it checks the shape of your ADR (keywords, length, a condition), not whether the argument is right.",
       "progress": "{n} of {total} sections drafted",
       "submit": "Send to the review board"
     },
     "review": {
       "kicker": "REVIEW BOARD · REV {letter}",
       "title": "The review board has three questions about Rev {letter}.",
-      "answered": "Answered in your ADR:",
+      "answered": "Your ADR mentions it:",
       "press": "The board would press here:",
       "senseiPending": "The sensei is reading your ADR…",
       "senseiTitle": "The sensei's notes:",
-      "standalone": "A fixed rubric reads your ADR, standalone and in Dojo. When Dojo offers a sensei, its notes appear alongside the board.",
+      "rubricNote": "A fixed rubric read the shape of your ADR, not its truth: it can count a badly argued point as mentioned. Judging the argument is on you. When Dojo offers a sensei, its notes appear alongside the board.",
       "closing": "There was no right answer. There was a better-argued one.",
       "readNext": "WHAT TO READ NEXT",
       "editAdr": "Revise the ADR",
