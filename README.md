@@ -8,7 +8,7 @@
 
 An interactive course on software architecture decision-making, played as a campaign.
 
-You are the architect of **Mercadito**, a marketplace with payments, for three years: from three founders and one database to an 80-engineer regulated fintech. Its system is drawn as a living city on cyanotype blueprint paper. You make a decision, the drawing time-lapses forward, the city grows, and red-pencil revision clouds sketch themselves around what changed. Some consequences arrive late, and a red leader line points back to the revision that caused them. The title block in the corner is your ADR log.
+You are the architect of **Mercadito**, a marketplace with payments, for three and a half years: from three founders and one database to a regulated fintech of nearly 80 engineers. Its system is drawn as a living city on cyanotype blueprint paper. You make a decision, the drawing time-lapses forward, the city grows, and red-pencil revision clouds sketch themselves around what changed. Some consequences arrive late, and a red leader line points back to the revision that caused them. The title block in the corner is your ADR log.
 
 The course never rewards a single correct answer. It rewards knowing which forces matter in which context, and being able to justify, and revisit, a decision.
 
@@ -25,7 +25,7 @@ Eight sheets, one per decision, in English and Spanish (Mexico).
 3. **Choose and write one sentence of why.** Issue the revision.
 4. **Watch the time-lapse.** Buildings rise floor by floor, traffic thickens and reddens where load passes capacity, cracks spread from shared reservoirs, clouds draw around the consequences.
 5. **Hover anything** to read the assumption and the source behind it. Click a building to zoom into its district and open a section drawing of the service.
-6. **Write the ADR** (context, decision, consequences, what you gave up, when to revisit). The review board asks three questions and a deterministic rubric reads it, standalone and inside Dojo. When Dojo offers a sensei, its notes will appear alongside the board, never instead of it.
+6. **Write the ADR** (context, decision, consequences, what you gave up, when to revisit). The review board asks three questions and a deterministic rubric reads it, standalone and inside Dojo. The rubric checks the shape of the argument (keywords, length, a revisit condition), not whether it is right, and says so on screen. When Dojo offers a sensei, its notes will appear alongside the board, never instead of it.
 7. **Rewind** any revision and choose differently: two cities grow side by side, same company, one different decision.
 
 | | |
