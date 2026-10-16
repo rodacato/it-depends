@@ -9,10 +9,8 @@ export function CityCanvas({ frame, camera, reducedMotion, onReady }: { frame: C
   const renderer = useRef<CityRenderer | null>(null);
   const latest = useRef(frame);
   const latestCamera = useRef(camera);
-  latestCamera.current = camera;
   const [failed, setFailed] = useState(false);
   const { t } = useI18n();
-  latest.current = frame;
 
   useEffect(() => {
     let cancelled = false;
@@ -42,10 +40,12 @@ export function CityCanvas({ frame, camera, reducedMotion, onReady }: { frame: C
   }, [reducedMotion]);
 
   useEffect(() => {
+    latest.current = frame;
     renderer.current?.setFrame(frame);
   }, [frame]);
 
   useEffect(() => {
+    latestCamera.current = camera;
     renderer.current?.setCamera(camera);
   }, [camera]);
 
