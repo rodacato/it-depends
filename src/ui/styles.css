@@ -4,6 +4,9 @@
   --line: #f5f7f2;
   --vellum: #edebe3;
   --red: #d2412f;
+  /* Red as text needs its own shade per ground to reach 4.5:1; --red stays for linework. */
+  --red-ink: #b0301f;
+  --red-light: #ff8a75;
   --graphite: #5a5a5a;
   --ground: var(--blue);
   --label: 'Barlow Condensed', 'Arial Narrow', sans-serif;
@@ -210,7 +213,7 @@ button {
 }
 
 .city-labels .red {
-  fill: var(--red);
+  fill: var(--red-light);
 }
 
 .city-labels .lettering {
@@ -233,7 +236,7 @@ button {
 }
 
 .city-labels .delta text {
-  fill: var(--red);
+  fill: var(--red-light);
   font-weight: 600;
 }
 
@@ -259,7 +262,7 @@ button {
 }
 
 .force-strip .red {
-  fill: var(--red);
+  fill: var(--red-light);
 }
 
 .force-strip .gauge {
@@ -362,8 +365,8 @@ button {
 }
 
 .tb-cells .k {
-  font-size: 8px;
-  opacity: 0.65;
+  font-size: 9.5px;
+  opacity: 0.75;
 }
 
 .tb-cells .v {
@@ -431,7 +434,7 @@ button {
 }
 
 .tb-rev .red {
-  color: var(--red);
+  color: var(--red-light);
   font-size: 13px;
   font-weight: 600;
 }
@@ -457,13 +460,13 @@ button {
 }
 
 .vellum .link {
-  font-size: 10.5px;
+  font-size: 12.5px;
   color: var(--blue);
   text-align: left;
 }
 
 .vellum .link.red {
-  color: var(--red);
+  color: var(--red-ink);
 }
 
 .city-labels .proposed text {
@@ -521,7 +524,7 @@ button {
 }
 
 .vellum .kicker {
-  font-size: 10.5px;
+  font-size: 11.5px;
   letter-spacing: 0.08em;
   color: var(--graphite);
   text-transform: uppercase;
@@ -551,15 +554,15 @@ button {
 }
 
 .briefing .voice {
-  font-size: 10px;
-  line-height: 1.4;
+  font-size: 12.5px;
+  line-height: 1.45;
   margin-bottom: 6px;
 }
 
 .vellum p {
   margin: 0 0 8px;
-  font-size: 10.5px;
-  line-height: 1.45;
+  font-size: 13px;
+  line-height: 1.5;
 }
 
 .vellum .voice {
@@ -571,11 +574,11 @@ button {
 }
 
 .vellum .red {
-  color: var(--red);
+  color: var(--red-ink);
 }
 
 .vellum .small {
-  font-size: 9.5px;
+  font-size: 11.5px;
 }
 
 .vellum .actions {
@@ -588,7 +591,7 @@ button {
 
 .vellum .hint {
   margin-right: auto;
-  font-size: 9.5px;
+  font-size: 11.5px;
   color: var(--graphite);
 }
 
@@ -615,12 +618,12 @@ button {
 }
 
 .ink-button.danger {
-  border-color: var(--red);
-  color: var(--red);
+  border-color: var(--red-ink);
+  color: var(--red-ink);
 }
 
 .ink-button.danger:hover {
-  background: var(--red);
+  background: var(--red-ink);
   color: var(--vellum);
 }
 
@@ -640,7 +643,7 @@ button {
   display: grid;
   grid-template-columns: auto 1fr auto 1fr;
   gap: 1px 10px;
-  font-size: 10px;
+  font-size: 12px;
   border-top: 1px solid var(--blue);
   border-bottom: 1px solid var(--blue);
   padding: 5px 0;
@@ -662,7 +665,7 @@ button {
   flex-wrap: wrap;
   align-items: baseline;
   gap: 4px 10px;
-  font-size: 9.5px;
+  font-size: 11.5px;
   color: var(--graphite);
   margin-bottom: 6px;
 }
@@ -673,7 +676,7 @@ button {
   padding: 0 0 1px;
   color: var(--graphite);
   border-bottom: 1px dashed transparent;
-  font-size: 9.5px;
+  font-size: 11.5px;
 }
 
 .variants button.on {
@@ -682,8 +685,8 @@ button {
 }
 
 .variant-note {
-  color: var(--red) !important;
-  font-size: 9.5px !important;
+  color: var(--red-ink) !important;
+  font-size: 11.5px !important;
 }
 
 .briefing .dilemma {
@@ -708,7 +711,8 @@ button {
   background: none;
   border: none;
   border-top: 1px dashed rgba(30, 63, 102, 0.4);
-  padding: 5px 0;
+  /* Room for the "previewing" note, so it never sits on the option's own text. */
+  padding: 5px 0 16px;
   color: var(--blue);
 }
 
@@ -750,8 +754,8 @@ button {
 }
 
 .opt .line {
-  font-size: 9.6px;
-  line-height: 1.38;
+  font-size: 12px;
+  line-height: 1.42;
 }
 
 .opt .line b {
@@ -781,7 +785,7 @@ button {
   right: 0;
   bottom: 3px;
   font-style: italic;
-  font-size: 9.5px;
+  font-size: 11px;
   color: var(--graphite);
 }
 
@@ -829,7 +833,7 @@ label.rationale {
   display: flex;
   gap: 8px;
   align-items: baseline;
-  font-size: 10.5px;
+  font-size: 12.5px;
   color: var(--graphite);
 }
 
@@ -839,7 +843,7 @@ label.rationale input {
   border: none;
   border-bottom: 1px solid var(--blue);
   background: transparent;
-  font: 11px var(--mono);
+  font: 13px var(--mono);
   color: var(--blue);
   padding: 2px 0;
 }
@@ -851,7 +855,7 @@ label.rationale input {
 
 .disagree {
   margin-top: 8px !important;
-  font-size: 9.5px !important;
+  font-size: 11.5px !important;
   color: var(--graphite);
 }
 
@@ -864,14 +868,14 @@ label.rationale input {
 
 .issued blockquote {
   margin: 0 0 8px;
-  font-size: 11px;
+  font-size: 13px;
   line-height: 1.45;
   border-left: 2px solid var(--red);
   padding-left: 10px;
 }
 
 .issued .log .k {
-  font-size: 9px;
+  font-size: 11px;
   letter-spacing: 0.08em;
   color: var(--graphite);
   border-top: 1px solid var(--blue);
@@ -882,7 +886,7 @@ label.rationale input {
   margin: 4px 0 0;
   padding: 0;
   list-style: none;
-  font-size: 10px;
+  font-size: 12px;
   line-height: 1.45;
 }
 
@@ -895,7 +899,7 @@ label.rationale input {
 }
 
 .issued .log .late {
-  color: var(--red);
+  color: var(--red-ink);
 }
 
 .pinned {
@@ -927,12 +931,12 @@ label.rationale input {
 }
 
 .adr-head .status {
-  font-size: 10.5px;
+  font-size: 12px;
   margin-top: 3px;
 }
 
 .adr-head .dim {
-  font-size: 9.5px;
+  font-size: 11px;
   color: var(--graphite);
 }
 
@@ -961,7 +965,7 @@ label.rationale input {
 }
 
 .adr-grid .criterion {
-  font-size: 9.5px;
+  font-size: 11px;
   line-height: 1.35;
   color: var(--graphite);
 }
@@ -978,8 +982,8 @@ label.rationale input {
   resize: none;
   border: none;
   border-bottom: 1px solid var(--blue);
-  background: repeating-linear-gradient(transparent, transparent 17px, rgba(30, 63, 102, 0.15) 17px, rgba(30, 63, 102, 0.15) 18px);
-  font: 11px/18px var(--mono);
+  background: repeating-linear-gradient(transparent, transparent 20px, rgba(30, 63, 102, 0.15) 20px, rgba(30, 63, 102, 0.15) 21px);
+  font: 13px/21px var(--mono);
   color: var(--blue);
   padding: 0;
 }
@@ -1026,7 +1030,7 @@ label.rationale input {
 .review .answered,
 .review .press,
 .review .sensei {
-  font-size: 10px !important;
+  font-size: 12px !important;
   margin-bottom: 3px !important;
 }
 
@@ -1037,7 +1041,7 @@ label.rationale input {
 }
 
 .review .press {
-  color: var(--red);
+  color: var(--red-ink);
 }
 
 .review .closing {
@@ -1047,7 +1051,7 @@ label.rationale input {
 }
 
 .read-next {
-  font-size: 10px;
+  font-size: 12px;
   line-height: 1.45;
   border-top: 1px solid var(--blue);
   padding-top: 6px;
@@ -1075,7 +1079,7 @@ label.rationale input {
   padding: 0;
   columns: 2;
   column-gap: 24px;
-  font-size: 10px;
+  font-size: 12px;
 }
 
 .complete .history li {
@@ -1087,7 +1091,7 @@ label.rationale input {
 }
 
 .complete .history b {
-  color: var(--red);
+  color: var(--red-ink);
   font-size: 13px;
 }
 
@@ -1103,12 +1107,12 @@ label.rationale input {
   border-bottom: 1px solid var(--blue);
   padding: 6px 0;
   margin: 0 0 8px;
-  font-size: 10px;
+  font-size: 12px;
 }
 
 .complete .forces dt {
   color: var(--graphite);
-  font-size: 8.5px;
+  font-size: 10.5px;
 }
 
 .complete .forces dd {
@@ -1135,7 +1139,7 @@ label.rationale input {
 }
 
 .confirm {
-  border-top: 1px solid var(--red);
+  border-top: 1px solid var(--red-ink);
   margin-top: 10px;
   padding-top: 8px;
 }
@@ -1147,7 +1151,7 @@ label.rationale input {
 /* tags */
 
 .tag {
-  width: 340px;
+  width: 400px;
   padding: 12px 14px 10px;
   z-index: 20;
   pointer-events: none;
@@ -1158,7 +1162,7 @@ label.rationale input {
   font-size: 15px;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  color: var(--red);
+  color: var(--red-ink);
 }
 
 .tag ul {
@@ -1173,7 +1177,7 @@ label.rationale input {
 }
 
 .tag .row {
-  font-size: 10px;
+  font-size: 12px;
   color: var(--graphite);
 }
 
@@ -1183,7 +1187,7 @@ label.rationale input {
 }
 
 .tag .row b.worse {
-  color: var(--red);
+  color: var(--red-ink);
 }
 
 .tag .row b.neutral {
@@ -1191,8 +1195,8 @@ label.rationale input {
 }
 
 .tag p {
-  font-size: 10px;
-  line-height: 1.4;
+  font-size: 12px;
+  line-height: 1.45;
   margin: 2px 0 0;
 }
 
@@ -1202,7 +1206,7 @@ label.rationale input {
 
 .tag .src {
   color: var(--graphite);
-  font-size: 9px;
+  font-size: 11px;
 }
 
 /* semantic zoom: section detail */
@@ -1304,7 +1308,7 @@ label.rationale input {
 }
 
 .section-detail .red {
-  fill: var(--red);
+  fill: var(--red-light);
 }
 
 .section-detail .detail-delta path {
@@ -1314,7 +1318,7 @@ label.rationale input {
 }
 
 .section-detail .detail-delta text {
-  fill: var(--red);
+  fill: var(--red-light);
   font-size: 12px;
 }
 
@@ -1493,7 +1497,7 @@ label.rationale input {
 .state-screen.torn h1 {
   font-size: 48px;
   text-transform: uppercase;
-  color: var(--red);
+  color: var(--red-light);
   margin: 0;
 }
 

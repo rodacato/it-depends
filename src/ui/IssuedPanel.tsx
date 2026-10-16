@@ -27,7 +27,7 @@ export function IssuedPanel({ campaign, chapter, optionId, rationale, letter, mo
   const clouds = scene.clouds.length;
   return (
     <>
-      <Vellum x={1004} y={58} w={398} rotate={-1.3} className="issued" label={t('ui.issued.kicker', { letter, months })} testId="issued">
+      <Vellum x={924} y={58} w={478} rotate={-1.3} className="issued" label={t('ui.issued.kicker', { letter, months })} testId="issued">
         <div className="kicker mono">{t('ui.issued.kicker', { letter, months })}</div>
         <h2 className="lbl">{t(`chapters.${chapter.id}.options.${optionId}.title`)}</h2>
         <blockquote className="mono">“{t('ui.briefing.because')} {rationale}”</blockquote>

@@ -35,8 +35,8 @@ interface Props {
 export function AssumptionTag({ x, y, title, effects, empty, hint, testId }: Props) {
   const i18n = useI18n();
   const { t } = i18n;
-  const left = Math.min(Math.max(48, x), 1440 - 360);
-  const top = Math.min(Math.max(48, y), 900 - 60 - Math.min(5, effects.length) * 70);
+  const left = Math.min(Math.max(48, x), 1440 - 420);
+  const top = Math.min(Math.max(48, y), 900 - 60 - Math.min(5, effects.length) * 80);
   return (
     <motion.aside
       className="vellum tag"

@@ -24,7 +24,7 @@ export function ForceStrip({ forces, from, preview, hovered, onHover }: Props) {
   const { t } = useI18n();
   return (
     <svg className="force-strip" viewBox="0 0 1440 900" width={1440} height={900}>
-      <text x={X0} y={Y0 - 22} className="mono dim" fontSize={8.5}>
+      <text x={X0} y={Y0 - 22} className="mono dim" fontSize={10}>
         {t('ui.forces.caption')}
       </text>
       {FORCE_IDS.map((f, i) => {
@@ -48,11 +48,11 @@ export function ForceStrip({ forces, from, preview, hovered, onHover }: Props) {
             onBlur={() => onHover(null)}
           >
             <rect x={x - 6} y={Y0 - 12} width={W + 12} height={56} className="hit" />
-            <text x={x} y={Y0} className="mono" fontSize={9.5} letterSpacing="0.06em">
+            <text x={x} y={Y0} className="mono" fontSize={10.5} letterSpacing="0.04em">
               {t(`ui.forces.${f}`)}
             </text>
             {delta !== null && Math.round(delta) !== 0 && (
-              <text x={x + W} y={Y0} textAnchor="end" className="mono red" fontSize={9.5}>
+              <text x={x + W} y={Y0} textAnchor="end" className="mono red" fontSize={11}>
                 {delta > 0 ? '+' : ''}
                 {Math.round(delta)}
               </text>
@@ -71,7 +71,7 @@ export function ForceStrip({ forces, from, preview, hovered, onHover }: Props) {
             )}
             {ghost !== undefined && <path d={`M${x + (W * ghost) / 100},${Y0 + 22} l-4.5,8 h9 z`} className="preview" />}
             <path d={`M${vx},${Y0 + 22} l-4.5,8 h9 z`} className="solid" />
-            <text x={vx} y={Y0 + 9} textAnchor="middle" className="mono" fontSize={9}>
+            <text x={vx} y={Y0 + 9} textAnchor="middle" className="mono" fontSize={10.5}>
               {Math.round(v)}
             </text>
           </g>

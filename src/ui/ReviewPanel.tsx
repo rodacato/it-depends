@@ -23,7 +23,7 @@ export function ReviewPanel({ chapter, letter, results, sensei, hasNext, onNext,
   const base = `chapters.${chapter.id}`;
   const met = new Set(results.filter((r) => r.met).map((r) => r.criterionId));
   return (
-    <Vellum x={760} y={50} w={644} rotate={-1} className="review" label={t('ui.review.title', { letter })} testId="review" from="top">
+    <Vellum x={680} y={50} w={724} rotate={-1} className="review" label={t('ui.review.title', { letter })} testId="review" from="top">
       <div className="kicker mono">{t('ui.review.kicker', { letter })}</div>
       <h2 className="lbl">{t('ui.review.title', { letter })}</h2>
       <ol className="questions">
