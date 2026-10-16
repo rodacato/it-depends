@@ -101,6 +101,7 @@ export interface SlotOrder {
   // Service and module pads, and reservoirs, per district, in order of first appearance.
   pads: Record<string, string[]>;
   basins: Record<string, string[]>;
+  depots: Record<string, string[]>;
 }
 
 const push = (list: string[], id: string) => {
@@ -113,12 +114,13 @@ function addTopology(order: SlotOrder, topology: Topology): void {
     if (c.kind === 'vendor') push(order.vendors, c.id);
     else if (c.kind === 'service' || c.kind === 'module') push((order.pads[c.district ?? ''] ??= []), c.id);
     else if (c.kind === 'database') push((order.basins[c.district ?? ''] ??= []), c.id);
+    else if (c.kind === 'queue') push((order.depots[c.district ?? ''] ??= []), c.id);
   }
 }
 
 // Slots follow first appearance across a whole run, so nothing moves when something else is added or removed.
 export function slotOrder(topologies: readonly Topology[]): SlotOrder {
-  const order: SlotOrder = { districts: [], vendors: [], pads: {}, basins: {} };
+  const order: SlotOrder = { districts: [], vendors: [], pads: {}, basins: {}, depots: {} };
   for (const t of topologies) addTopology(order, t);
   return order;
 }
@@ -129,6 +131,7 @@ export function extendOrder(order: SlotOrder, topology: Topology): SlotOrder {
     vendors: [...order.vendors],
     pads: Object.fromEntries(Object.entries(order.pads).map(([k, v]) => [k, [...v]])),
     basins: Object.fromEntries(Object.entries(order.basins).map(([k, v]) => [k, [...v]])),
+    depots: Object.fromEntries(Object.entries(order.depots).map(([k, v]) => [k, [...v]])),
   };
   addTopology(next, topology);
   return next;
@@ -196,15 +199,17 @@ export function layoutCity(
       model.anchors[c.id] = [footprint.x, footprint.y + footprint.h + 16];
     } else if (c.kind === 'database') {
       const k = full.basins[district]?.indexOf(c.id) ?? 0;
-      const rx = Math.min(64, d.w * 0.19);
-      const cx = d.x + d.w * (0.28 + 0.44 * (k % 2));
+      const n = Math.max(2, full.basins[district]?.length ?? 1);
+      const rx = Math.min(64, d.w / (2 * n) - 10);
+      const cx = d.x + (d.w / n) * (k + 0.5);
       const cy = d.y + d.h - 66;
       const level = Math.max(0.12, 1 - Math.max(0, stress - 0.4) * 0.9);
       model.reservoirs.push({ id: c.id, cx, cy, rx, ry: 20, level });
       model.bounds[c.id] = { x: cx - rx, y: cy - 20, w: rx * 2, h: 40 + 26 };
       model.anchors[c.id] = [cx - rx, cy + 36];
     } else {
-      const rect = { x: d.x + 24, y: d.y + 34, w: 64, h: 14 };
+      const k = full.depots[district]?.indexOf(c.id) ?? 0;
+      const rect = { x: d.x + 24 + (k % 2) * 150, y: d.y + 34, w: 64, h: 14 };
       model.depots.push({ id: c.id, rect });
       model.bounds[c.id] = { x: rect.x, y: rect.y, w: rect.w, h: rect.h + 22 };
       model.anchors[c.id] = [rect.x + rect.w + 10, rect.y + 11];

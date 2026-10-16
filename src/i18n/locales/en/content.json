@@ -114,7 +114,15 @@
     "debtQuadrant": "Reckless or prudent, deliberate or inadvertent: not all technical debt is the same.",
     "cunningham": "The original debt metaphor: shipping early is fine if you pay it back by refactoring.",
     "pciDss": "The card industry's security standard: what changes when you store, process or transmit card data.",
-    "model": "Our own estimates. They show the direction and rough size of an effect, never a measurement."
+    "model": "Our own estimates. They show the direction and rough size of an effect, never a measurement.",
+    "accelerate": "Delivery performance research: small batches, loose coupling and fast feedback predict outcomes.",
+    "microservicePremium": "Microservices carry a cost premium that only pays off past a certain complexity.",
+    "richardson": "Sagas, database per service and the patterns that replace distributed transactions.",
+    "helland": "Why systems at scale give up distributed transactions and design for uncertainty instead.",
+    "wardley": "Map components by evolution: build what differentiates you, buy what has become a commodity.",
+    "feathers": "Legacy code is code without tests; seams are where you change it safely.",
+    "strangler": "Replace a system gradually by growing the new one around the old until it can be removed.",
+    "sre": "Error budgets, toil and reliability as a feature with a cost."
   },
   "terms": {
     "context": "team, engineer, founder, people, orders, traffic, runway, cash, money, launch, deadline, week, month, regulation, scale",

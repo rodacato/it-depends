@@ -114,7 +114,15 @@
     "debtQuadrant": "Imprudente o prudente, deliberada o accidental: no toda la deuda técnica es igual.",
     "cunningham": "La metáfora original de la deuda: entregar pronto está bien si la pagas refactorizando.",
     "pciDss": "El estándar de seguridad de la industria de tarjetas: qué cambia cuando guardas, procesas o transmites datos de tarjeta.",
-    "model": "Nuestras propias estimaciones. Muestran la dirección y el tamaño aproximado de un efecto, nunca una medición."
+    "model": "Nuestras propias estimaciones. Muestran la dirección y el tamaño aproximado de un efecto, nunca una medición.",
+    "accelerate": "Investigación sobre desempeño de entrega: lotes pequeños, acoplamiento bajo y retroalimentación rápida predicen resultados.",
+    "microservicePremium": "Los microservicios cargan un sobrecosto que solo se paga pasado cierto nivel de complejidad.",
+    "richardson": "Sagas, base de datos por servicio y los patrones que reemplazan a las transacciones distribuidas.",
+    "helland": "Por qué los sistemas a escala renuncian a las transacciones distribuidas y diseñan para la incertidumbre.",
+    "wardley": "Ubica componentes por evolución: construye lo que te diferencia, compra lo que ya es commodity.",
+    "feathers": "El código legado es código sin pruebas; las costuras son donde lo cambias con seguridad.",
+    "strangler": "Reemplaza un sistema poco a poco haciendo crecer el nuevo alrededor del viejo hasta poder quitarlo.",
+    "sre": "Presupuestos de error, trabajo repetitivo y la confiabilidad como una funcionalidad con costo."
   },
   "terms": {
     "context": "equipo, ingenier, fundador, persona, gente, pedidos, tráfico, runway, dinero, efectivo, lanzamiento, fecha, semana, mes, regulación, escala",
