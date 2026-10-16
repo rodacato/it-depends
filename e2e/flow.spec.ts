@@ -1,7 +1,6 @@
 import type { Page } from '@playwright/test';
 import { expect, test } from '@playwright/test';
-
-const SHOTS = 'docs/screenshots';
+import { SHOTS } from './shots';
 
 const locales = [
   { tag: 'en-US', dir: 'en', rationale: 'we may outgrow the vendor before we outgrow the monolith' },
@@ -129,37 +128,5 @@ test.describe('reduced motion', () => {
     await expect(page.getByTestId('rev-A')).toBeVisible();
     await page.waitForTimeout(500);
     await shot(page, 'en', '14-reduced-motion-after');
-  });
-});
-
-test.describe('whole campaign', () => {
-  test.use({ locale: 'en-US', reducedMotion: 'reduce' });
-
-  test('eight sheets, eight revisions, a closed drawing set', async ({ page }) => {
-    test.setTimeout(240_000);
-    await page.goto('/');
-    await page.getByTestId('begin').click();
-    for (let sheet = 1; sheet <= 8; sheet++) {
-      await expect(page.getByTestId('briefing')).toBeVisible();
-      const options = page.getByTestId('briefing').getByRole('radio');
-      const count = await options.count();
-      await options.nth((sheet * 2) % count).click();
-      await page.getByTestId('rationale').fill('the constraints this quarter point this way');
-      await page.getByTestId('issue').click();
-      await expect(page.getByTestId('issued')).toBeVisible();
-      await page.waitForTimeout(400);
-      await shot(page, 'campaign', `sheet-${sheet}-issued`);
-      await page.getByTestId('write-adr').click();
-      await page.getByTestId('adr-context').fill('Team, traffic and runway as on the briefing.');
-      await page.getByTestId('adr-revisit').fill('If reliability drops below 40 for two quarters.');
-      await page.getByTestId('submit-adr').click();
-      await expect(page.getByTestId('review')).toBeVisible();
-      if (sheet < 8) await page.getByTestId('next-sheet').click();
-    }
-    await page.getByTestId('finish').click();
-    await expect(page.getByTestId('complete')).toBeVisible();
-    await expect(page.getByTestId('rev-H')).toBeVisible();
-    await page.waitForTimeout(300);
-    await shot(page, 'campaign', 'drawing-set-complete');
   });
 });

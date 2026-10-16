@@ -34,7 +34,5 @@ jobs:
         if: always()
         with:
           name: e2e-screenshots
-          path: |
-            docs/screenshots
-            test-results
+          path: test-results
           retention-days: 7

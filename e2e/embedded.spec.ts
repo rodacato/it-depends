@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { SHOTS } from './shots';
 
 // Another origin than the course's localhost; a public hostname would be blocked from framing localhost.
 const HOST = 'http://127.0.0.1:4392';
@@ -57,5 +58,5 @@ test('embedded in a Dojo-like host: handshake, host locale, progress and complet
 
   await page.evaluate(() => (window as unknown as { setLocale: (l: string) => void }).setLocale('en'));
   await expect(app.getByText('The review board has three questions about Rev A.')).toBeVisible();
-  await page.screenshot({ path: 'docs/screenshots/en/16-embedded-in-host.png' });
+  await page.screenshot({ path: `${SHOTS}/en/16-embedded-in-host.png` });
 });
