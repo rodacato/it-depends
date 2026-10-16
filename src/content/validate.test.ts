@@ -32,6 +32,20 @@ describe('content validation', () => {
     expect(checkCampaign(campaign, locales).join('\n')).toMatch(/portCostsAWeek.*es-MX/);
   });
 
+  it('a scheduled event that would fire before its own chapter decides fails', () => {
+    const raw = clone(readRawContent());
+    const finale = raw.chapters.find((c) => (c as { id: string }).id === 'finale') as { quarter: number; events: { trigger: { quarter: number } }[] };
+    finale.events[0]!.trigger.quarter = finale.quarter;
+    expect(checkCampaign(parseCampaign(raw), readLocales()).join('\n')).toMatch(/series-b: scheduled at quarter 11/);
+  });
+
+  it('an onlyIf that no reachable site can satisfy fails', () => {
+    const raw = clone(readRawContent());
+    const first = raw.chapters[0] as { dilemma: { options: { effects: Record<string, unknown>[] }[] } };
+    first.dilemma.options[0]!.effects[0]!.onlyIf = { has: 'ledger-db' };
+    expect(checkCampaign(parseCampaign(raw), readLocales()).join('\n')).toMatch(/onlyIf.has ledger-db is never on the site/);
+  });
+
   it('an unknown source id fails', () => {
     const raw = clone(readRawContent());
     const ch = raw.chapters[0] as { dilemma: { options: { effects: { sources: string[] }[] }[] } };
