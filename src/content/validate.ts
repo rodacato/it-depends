@@ -104,6 +104,9 @@ export function checkCampaign(campaign: Campaign, locales: LocaleBundle[]): stri
     reachable = [...next.values()];
     for (const ev of ch.events) {
       requireText(`${base}.events.${ev.id}`, where);
+      if (ev.trigger.kind === 'scheduled' && ev.trigger.quarter <= ch.quarter) {
+        problems.push(`${where} event ${ev.id}: scheduled at quarter ${ev.trigger.quarter}, but it cannot fire before the chapter's decision (quarter ${ch.quarter + 1})`);
+      }
       for (const e of ev.effects) checkEffect(e, `${where} event ${ev.id}`);
     }
     for (const ins of ch.inspections) requireText(`${base}.inspections.${ins.id}`, where);

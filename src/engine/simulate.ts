@@ -309,9 +309,11 @@ function applyDueEffects(state: MutableState, applied: AppliedEffect[], step: nu
   for (const p of due) applyOptionEffect(state, applied, p.effect, p.origin, 'delayed', quarter);
 }
 
+// An event never fires before its own chapter's decision, or that decision's conditionals could never react to it.
 function fireEvents(campaign: Campaign, state: MutableState, applied: AppliedEffect[], incidents: Incident[], quarter: number): void {
-  for (const event of campaign.chapters.flatMap((ch) => ch.events)) {
-    if (state.firedEvents.has(event.id)) continue;
+  const owned = campaign.chapters.flatMap((ch) => ch.events.map((event) => ({ event, earliest: ch.quarter + 1 })));
+  for (const { event, earliest } of owned) {
+    if (state.firedEvents.has(event.id) || quarter < earliest) continue;
     const t = event.trigger;
     const fires = t.kind === 'scheduled' ? t.quarter === quarter : thresholdMet(state, t.on, t.op, t.value);
     if (!fires) continue;
