@@ -53,9 +53,9 @@
           "costs": "A week of plan and checks now, and a whole quarter of repayment that ships nothing visible."
         },
         "shortcut-no-plan": {
-          "title": "Take the shortcut; clean it up later",
-          "optimizes": "Colombia on the date, slightly faster, with no ceremony.",
-          "costs": "Interest on every change after, and 'later' has no date."
+          "title": "Take the shortcut and pay the debt when it hurts",
+          "optimizes": "Colombia on the date, without spending a week planning to repay a debt that may never be worth repaying.",
+          "costs": "Interest on every change after, and nobody decides when it hurts enough."
         },
         "generalize-first": {
           "title": "Generalize the checkout first, launch a quarter late",

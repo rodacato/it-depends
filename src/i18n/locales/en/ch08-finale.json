@@ -12,7 +12,7 @@
       "voice": "Sixty-odd engineers, one licence, and a regulator who reads ADRs for fun.",
       "briefing": "Q4, Year 3. Mercadito is licensed and supervised, and the regulator now wants payments operated by a unit that is accountable and auditable, with names on it. The board wants a plan by the next meeting, and the Series B closes the quarter after. Every option below is defensible in some company; your job is to say why it is the right one in this one.",
       "dilemma": "Who operates the money from now on, and what will you show the regulator to prove it?",
-      "disagreement": "Experts split three ways here. Platform people say accountability needs a team boundary and its own data, so carve it out now. Evolutionary architects say big moves under scrutiny are how incidents happen, so strangle it with fitness functions. SRE people say the regulator wants evidence, not diagrams, so freeze and measure. And Wardley would ask why you are building a commodity at all. Each is right in some quarter of some company.",
+      "disagreement": "Experts split three ways here. Platform people say accountability needs a team boundary and its own data, so carve it out now. Evolutionary architects say big moves under scrutiny are how incidents happen, so strangle it with fitness functions. SRE people say the regulator wants evidence, not diagrams, so let the error budget set the pace and measure. And Wardley would ask why you are building a commodity at all. Each is right in some quarter of some company.",
       "readNext": "A closing shelf for the whole drawing set: Nygard for the ADR you just wrote; Richards and Ford, then The Hard Parts, for trade-off analysis; Team Topologies for the team you may have just created; Building Evolutionary Architectures for the fitness functions that keep any of this honest; the SRE book for error budgets; Wardley for what to build and what to buy; and back to the one-way door letter where it started.",
       "options": {
         "platform-team": {
@@ -26,9 +26,9 @@
           "costs": "The regulator gets a roadmap, not a unit. Two code paths for a while, and the payoff arrives after the board meeting."
         },
         "reliability-freeze": {
-          "title": "Freeze architecture changes for two quarters; invest in SRE and evidence",
+          "title": "Gate architecture changes on the error budget; invest in SRE and evidence",
           "optimizes": "SLOs, error budgets and incident history: the evidence a supervisor actually asks for.",
-          "costs": "Two quarters with no structural change and few features. The ownership question is postponed, not answered."
+          "costs": "While the budget is spent, little structural change and few features get in. The ownership question is postponed, not answered."
         },
         "buy-platform": {
           "title": "Buy a licensed payments platform and become its customer",
@@ -72,12 +72,12 @@
       "strangleStillEveryones": "Until the extraction finishes, the payment logic still in the monolith (refunds, disputes, charging rules) belongs to every team that touches it, and all of them need to understand it.",
       "strangleSeamsPay": "Once the seams are in place and guarded, the monolith loses its most entangled module and complexity drops measurably.",
       "strangleOpenFinding": "A regulator's requirement with only a roadmap behind it reads as an open finding in diligence, and the terms reflect it.",
-      "freezeStopsFeatures": "Two quarters of no structural change and a reliability focus leave little capacity for the roadmap the board approved.",
+      "freezeStopsFeatures": "With the error budget spent at the start, structural changes wait and the reliability focus leaves little capacity for the roadmap the board approved.",
       "freezeErrorBudgets": "SLOs with error budgets, runbooks and blameless reviews reduce incident frequency within a quarter of being enforced.",
       "freezeSreHires": "A small SRE group and the observability tooling it needs are a real line in the budget.",
-      "freezeQuietHeads": "With no migrations in flight, engineers carry fewer moving parts and context switches drop.",
-      "freezeStructureUnchanged": "Features keep landing in the same shared structure, so the accidental complexity the freeze does not touch keeps accumulating.",
-      "freezeBigBatch": "Changes deferred by a freeze ship afterwards in larger batches, and larger batches fail more often.",
+      "freezeQuietHeads": "With no migrations in flight during the pause, engineers carry fewer moving parts and context switches drop.",
+      "freezeStructureUnchanged": "Features keep landing in the same shared structure, so the accidental complexity the pause does not touch keeps accumulating.",
+      "freezeBigBatch": "Changes deferred while the budget is spent ship afterwards in larger batches, and larger batches fail more often.",
       "freezeEvidenceDiligence": "A year of SLO reports and incident reviews answers diligence questions quickly, which helps the round a little.",
       "buyBorrowedLicence": "A licensed platform brings mature controls, certifications and incident history that would take years to build in house.",
       "buyLessToCarry": "Operating an integration is much less to know than operating a ledger, a card flow and their compliance.",

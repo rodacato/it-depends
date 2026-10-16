@@ -25,7 +25,7 @@
         },
         "microservices": {
           "title": "Microservicios: pedidos, catálogo y notificaciones, todo de una vez",
-          "optimizes": "Cada equipo con su propio desplegable, algún día.",
+          "optimizes": "Cada equipo con su propio desplegable, y fronteras que nadie se salta por accidente.",
           "costs": "Cuatro sistemas para doce personas, la prima de los microservicios pagada por adelantado y una baja de confiabilidad mientras todos aprenden."
         }
       },

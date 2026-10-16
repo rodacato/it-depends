@@ -158,8 +158,8 @@
       "options": {
         "hosted-checkout": {
           "title": "Hosted checkout, wired into the monolith",
-          "optimizes": "Launch in two weeks; trivially undone.",
-          "costs": "A fee on every order; their checkout page, not yours."
+          "optimizes": "Launch in two weeks, with card data kept off your servers.",
+          "costs": "A fee on every order; their checkout page, not yours; and leaving later means migrating customers and contracts."
         },
         "payments-port": {
           "title": "A payments module behind a port",
@@ -168,7 +168,7 @@
         },
         "own-service": {
           "title": "Own payments-service and ledger",
-          "optimizes": "Control and margin, eventually.",
+          "optimizes": "Control of the payment flow and the margin, and a ledger of your own from day one.",
           "costs": "The whole six weeks; card data in scope. A one-way door."
         }
       },

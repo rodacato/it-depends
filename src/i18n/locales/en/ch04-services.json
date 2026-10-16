@@ -25,7 +25,7 @@
         },
         "microservices": {
           "title": "Microservices: orders, catalog and notifications, all at once",
-          "optimizes": "Every team its own deployable, eventually.",
+          "optimizes": "Every team its own deployable, and boundaries nobody crosses by accident.",
           "costs": "Four systems for twelve people, the microservice premium paid up front, and a reliability dip while everyone learns."
         }
       },

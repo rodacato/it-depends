@@ -53,9 +53,9 @@
           "costs": "Una semana de plan y checks ahora, y un trimestre entero de pago que no entrega nada visible."
         },
         "shortcut-no-plan": {
-          "title": "Tomar el atajo; ya lo limpiamos después",
-          "optimizes": "Colombia en la fecha, un poco más rápido y sin ceremonias.",
-          "costs": "Intereses en cada cambio posterior, y el 'después' no tiene fecha."
+          "title": "Tomar el atajo y pagar la deuda cuando duela",
+          "optimizes": "Colombia en la fecha, sin gastar una semana planeando el pago de una deuda que quizá nunca convenga pagar.",
+          "costs": "Intereses en cada cambio posterior, y nadie decide cuándo duele lo suficiente."
         },
         "generalize-first": {
           "title": "Generalizar el checkout primero, lanzar un trimestre tarde",
