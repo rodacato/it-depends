@@ -22,6 +22,7 @@
     "validate:content": "tsx scripts/validate-content.ts",
     "check:i18n": "tsx scripts/check-i18n.ts",
     "e2e": "playwright test",
+    "e2e:smoke": "playwright test --grep @smoke",
     "build:manifest": "tsx scripts/build-manifest.ts"
   },
   "dependencies": {
