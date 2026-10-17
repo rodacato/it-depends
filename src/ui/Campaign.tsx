@@ -127,10 +127,14 @@ export function Campaign({ bridge, session, progress, setProgress, setLocale, da
     setProgress((p) => ({ ...p, started: true, current: { chapterId, phase: next } }));
   }
 
+  function reportStarted(chapterId: string) {
+    if (!progress.completed.includes(chapterId)) bridge.unitStarted(chapterId);
+  }
+
   function begin() {
     const target = progress.current?.chapterId ?? chapters[0]!.id;
     const resumed = progress.current?.phase ?? 'briefing';
-    if (!progress.completed.includes(target)) bridge.unitStarted(target);
+    reportStarted(target);
     if (resumed === 'adr') {
       const optionId = progress.decisions.find((d) => d.chapterId === target)?.optionId;
       setAdrDraft(progress.adrs[target] ?? prefilledAdr(target, optionId, progress.rationales[target]));
@@ -191,7 +195,7 @@ export function Campaign({ bridge, session, progress, setProgress, setLocale, da
     setSelected(null);
     setDraft('');
     setSensei(null);
-    bridge.unitStarted(next.id);
+    reportStarted(next.id);
     goPhase('briefing', next.id);
   }
 

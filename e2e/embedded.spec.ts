@@ -61,7 +61,7 @@ test('embedded in a Dojo-like host: handshake, host locale, progress and complet
   await page.screenshot({ path: `${SHOTS}/en/16-embedded-in-host.png` });
 });
 
-test('continuing on a sheet the host has as completed does not report it incomplete', async ({ page, baseURL }) => {
+test('continuing on, or moving on to, a sheet the host has as completed does not report it incomplete', async ({ page, baseURL }) => {
   const adr = { context: 'c', decision: 'd', consequences: 'x', givenUp: 'g', revisit: 'r' };
   const decided = {
     reversibility: 'hosted-checkout',
@@ -82,6 +82,26 @@ test('continuing on a sheet the host has as completed does not report it incompl
   await app.getByTestId('begin').click();
   await expect(app.getByTestId('review')).toBeVisible();
 
-  const messages = await page.evaluate(() => (window as unknown as { received: Record<string, unknown>[] }).received);
-  expect(messages).not.toContainEqual(expect.objectContaining({ type: 'progress', unitId: 'finale', completed: false }));
+  await app.getByTestId('rev-B').click();
+  await app.getByTestId('rewind').locator('[data-testid^="alt-"]').first().click();
+  await app.getByTestId('alt-rationale').fill('the other door looked cheaper in hindsight');
+  await app.getByTestId('compare').click();
+  await app.getByTestId('adopt').click();
+  await app.getByTestId('adr-context').fill('Team, traffic and runway as on the briefing.');
+  await app.getByTestId('submit-adr').click();
+  await app.getByTestId('next-sheet').click();
+  await app.getByTestId('briefing').getByRole('radio').first().click();
+  await app.getByTestId('rationale').fill('the constraints this quarter point this way');
+  await app.getByTestId('issue').click();
+  await app.getByTestId('write-adr').click();
+  await app.getByTestId('adr-context').fill('Team, traffic and runway as on the briefing.');
+  await app.getByTestId('submit-adr').click();
+
+  // Messages arrive in order, so once this sheet's completion is in, any earlier start report is too.
+  const read = () => page.evaluate(() => (window as unknown as { received: Record<string, unknown>[] }).received);
+  await expect.poll(async () => (await read()).some((m) => m.type === 'complete' && m.unitId === 'technology')).toBe(true);
+  const messages = await read();
+  for (const unitId of ['finale', 'technology']) {
+    expect(messages).not.toContainEqual(expect.objectContaining({ type: 'progress', unitId, completed: false }));
+  }
 });
