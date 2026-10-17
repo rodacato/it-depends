@@ -33,6 +33,15 @@ async function adoptFirstAlternate(page: Page) {
   await page.getByTestId('adopt').click();
 }
 
+test('adopting an alternate opens the ADR with the new decision filled in', async ({ page }) => {
+  await page.goto('/?walkthrough=off');
+  await page.getByTestId('begin').click();
+  await playSheet(page);
+  await page.getByTestId('restore').click();
+  await adoptFirstAlternate(page);
+  await expect(page.getByTestId('adr-decision')).toHaveValue(/the other door looked cheaper in hindsight$/);
+});
+
 test('a new campaign after finishing shows the first review, not the closed drawing set', async ({ page }) => {
   test.setTimeout(180_000);
   await finishCampaign(page);
