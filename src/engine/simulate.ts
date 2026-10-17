@@ -133,7 +133,7 @@ function stressOf(component: Component, context: Context, capacityScale: number)
 export function computeLoads(topology: Topology, context: Context, capacityScale = 1): Record<string, ComponentLoad> {
   const loads: Record<string, ComponentLoad> = {};
   for (const c of topology.components) {
-    loads[c.id] = { load: Math.round(context.ordersPerDay * c.loadShare), stress: roundTo(stressOf(c, context, capacityScale), 2) };
+    loads[c.id] = { load: Math.round(context.ordersPerDay * c.loadShare), stress: stressOf(c, context, capacityScale) };
   }
   return loads;
 }
