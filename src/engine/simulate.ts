@@ -353,6 +353,7 @@ function fireEvents(campaign: Campaign, state: MutableState, applied: AppliedEff
 
 function detectCongestion(campaign: Campaign, state: MutableState, applied: AppliedEffect[], incidents: Incident[], quarter: number): void {
   const rule = campaign.company.congestion;
+  for (const id of state.congested) if (!state.topology.components.some((c) => c.id === id)) state.congested.delete(id);
   for (const c of state.topology.components) {
     const stress = stressOf(c, state.context, state.capacityScale);
     if (stress >= 1 && !state.congested.has(c.id)) {
