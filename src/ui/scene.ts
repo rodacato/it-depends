@@ -53,6 +53,11 @@ export function buildScene(timeline: Timeline, window: ChapterWindow, order: Slo
 
   const fromThisRevision = (id: string) =>
     changes.byAnchor[id]!.some((e) => e.origin.kind === 'option' && e.origin.revision === letter && (e.timing === 'immediate' || e.timing === 'delayed'));
+  const revisionOf = (id: string) => {
+    if (changes.byAnchor[id] && fromThisRevision(id)) return letter;
+    const revisions = (changes.byAnchor[id] ?? []).flatMap((e) => (e.origin.kind === 'option' ? [e.origin.revision] : []));
+    return revisions.at(-1) ?? letter;
+  };
   const priority = [
     ...changes.added,
     ...Object.keys(changes.byAnchor).filter(fromThisRevision),
@@ -63,7 +68,8 @@ export function buildScene(timeline: Timeline, window: ChapterWindow, order: Slo
     if (clouds.some((c) => c.componentId === id) || clouds.length >= MAX_CLOUDS) continue;
     const rect = final.bounds[id];
     if (!rect) continue;
-    clouds.push({ id: `cloud-${letter}-${id}`, componentId: id, rect, letter });
+    const revision = revisionOf(id);
+    clouds.push({ id: `cloud-${revision}-${id}`, componentId: id, rect, letter: revision });
   }
 
   const late = delayedConsequences(timeline, window.start, window.end);
