@@ -192,6 +192,8 @@ export function Campaign({ bridge, session, progress, setProgress, setLocale, da
     setRewind(null);
     setSelected(null);
     setDraft('');
+    setFinished(false);
+    setSensei(null);
     setOpened(false);
     setProgress((p) => ({ ...freshProgress(p.locale), started: false, walkthroughSeen: p.walkthroughSeen }));
   }
@@ -213,6 +215,7 @@ export function Campaign({ bridge, session, progress, setProgress, setLocale, da
     }));
     setAdrDraft(emptyAdr());
     setRewind(null);
+    setFinished(false);
   }
 
   const showGuide = guideRequested || (phase === 'briefing' && !rewind && !progress.walkthroughSeen && !guideOff);
