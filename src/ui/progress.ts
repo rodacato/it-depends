@@ -62,11 +62,16 @@ const UnitStateSchema = z.object({
 });
 
 // Embedded, the host's record of earlier visits wins: rebuild decisions, rationales and ADRs from unit states.
-export function restoreFromHost(local: Progress, host: Record<string, { completed: boolean; state?: unknown }>, chapterIds: readonly string[]): Progress {
-  const restored = chapterIds.flatMap((id) => {
+export function restoreFromHost(
+  local: Progress,
+  host: Record<string, { completed: boolean; state?: unknown }>,
+  chapters: readonly { id: string; options: readonly string[] }[],
+): Progress {
+  const chapterIds = chapters.map((c) => c.id);
+  const restored = chapters.flatMap(({ id, options }) => {
     const unit = host[id];
     const state = UnitStateSchema.safeParse(unit?.state);
-    return unit && state.success ? [{ id, completed: unit.completed, ...state.data }] : [];
+    return unit && state.success && options.includes(state.data.optionId) ? [{ id, completed: unit.completed, ...state.data }] : [];
   });
   if (!restored.length) return local;
   const done = restored.filter((r) => r.completed).map((r) => r.id);
