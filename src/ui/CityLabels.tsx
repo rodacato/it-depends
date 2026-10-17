@@ -28,6 +28,7 @@ export function CityLabels({ preview, base, target, growth, clouds, cloudProgres
   const role = (id: string, kind: string) => clip(has(`components.${id}.role`) ? t(`components.${id}.role`) : t(`kinds.${kind}`));
   const isNew = (id: string) => !(id in base.bounds);
   const shown = (id: string) => !isNew(id) || growth > 0.45;
+  const isNewDistrict = (id: string) => !base.districts.some((d) => d.id === id);
 
   return (
     <svg className="city-labels" viewBox={`0 0 ${SHEET.w} ${SHEET.h}`} width={SHEET.w} height={SHEET.h}>
@@ -45,7 +46,7 @@ export function CityLabels({ preview, base, target, growth, clouds, cloudProgres
         {t('ui.city.publicRoad')}
       </text>
       {target.districts.map((d) => (
-        <text key={d.id} x={d.rect.x + 12} y={d.rect.y + 18} className={`lbl spaced dim ${isNew(d.id) && growth < 0.4 ? 'lettering' : ''}`} fontSize={12}>
+        <text key={d.id} x={d.rect.x + 12} y={d.rect.y + 18} className={`lbl spaced dim ${isNewDistrict(d.id) && growth < 0.4 ? 'lettering' : ''}`} fontSize={12}>
           {t('ui.city.district', { name: has(`districts.${d.id}`) ? t(`districts.${d.id}`) : d.id })}
         </text>
       ))}
