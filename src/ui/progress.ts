@@ -68,11 +68,14 @@ export function restoreFromHost(
   chapters: readonly { id: string; options: readonly string[] }[],
 ): Progress {
   const chapterIds = chapters.map((c) => c.id);
-  const restored = chapters.flatMap(({ id, options }) => {
+  // Each sheet is drawn on the site the earlier ones built, so restoring stops at the first sheet that cannot be.
+  const restored = [];
+  for (const { id, options } of chapters) {
     const unit = host[id];
     const state = UnitStateSchema.safeParse(unit?.state);
-    return unit && state.success && options.includes(state.data.optionId) ? [{ id, completed: unit.completed, ...state.data }] : [];
-  });
+    if (!unit || !state.success || !options.includes(state.data.optionId)) break;
+    restored.push({ id, completed: unit.completed, ...state.data });
+  }
   if (!restored.length) return local;
   const done = restored.filter((r) => r.completed).map((r) => r.id);
   const next = chapterIds.find((id) => !done.includes(id));

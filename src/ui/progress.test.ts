@@ -21,16 +21,18 @@ describe('progress', () => {
     expect(restoreFromHost(local, { reversibility: { completed: true, state: { nope: 1 } } }, chapters)).toBe(local);
   });
 
-  it('ignores a decision for an option the chapter no longer has', () => {
+  it('stops restoring at a decision for an option the chapter no longer has', () => {
     const p = restoreFromHost(
       freshProgress(),
       {
         reversibility: { completed: true, state: { optionId: 'payments-port', adr } },
         complexity: { completed: true, state: { optionId: 'retired-option', adr } },
+        technology: { completed: true, state: { optionId: 'postgres-fts', adr } },
       },
       chapters,
     );
     expect(p.decisions).toEqual([{ chapterId: 'reversibility', optionId: 'payments-port' }]);
+    expect(p.completed).toEqual(['reversibility']);
     expect(p.current).toEqual({ chapterId: 'complexity', phase: 'briefing' });
   });
 
