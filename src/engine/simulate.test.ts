@@ -124,6 +124,26 @@ describe('topology', () => {
   });
 });
 
+describe('congestion', () => {
+  function quietCampaign() {
+    const c = structuredClone(campaign);
+    c.company.drifts = [];
+    c.company.demandNoise.amount = 0;
+    c.chapters.forEach((ch) => (ch.events = []));
+    const component = c.company.initialTopology.components[0]!;
+    component.loadShare = 1;
+    return { c, component };
+  }
+  const congestions = (t: ReturnType<typeof simulate>, q: number) => t.snapshots[q]!.incidents.filter((i) => i.kind === 'congestion');
+
+  it('a component just under capacity is not congested', () => {
+    const { c, component } = quietCampaign();
+    component.capacity = 700;
+    c.company.initialContext.ordersPerDay = 697;
+    expect(congestions(simulate(c, [], { seed: 1, untilQuarter: 1 }), 1)).toEqual([]);
+  });
+});
+
 describe('forces and forecasts', () => {
   it('forces stay within 0-100', () => {
     for (const option of ch1.dilemma.options) {
