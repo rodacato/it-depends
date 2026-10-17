@@ -147,10 +147,13 @@ export function Campaign({ bridge, session, progress, setProgress, setLocale, da
     setVariant(null);
   }
 
+  function prefilledAdr(chapterId: string, optionId: string | undefined, rationale: string | undefined): Adr {
+    const optionTitle = optionId ? t(`chapters.${chapterId}.options.${optionId}.title`) : '';
+    return { ...emptyAdr(), decision: `${optionTitle}. ${rationale ?? ''}`.trim() };
+  }
+
   function openAdr() {
-    const saved = progress.adrs[chapter.id];
-    const optionTitle = decision ? t(`chapters.${chapter.id}.options.${decision.optionId}.title`) : '';
-    setAdrDraft(saved ?? { ...emptyAdr(), decision: `${optionTitle}. ${progress.rationales[chapter.id] ?? ''}`.trim() });
+    setAdrDraft(progress.adrs[chapter.id] ?? prefilledAdr(chapter.id, decision?.optionId, progress.rationales[chapter.id]));
     goPhase('adr');
   }
 
@@ -213,7 +216,7 @@ export function Campaign({ bridge, session, progress, setProgress, setLocale, da
       completed: p.completed.filter((c) => c !== chapterId),
       current: { chapterId, phase: 'adr' },
     }));
-    setAdrDraft(emptyAdr());
+    setAdrDraft(prefilledAdr(chapterId, optionId, rationale.trim()));
     setRewind(null);
     setFinished(false);
   }
