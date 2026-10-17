@@ -1,5 +1,5 @@
 import { createRng, deriveSeed } from './rng';
-import type { Campaign, Chapter, Context, Decision, Effect, EffectTarget, Forces, Topology } from './schema';
+import type { Campaign, Chapter, Component, Context, Decision, Effect, EffectTarget, Forces, Topology } from './schema';
 import { FORCE_IDS } from './schema';
 import { applyTopologyChanges, cloneTopology } from './topology';
 
@@ -126,11 +126,14 @@ function deltaFor(effect: Effect, variantId: string | undefined): number {
   return (variantId ? effect.byVariant?.[variantId] : undefined) ?? effect.delta;
 }
 
+function stressOf(component: Component, context: Context, capacityScale: number): number {
+  return (context.ordersPerDay * component.loadShare) / (component.capacity * capacityScale);
+}
+
 export function computeLoads(topology: Topology, context: Context, capacityScale = 1): Record<string, ComponentLoad> {
   const loads: Record<string, ComponentLoad> = {};
   for (const c of topology.components) {
-    const load = context.ordersPerDay * c.loadShare;
-    loads[c.id] = { load: Math.round(load), stress: roundTo(load / (c.capacity * capacityScale), 2) };
+    loads[c.id] = { load: Math.round(context.ordersPerDay * c.loadShare), stress: roundTo(stressOf(c, context, capacityScale), 2) };
   }
   return loads;
 }
@@ -349,10 +352,9 @@ function fireEvents(campaign: Campaign, state: MutableState, applied: AppliedEff
 }
 
 function detectCongestion(campaign: Campaign, state: MutableState, applied: AppliedEffect[], incidents: Incident[], quarter: number): void {
-  const loads = computeLoads(state.topology, state.context, state.capacityScale);
   const rule = campaign.company.congestion;
   for (const c of state.topology.components) {
-    const stress = loads[c.id]?.stress ?? 0;
+    const stress = stressOf(c, state.context, state.capacityScale);
     if (stress >= 1 && !state.congested.has(c.id)) {
       state.congested.add(c.id);
       incidents.push({ id: `congestion-${c.id}-${quarter}`, kind: 'congestion', quarter, anchor: c.id });
