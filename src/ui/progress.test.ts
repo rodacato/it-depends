@@ -1,7 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import { freshProgress, loadProgress, restoreFromHost } from './progress';
 
-const chapters = ['reversibility', 'complexity', 'technology'];
+const chapters = [
+  { id: 'reversibility', options: ['payments-port', 'hosted-checkout'] },
+  { id: 'complexity', options: ['pricing-engine'] },
+  { id: 'technology', options: ['postgres-fts'] },
+];
 const adr = { context: 'c', decision: 'd', consequences: 'x', givenUp: 'g', revisit: 'r' };
 
 describe('progress', () => {
@@ -15,6 +19,19 @@ describe('progress', () => {
   it('ignores unit states it does not recognise', () => {
     const local = freshProgress();
     expect(restoreFromHost(local, { reversibility: { completed: true, state: { nope: 1 } } }, chapters)).toBe(local);
+  });
+
+  it('ignores a decision for an option the chapter no longer has', () => {
+    const p = restoreFromHost(
+      freshProgress(),
+      {
+        reversibility: { completed: true, state: { optionId: 'payments-port', adr } },
+        complexity: { completed: true, state: { optionId: 'retired-option', adr } },
+      },
+      chapters,
+    );
+    expect(p.decisions).toEqual([{ chapterId: 'reversibility', optionId: 'payments-port' }]);
+    expect(p.current).toEqual({ chapterId: 'complexity', phase: 'briefing' });
   });
 
   it('loads a save from before the guide existed without calling it damaged', () => {

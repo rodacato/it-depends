@@ -9,7 +9,9 @@ import type { Progress } from './progress';
 import { loadProgress, restoreFromHost, safeStorage, saveProgress } from './progress';
 import { campaign } from '../content';
 
-type Boot = { status: 'loading' } | { status: 'ready'; bridge: HostBridge; session: HostSession };
+const hostChapters = campaign.chapters.map((c) => ({ id: c.id, options: c.dilemma.options.map((o) => o.id) }));
+
+type Boot ={ status: 'loading' } | { status: 'ready'; bridge: HostBridge; session: HostSession };
 
 export function App() {
   const [boot, setBoot] = useState<Boot>({ status: 'loading' });
@@ -20,7 +22,7 @@ export function App() {
     connectHost().then(({ bridge, session }) => {
       if (session.locale && LOCALES.length) setLocaleState(detectLocale([session.locale]));
       if (session.mode === 'embedded') {
-        setLoaded((prev) => ({ ...prev, progress: restoreFromHost(prev.progress, session.progress, campaign.chapters.map((c) => c.id)) }));
+        setLoaded((prev) => ({ ...prev, progress: restoreFromHost(prev.progress, session.progress, hostChapters) }));
       }
       setBoot({ status: 'ready', bridge, session });
     });
