@@ -130,7 +130,7 @@ export function Campaign({ bridge, session, progress, setProgress, setLocale, da
   function begin() {
     const target = progress.current?.chapterId ?? chapters[0]!.id;
     const resumed = progress.current?.phase ?? 'briefing';
-    bridge.unitStarted(target);
+    if (!progress.completed.includes(target)) bridge.unitStarted(target);
     if (resumed === 'adr') {
       const optionId = progress.decisions.find((d) => d.chapterId === target)?.optionId;
       setAdrDraft(progress.adrs[target] ?? prefilledAdr(target, optionId, progress.rationales[target]));
