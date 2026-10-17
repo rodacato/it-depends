@@ -140,7 +140,9 @@ describe('congestion', () => {
     const { c, component } = quietCampaign();
     component.capacity = 700;
     c.company.initialContext.ordersPerDay = 697;
-    expect(congestions(simulate(c, [], { seed: 1, untilQuarter: 1 }), 1)).toEqual([]);
+    const t = simulate(c, [], { seed: 1, untilQuarter: 1 });
+    expect(congestions(t, 1)).toEqual([]);
+    expect(t.snapshots[1]!.loads[component.id]!.stress).toBeLessThan(1);
   });
 
   it('a component removed while congested raises a new incident when it comes back overloaded', () => {
