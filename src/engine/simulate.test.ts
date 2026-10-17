@@ -142,6 +142,20 @@ describe('congestion', () => {
     c.company.initialContext.ordersPerDay = 697;
     expect(congestions(simulate(c, [], { seed: 1, untilQuarter: 1 }), 1)).toEqual([]);
   });
+
+  it('a component removed while congested raises a new incident when it comes back overloaded', () => {
+    const { c, component } = quietCampaign();
+    component.capacity = 1000;
+    c.company.initialContext.ordersPerDay = 2000;
+    const [first, second] = c.chapters;
+    first!.quarter = 1;
+    second!.quarter = 2;
+    first!.dilemma.options[0]!.topology = [{ op: 'removeComponent', id: component.id }];
+    second!.dilemma.options[0]!.topology = [{ op: 'addComponent', component: structuredClone(component) }];
+    const decisions = [first!, second!].map((ch) => ({ chapterId: ch.id, optionId: ch.dilemma.options[0]!.id }));
+    const t = simulate(c, decisions, { seed: 1, untilQuarter: 4 });
+    expect(t.snapshots.slice(2).some((s) => congestions(t, s.quarter).some((i) => i.anchor === component.id))).toBe(true);
+  });
 });
 
 describe('forces and forecasts', () => {
