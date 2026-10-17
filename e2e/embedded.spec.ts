@@ -5,7 +5,7 @@ import { SHOTS } from './shots';
 const HOST = 'http://127.0.0.1:4392';
 
 // A stand-in for Dojo: frames the course on another origin and speaks scroll protocol v0 back to it.
-function hostPage(courseUrl: string): string {
+function hostPage(courseUrl: string, progress: Record<string, unknown> = {}): string {
   return `<!doctype html><html><body style="margin:0;background:#111">
 <iframe id="scroll" src="${courseUrl}" style="width:1440px;height:900px;border:0"></iframe>
 <script>
@@ -17,7 +17,7 @@ function hostPage(courseUrl: string): string {
     window.received.push(e.data);
     if (e.data && e.data.type === 'hello') {
       frame.contentWindow.postMessage({ dojo: 'scroll', v: 0, type: 'init', nonce: e.data.nonce, session: 'sess-1',
-        locale: 'es-MX', theme: {}, progress: {}, capabilities: ['progress'], userRef: 'u-1', authenticated: true }, courseOrigin);
+        locale: 'es-MX', theme: {}, progress: ${JSON.stringify(progress)}, capabilities: ['progress'], userRef: 'u-1', authenticated: true }, courseOrigin);
     }
   });
   window.setLocale = (locale) => frame.contentWindow.postMessage({ dojo: 'scroll', v: 0, type: 'setLocale', session: 'sess-1', locale }, courseOrigin);
@@ -59,4 +59,29 @@ test('embedded in a Dojo-like host: handshake, host locale, progress and complet
   await page.evaluate(() => (window as unknown as { setLocale: (l: string) => void }).setLocale('en'));
   await expect(app.getByText('The review board has three questions about Rev A.')).toBeVisible();
   await page.screenshot({ path: `${SHOTS}/en/16-embedded-in-host.png` });
+});
+
+test('continuing on a sheet the host has as completed does not report it incomplete', async ({ page, baseURL }) => {
+  const adr = { context: 'c', decision: 'd', consequences: 'x', givenUp: 'g', revisit: 'r' };
+  const decided = {
+    reversibility: 'hosted-checkout',
+    complexity: 'pricing-engine',
+    technology: 'postgres-fts',
+    services: 'modular-monolith',
+    data: 'scale-the-reservoir',
+    'build-vs-buy': 'build-risk',
+    'tech-debt': 'shortcut-with-plan',
+    finale: 'platform-team',
+  };
+  const progress = Object.fromEntries(Object.entries(decided).map(([id, optionId]) => [id, { completed: true, state: { optionId, adr } }]));
+  const course = `${baseURL}/?host=${encodeURIComponent(HOST)}&walkthrough=off`;
+  await page.route(`${HOST}/host.html`, (route) => route.fulfill({ contentType: 'text/html', body: hostPage(course, progress) }));
+  await page.goto(`${HOST}/host.html`);
+  const app = page.frameLocator('#scroll');
+
+  await app.getByTestId('begin').click();
+  await expect(app.getByTestId('review')).toBeVisible();
+
+  const messages = await page.evaluate(() => (window as unknown as { received: Record<string, unknown>[] }).received);
+  expect(messages).not.toContainEqual(expect.objectContaining({ type: 'progress', unitId: 'finale', completed: false }));
 });
