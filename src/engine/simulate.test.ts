@@ -65,7 +65,7 @@ describe('effect timing', () => {
 
   it('a threshold event never fires before its own chapter decides, whatever the seed', () => {
     const data = campaign.chapters.find((c) => c.id === 'data')!;
-    // The last option of every chapter grows demand fastest, which once fired reservoir-dry a quarter early.
+    // The last option of every chapter grows demand fastest: the path most likely to reach the threshold early.
     const decisions = campaign.chapters.map((c) => ({ chapterId: c.id, optionId: c.dilemma.options.at(-1)!.id }));
     for (let seed = 0; seed < 300; seed++) {
       const t = simulate(campaign, decisions, { seed });

@@ -52,7 +52,7 @@ The build writes `dist/` with relative paths (it works from any GitHub Pages pat
 | `npm run lint` | ESLint; the engine may not import DOM or UI | every push and PR |
 | `npm run validate:content` | schema, sources, assumptions, every option valid on every reachable site | every push and PR, and before every build |
 | `npm run check:i18n` | missing, extra, empty or placeholder-mismatched keys | every push and PR |
-| `npm test` | Vitest: engine (including all 8,748 decision paths), rubric, layout, bridge, manifest | every push and PR |
+| `npm test` | Vitest: engine (including every decision path), rubric, layout, bridge, manifest | every push and PR |
 | `npm run build` | the full build plus the manifest | every push and PR |
 | `npm run e2e:smoke` | one Playwright test: the course embedded in a Dojo-like host | every PR |
 | `npm run e2e` | everything: the main flow in English and Spanish, reduced motion, the section drawing, the embedded host, and four walks through all eight sheets that between them play every option, in both languages and at 1280×720, failing on any console or page error | nightly and on demand |
