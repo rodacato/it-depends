@@ -46,6 +46,13 @@ describe('content validation', () => {
     expect(checkCampaign(parseCampaign(raw), readLocales()).join('\n')).toMatch(/onlyIf.has ledger-db is never on the site/);
   });
 
+  it('an onlyIf.lacks naming a component the campaign never has fails', () => {
+    const raw = clone(readRawContent());
+    const first = raw.chapters[0] as { dilemma: { options: { effects: Record<string, unknown>[] }[] } };
+    first.dilemma.options[0]!.effects[0]!.onlyIf = { lacks: 'ledger-dbs' };
+    expect(checkCampaign(parseCampaign(raw), readLocales()).join('\n')).toMatch(/onlyIf.lacks ledger-dbs is not a component in this campaign/);
+  });
+
   it('an unknown source id fails', () => {
     const raw = clone(readRawContent());
     const ch = raw.chapters[0] as { dilemma: { options: { effects: { sources: string[] }[] }[] } };
