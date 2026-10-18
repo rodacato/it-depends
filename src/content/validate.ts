@@ -60,6 +60,11 @@ export function checkCampaign(campaign: Campaign, locales: LocaleBundle[]): stri
   checkEffect({ id: 'demand-noise', ...company.demandNoise }, 'company');
   checkEffect({ id: 'congestion', ...company.congestion }, 'company');
 
+  const componentIds = new Set([
+    ...company.initialTopology.components.map((c) => c.id),
+    ...campaign.chapters.flatMap((ch) => ch.dilemma.options.flatMap((o) => o.topology.flatMap((t) => (t.op === 'addComponent' ? [t.component.id] : [])))),
+  ]);
+
   // Every chapter must work whatever was chosen before it, so walk every reachable site.
   let reachable: Topology[] = [company.initialTopology];
   let previousEnd = 0;
@@ -88,6 +93,7 @@ export function checkCampaign(campaign: Campaign, locales: LocaleBundle[]): stri
         const builtSomewhere = (id: string) => reachable.some((t) => t.components.some((c) => c.id === id));
         const builtEverywhere = (id: string) => reachable.every((t) => t.components.some((c) => c.id === id));
         if (has && !builtSomewhere(has)) problems.push(`${ow} effect ${e.id}: onlyIf.has ${has} is never on the site, so it never applies`);
+        if (lacks && !componentIds.has(lacks)) problems.push(`${ow} effect ${e.id}: onlyIf.lacks ${lacks} is not a component in this campaign, so it always applies`);
         if (lacks && builtEverywhere(lacks)) problems.push(`${ow} effect ${e.id}: onlyIf.lacks ${lacks} is always on the site, so it never applies`);
       }
       for (const topology of reachable) {
