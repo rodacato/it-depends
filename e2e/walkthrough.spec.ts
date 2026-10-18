@@ -28,6 +28,22 @@ test('the guide shows once on the first sheet, stays gone after a reload, and GU
   await expect(page.getByTestId('walkthrough')).toBeHidden();
 });
 
+test('Tab stays inside the guide', async ({ page }) => {
+  await page.goto('/?walkthrough=off');
+  await page.getByTestId('begin').click();
+  await page.getByTestId('help').click();
+  await page.getByTestId('walkthrough-next').click();
+  const focusInGuide = page.getByTestId('walkthrough').locator(':focus');
+  for (let i = 0; i < 4; i++) {
+    await page.keyboard.press('Tab');
+    await expect(focusInGuide).toHaveCount(1);
+  }
+  for (let i = 0; i < 4; i++) {
+    await page.keyboard.press('Shift+Tab');
+    await expect(focusInGuide).toHaveCount(1);
+  }
+});
+
 test('?walkthrough=off keeps the guide away, but GUIDE still opens it', async ({ page }) => {
   await page.goto('/?walkthrough=off');
   await page.getByTestId('begin').click();

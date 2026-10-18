@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useI18n } from './i18n';
 import { TITLE_BLOCK } from './scene';
 
@@ -31,9 +31,16 @@ export function Walkthrough({ onDone }: Props) {
   const last = i === STEPS.length - 1;
   const next = () => (last ? onDone() : setI(i + 1));
 
+  const note = useRef<HTMLElement>(null);
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onDone();
+      if (e.key !== 'Tab' || !note.current) return;
+      const buttons = [...note.current.querySelectorAll('button')];
+      const at = buttons.indexOf(document.activeElement as HTMLButtonElement);
+      const to = at === -1 ? 0 : (at + (e.shiftKey ? -1 : 1) + buttons.length) % buttons.length;
+      e.preventDefault();
+      buttons[to]?.focus();
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
@@ -46,7 +53,7 @@ export function Walkthrough({ onDone }: Props) {
         <path d={`M0,0 H1440 V900 H0 Z M${x},${y} v${h} h${w} v${-h} Z`} fillRule="evenodd" />
         <rect x={x} y={y} width={w} height={h} className="ring" />
       </svg>
-      <section className="vellum walkthrough-note" style={{ left: step.note.x, top: step.note.y }} role="dialog" aria-modal="true" aria-labelledby="walkthrough-title">
+      <section ref={note} className="vellum walkthrough-note" style={{ left: step.note.x, top: step.note.y }} role="dialog" aria-modal="true" aria-labelledby="walkthrough-title">
         <div className="kicker mono">{t('ui.walkthrough.kicker', { n: i + 1, total: STEPS.length })}</div>
         <h2 className="lbl" id="walkthrough-title">
           {t(`ui.walkthrough.steps.${step.id}.title`)}
