@@ -133,11 +133,10 @@
     "review": {
       "kicker": "COMITÉ DE REVISIÓN · REV {letter}",
       "title": "El comité de revisión tiene tres preguntas sobre la Rev {letter}.",
-      "answered": "Tu ADR lo menciona:",
-      "press": "Aquí el comité insistiría:",
+      "press": "Falta:",
       "senseiPending": "El sensei está leyendo tu ADR…",
       "senseiTitle": "Notas del sensei:",
-      "rubricNote": "Una rúbrica fija leyó la forma de tu ADR, no su verdad: puede dar por mencionado algo mal argumentado. Juzgar el argumento te toca a ti. Cuando Dojo ofrezca un sensei, sus notas aparecerán junto al tablero.",
+      "rubricNote": "Una rúbrica fija revisó la forma de tu ADR, no si el argumento se sostiene. Eso lo juzgas tú.",
       "closing": "No había una respuesta correcta. Había una mejor argumentada.",
       "readNext": "QUÉ LEER DESPUÉS",
       "editAdr": "Corregir el ADR",

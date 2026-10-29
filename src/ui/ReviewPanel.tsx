@@ -1,5 +1,5 @@
-import type { CriterionResult } from '../engine/rubric';
-import type { Chapter } from '../engine/schema';
+import type { Adr, CriterionResult } from '../engine/rubric';
+import type { AdrField, Chapter } from '../engine/schema';
 import type { AdrEvaluation } from '../host/HostBridge';
 import { sourceById } from '../content';
 import { useI18n } from './i18n';
@@ -8,6 +8,7 @@ import { Vellum } from './Vellum';
 interface Props {
   chapter: Chapter;
   letter: string;
+  adr: Adr;
   results: CriterionResult[];
   sensei: AdrEvaluation | null | 'pending';
   hasNext: boolean;
@@ -17,29 +18,32 @@ interface Props {
   onEditAdr: () => void;
 }
 
-// No verdict, no score: the board says what the ADR already answers and where it would push.
-export function ReviewPanel({ chapter, letter, results, sensei, hasNext, onNext, onFinish, onRestore, onEditAdr }: Props) {
+// No verdict, no score: the board quotes what the ADR says to each question and names only what is missing.
+export function ReviewPanel({ chapter, letter, adr, results, sensei, hasNext, onNext, onFinish, onRestore, onEditAdr }: Props) {
   const { t } = useI18n();
   const base = `chapters.${chapter.id}`;
   const met = new Set(results.filter((r) => r.met).map((r) => r.criterionId));
+  const fieldOf = new Map(chapter.rubric.map((c) => [c.id, c.field]));
   return (
     <Vellum x={680} y={50} w={724} rotate={-1} className="review" label={t('ui.review.title', { letter })} testId="review" from="top">
       <div className="kicker mono">{t('ui.review.kicker', { letter })}</div>
       <h2 className="lbl">{t('ui.review.title', { letter })}</h2>
       <ol className="questions">
         {chapter.review.questions.map((q, i) => {
-          const answered = q.criteria.filter((c) => met.has(c));
+          const fields = [...new Set(q.criteria.map((c) => fieldOf.get(c)).filter((f): f is AdrField => !!f))];
           const open = q.criteria.filter((c) => !met.has(c));
           const comment = sensei && sensei !== 'pending' ? sensei.questions.find((x) => x.id === q.id)?.comment : undefined;
           return (
             <li key={q.id} data-testid={`question-${q.id}`}>
               <span className="num lbl">{i + 1}</span>
               <p className="lbl q">{t(`${base}.review.${q.id}`)}</p>
-              {answered.map((c) => (
-                <p key={c} className="mono answered">
-                  <b>{t('ui.review.answered')}</b> {t(`${base}.rubric.${c}`)}
-                </p>
-              ))}
+              {fields
+                .filter((f) => adr[f].trim())
+                .map((f) => (
+                  <p key={f} className="mono quote" data-testid={`quote-${f}`}>
+                    <b>{t(`ui.adr.fields.${f}`)}:</b> “{adr[f].trim()}”
+                  </p>
+                ))}
               {open.map((c) => (
                 <p key={c} className="mono press">
                   <b>{t('ui.review.press')}</b> {t(`${base}.rubric.${c}`)}

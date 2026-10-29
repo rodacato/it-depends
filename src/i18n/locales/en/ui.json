@@ -133,11 +133,10 @@
     "review": {
       "kicker": "REVIEW BOARD · REV {letter}",
       "title": "The review board has three questions about Rev {letter}.",
-      "answered": "Your ADR mentions it:",
-      "press": "The board would press here:",
+      "press": "Missing:",
       "senseiPending": "The sensei is reading your ADR…",
       "senseiTitle": "The sensei's notes:",
-      "rubricNote": "A fixed rubric read the shape of your ADR, not its truth: it can count a badly argued point as mentioned. Judging the argument is on you. When Dojo offers a sensei, its notes appear alongside the board.",
+      "rubricNote": "A fixed rubric checked your ADR's shape, not whether the argument holds. That call is yours.",
       "closing": "There was no right answer. There was a better-argued one.",
       "readNext": "WHAT TO READ NEXT",
       "editAdr": "Revise the ADR",
