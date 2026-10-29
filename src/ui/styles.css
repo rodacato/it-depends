@@ -623,6 +623,12 @@ button {
   align-items: center;
   gap: 16px;
   margin-top: 10px;
+  /* The next step stays in view when the panel's text scrolls. */
+  position: sticky;
+  bottom: 0;
+  z-index: 1;
+  padding: 8px 0 2px;
+  background: rgb(237, 235, 227);
 }
 
 .vellum .hint {
