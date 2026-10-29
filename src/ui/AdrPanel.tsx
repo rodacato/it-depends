@@ -55,7 +55,6 @@ export function AdrPanel({ chapter, number, title, letter, quarterLabel, adr, on
             </label>
           ))}
         </div>
-        <p className="mono dim small rubric-note">{t('ui.adr.rubricNote')}</p>
         <div className="actions">
           <span className="mono hint">{t('ui.adr.progress', { n: filled, total: ADR_FIELDS.length })}</span>
           <button type="submit" className="ink-button lbl" disabled={filled < 2} data-testid="submit-adr">
