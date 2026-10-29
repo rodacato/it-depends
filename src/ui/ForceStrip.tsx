@@ -1,5 +1,6 @@
 import type { ForceId, Forces } from '../engine/schema';
 import { FORCE_IDS } from '../engine/schema';
+import { toneMark } from './AssumptionTag';
 import { useI18n } from './i18n';
 
 const X0 = 64;
@@ -34,6 +35,7 @@ export function ForceStrip({ forces, from, preview, hovered, onHover }: Props) {
         const prev = from?.[f];
         const ghost = preview?.[f];
         const delta = prev === undefined ? null : v - prev;
+        const mark = delta === null ? null : toneMark(f, delta);
         return (
           <g
             key={f}
@@ -47,14 +49,13 @@ export function ForceStrip({ forces, from, preview, hovered, onHover }: Props) {
             onFocus={() => onHover(f)}
             onBlur={() => onHover(null)}
           >
-            <rect x={x - 6} y={Y0 - 12} width={W + 12} height={56} className="hit" />
-            <text x={x} y={Y0} className="mono" fontSize={10.5} letterSpacing="0.04em">
+            <rect x={x - 6} y={Y0 - 15} width={W + 12} height={59} className="hit" />
+            <text x={x} y={Y0 - 3} className="mono" fontSize={10.5} letterSpacing="0.04em">
               {t(`ui.forces.${f}`)}
             </text>
-            {delta !== null && Math.round(delta) !== 0 && (
-              <text x={x + W} y={Y0} textAnchor="end" className="mono red" fontSize={11}>
-                {delta > 0 ? '+' : ''}
-                {Math.round(delta)}
+            {mark && mark.tone !== 'neutral' && (
+              <text x={x + W} y={Y0 - 3} textAnchor="end" className={`mono delta ${mark.tone}`} fontSize={11}>
+                {mark.text}
               </text>
             )}
             <line x1={x} y1={Y0 + 20} x2={x + W} y2={Y0 + 20} className="rule" />
@@ -64,23 +65,32 @@ export function ForceStrip({ forces, from, preview, hovered, onHover }: Props) {
             {prev !== undefined && (
               <>
                 <path d={`M${x + (W * prev) / 100},${Y0 + 22} l-4,7 h8 z`} className="ghost" />
-                {Math.round(delta ?? 0) !== 0 && (
-                  <line x1={x + (W * prev) / 100} y1={Y0 + 36} x2={vx} y2={Y0 + 36} className="delta-line" markerEnd="url(#gauge-arrow)" />
+                {mark && mark.tone !== 'neutral' && (
+                  <line
+                    x1={x + (W * prev) / 100}
+                    y1={Y0 + 36}
+                    x2={vx}
+                    y2={Y0 + 36}
+                    className={`delta-line ${mark.tone}`}
+                    markerEnd={`url(#gauge-arrow-${mark.tone})`}
+                  />
                 )}
               </>
             )}
             {ghost !== undefined && <path d={`M${x + (W * ghost) / 100},${Y0 + 22} l-4.5,8 h9 z`} className="preview" />}
             <path d={`M${vx},${Y0 + 22} l-4.5,8 h9 z`} className="solid" />
-            <text x={vx} y={Y0 + 9} textAnchor="middle" className="mono" fontSize={10.5}>
+            <text x={vx} y={Y0 + 14} textAnchor="middle" className="mono" fontSize={10.5}>
               {Math.round(v)}
             </text>
           </g>
         );
       })}
       <defs>
-        <marker id="gauge-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-          <path d="M0,1 L10,5 L0,9" fill="none" stroke="var(--red)" strokeWidth="1.6" />
-        </marker>
+        {(['better', 'worse'] as const).map((tone) => (
+          <marker key={tone} id={`gauge-arrow-${tone}`} viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0,1 L10,5 L0,9" fill="none" stroke={tone === 'worse' ? 'var(--red)' : 'var(--line)'} strokeWidth="1.6" />
+          </marker>
+        ))}
       </defs>
     </svg>
   );

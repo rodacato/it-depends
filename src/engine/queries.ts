@@ -50,6 +50,35 @@ export function traceForce(timeline: Timeline, from: number, to: number, force: 
   return appliedBetween(timeline, from, to).filter((e) => 'force' in e.target && e.target.force === force && e.delta !== 0);
 }
 
+export interface ForceOutcome {
+  force: ForceId;
+  total: number;
+  // Moved by the player's own revisions, this one or earlier ones arriving late.
+  decisions: number;
+  // Moved by growth, events, demand noise and congestion.
+  world: number;
+  // The single largest move, so the sheet can say why in one line.
+  cause: AppliedEffect;
+}
+
+export function forceOutcomes(timeline: Timeline, from: number, to: number): ForceOutcome[] {
+  const applied = appliedBetween(timeline, from, to);
+  const out: ForceOutcome[] = [];
+  for (const force of FORCE_IDS) {
+    const moves = applied.filter((e) => 'force' in e.target && e.target.force === force && e.delta !== 0);
+    const cause = moves.reduce<AppliedEffect | undefined>((top, e) => (!top || Math.abs(e.delta) > Math.abs(top.delta) ? e : top), undefined);
+    if (!cause) continue;
+    const decisions = roundTenth(moves.filter((e) => e.origin.kind === 'option').reduce((s, e) => s + e.delta, 0));
+    const world = roundTenth(moves.filter((e) => e.origin.kind !== 'option').reduce((s, e) => s + e.delta, 0));
+    out.push({ force, total: roundTenth(decisions + world), decisions, world, cause });
+  }
+  return out.sort((a, b) => Math.abs(b.total) - Math.abs(a.total));
+}
+
+function roundTenth(n: number): number {
+  return Math.round(n * 10) / 10;
+}
+
 export interface ChangeSet {
   added: string[];
   removed: string[];

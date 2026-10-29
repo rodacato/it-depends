@@ -307,8 +307,17 @@ button {
 }
 
 .force-strip .delta-line {
-  stroke: var(--red);
+  stroke: var(--line);
   stroke-width: 1.4;
+}
+
+/* Red only means worse; better stays in the drawing's own white ink. */
+.force-strip .delta-line.worse {
+  stroke: var(--red);
+}
+
+.force-strip .delta.worse {
+  fill: var(--red-light);
 }
 
 /* ---------- title block ---------- */
@@ -916,6 +925,49 @@ label.rationale input {
   padding-left: 10px;
 }
 
+.issued .outcomes ul {
+  margin: 4px 0 8px;
+  padding: 0;
+  list-style: none;
+}
+
+.issued .outcomes li {
+  padding: 3px 0;
+}
+
+.issued .outcomes .row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 12px;
+}
+
+.issued .outcomes b {
+  font-weight: 600;
+  color: var(--blue);
+}
+
+.issued .outcomes b.worse {
+  color: var(--red-ink);
+}
+
+.issued .outcomes .by {
+  color: var(--graphite);
+  white-space: nowrap;
+}
+
+.issued .outcomes .by b {
+  font-weight: 500;
+}
+
+.issued .outcomes .why {
+  margin: 1px 0 0;
+  font-size: 11.5px;
+  line-height: 1.4;
+  color: var(--graphite);
+}
+
+.issued .outcomes .k,
 .issued .log .k {
   font-size: 11px;
   letter-spacing: 0.08em;

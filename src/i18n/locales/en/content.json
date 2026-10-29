@@ -76,7 +76,7 @@
     "reversibility": {
       "hostedShipsFast": "A hosted checkout is days of integration, not weeks. Easy to undo: you can always build your own later.",
       "hostedRunsHardPart": "The vendor runs card storage, fraud checks and compliance, which are hard to get right with three people.",
-      "hostedUxCeiling": "Their checkout page, their flow. Every UX change becomes a support ticket to someone else.",
+      "hostedUxCeiling": "Every checkout UX change becomes a support ticket to the vendor: their page, their flow.",
       "hostedFeeScales": "The fee is a percentage of every order. It is cheap at 40 orders a day and noticeable at 400.",
       "hostedOutageIsYours": "When the vendor's checkout goes down, nobody can pay, and there is no fallback to switch to.",
       "portCostsAWeek": "A port with one adapter costs about one engineer-week before launch, out of six.",

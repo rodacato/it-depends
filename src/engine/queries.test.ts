@@ -1,5 +1,40 @@
 import { describe, expect, it } from 'vitest';
-import { deltaTone } from './queries';
+import { campaign } from '../test/campaign';
+import { chapterWindow, deltaTone, forceOutcomes, snapshotAt } from './queries';
+import { simulate } from './simulate';
+
+describe('forceOutcomes', () => {
+  const chapter = campaign.chapters[0]!;
+  const { start, end } = chapterWindow(chapter);
+  const timeline = simulate(campaign, [{ chapterId: chapter.id, optionId: 'hosted-checkout' }], { seed: 7, untilQuarter: end });
+  const outcomes = forceOutcomes(timeline, start, end);
+
+  it('adds up to what the gauges show', () => {
+    const before = snapshotAt(timeline, start).forces;
+    const after = snapshotAt(timeline, end).forces;
+    for (const o of outcomes) expect(o.total).toBeCloseTo(after[o.force] - before[o.force], 1);
+  });
+
+  it('splits what the decision moved from what the world moved', () => {
+    // The fee is the decision's; the processor outage's refunds are the world's.
+    const cost = outcomes.find((o) => o.force === 'cost')!;
+    expect(cost.decisions).toBeGreaterThan(0);
+    expect(cost.world).toBeGreaterThan(0);
+    expect(cost.decisions + cost.world).toBeCloseTo(cost.total, 1);
+  });
+
+  it('names the largest single move as the cause', () => {
+    for (const o of outcomes) {
+      const target = o.cause.target;
+      expect('force' in target && target.force).toBe(o.force);
+    }
+  });
+
+  it('leaves out forces nothing moved', () => {
+    const quiet = forceOutcomes(timeline, start, start);
+    expect(quiet).toEqual([]);
+  });
+});
 
 describe('deltaTone', () => {
   it('reads a drop in cost, complexity or cognitive load as better', () => {

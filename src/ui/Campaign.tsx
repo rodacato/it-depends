@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from 'react';
 import type { CityModel } from '../city/layout';
 import { extendOrder, layoutCity, slotOrder } from '../city/layout';
 import { campaign, chapterById } from '../content';
-import { chapterWindow, forecastOption, snapshotAt } from '../engine/queries';
+import { chapterWindow, forceOutcomes, forecastOption, snapshotAt } from '../engine/queries';
 import type { Adr } from '../engine/rubric';
 import { emptyAdr, evaluateAdr } from '../engine/rubric';
 import type { AdrField, Chapter, Decision, Forces } from '../engine/schema';
@@ -313,6 +313,7 @@ export function Campaign({ bridge, session, progress, setProgress, setLocale, da
             letter={letter}
             months={quarters * 3}
             scene={scene}
+            outcomes={forceOutcomes(timeline, window.start, window.end)}
             incidents={timeline.snapshots.slice(window.start + 1, window.end + 1).flatMap((s) => s.incidents)}
             inspections={snapshotAt(timeline, window.end).inspections}
             onWriteAdr={openAdr}
