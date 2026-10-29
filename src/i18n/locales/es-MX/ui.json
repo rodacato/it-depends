@@ -79,7 +79,7 @@
       "variantNote": "Pesos para una {name}. La ciudad sigue siendo Mercadito; mira moverse las marcas fantasma de los indicadores.",
       "because": "Porque",
       "rationalePlaceholder": "una oración, con tus palabras",
-      "rationaleHint": "Una oración. El comité de revisión va a preguntar.",
+      "rationaleHint": "Es el mensaje de commit de tu decisión.",
       "issue": "Emitir Rev {letter}",
       "disagreement": "DONDE LOS EXPERTOS NO COINCIDEN"
     },
@@ -110,7 +110,7 @@
     "adr": {
       "kicker": "ADR {n} · {title}",
       "status": "Estado: aceptado · Rev {letter} · {quarter}",
-      "nygard": "Formato de Michael Nygard, más dos líneas que él perdonaría.",
+      "nygard": "Lo que tu equipo va a leer en seis meses, cuando pregunte por qué quedó así.",
       "fields": {
         "context": "Contexto",
         "decision": "Decisión",
@@ -126,7 +126,6 @@
         "revisit": "Una condición que alguien pueda notar: un número, una fecha, un evento."
       },
       "boardLooksFor": "El comité busca:",
-      "rubricNote": "El comité es una rúbrica fija: revisa la forma de tu ADR (palabras clave, extensión, una condición), no si el argumento es correcto.",
       "progress": "{n} de {total} secciones redactadas",
       "submit": "Enviar al comité de revisión"
     },
@@ -162,7 +161,7 @@
       "title": "It Depends",
       "subtitle": "Un curso de decisiones de arquitectura, dibujado como una ciudad que crece durante tres años y medio.",
       "opening": "Lámina 1 de 8. T1, Año 1. Tres ingenieros, una base de datos, cero arrepentimientos. Por ahora.",
-      "howTo": "Cada lámina avanza la empresa uno o más trimestres. Pasa el cursor por una opción para verla trazada a lápiz, escribe una oración de por qué, y mira llegar las consecuencias, algunas tarde.",
+      "howTo": "Ocho decisiones de arquitectura para una empresa que no deja de crecer. Cada una trae consecuencias, algunas tardías, y cada una la defiendes en un ADR.",
       "newCampaign": "Nueva campaña",
       "continue": "Continuar: lámina {n}",
       "begin": "Abrir la lámina 1",
@@ -175,15 +174,15 @@
       "steps": {
         "decide": {
           "title": "Una decisión por lámina",
-          "body": "Lee el contexto y el dilema. Pasa el cursor por una opción para verla trazada a lápiz en la ciudad. Elige una, escribe en una oración por qué, y emite la revisión: el tiempo avanza y llegan las consecuencias, algunas tarde."
+          "body": "Pasa el cursor por una opción para verla a lápiz en la ciudad, elige una y di por qué en una oración. Al emitirla, el tiempo avanza."
         },
         "forces": {
           "title": "Las fuerzas dicen qué cambió",
-          "body": "Cada decisión mueve estas cinco fuerzas, relativas de 0 a 100. Pasa el cursor por una para ver qué la movió, con qué supuesto y qué fuente. En la ciudad pasa igual con cualquier edificio o nube roja; un clic en un edificio abre su corte."
+          "body": "Cinco fuerzas, relativas de 0 a 100. Después de cada decisión, ▲ es mejor y ▼ es peor. Pasa el cursor por una fuerza o un edificio para ver qué la movió."
         },
         "log": {
           "title": "El rótulo es tu bitácora",
-          "body": "Cada revisión que emites queda anotada aquí. Después de las consecuencias escribes un ADR y el comité lo revisa. Desde una revisión puedes restaurar la obra, elegir distinto y ver las dos ciudades lado a lado. GUÍA repite esto."
+          "body": "Cada revisión queda anotada aquí. Haz clic en una para volver atrás, elegir distinto y comparar las dos ciudades. GUÍA repite esto."
         }
       },
       "next": "Siguiente",
