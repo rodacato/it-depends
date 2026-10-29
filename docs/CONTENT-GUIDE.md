@@ -22,7 +22,7 @@ Assumptions live under `assumptions.<chapterId>.<camelCaseKey>` and are referenc
 - An effect that only makes sense on some sites takes `onlyIf: { has | lacks: <componentId> }`, checked against the site as built before the decision. Option text must stay true on every reachable site; the validator rejects an `onlyIf` that can never apply.
 - Topology ops must be valid on **every** site reachable from earlier chapters. `addDistrict`/`addComponent`/`addConnection` are upserts, so "ensure it exists" is always safe. `updateComponent` only on `mercadito-app` or `shared-postgres` (they always exist) or on something the same option adds first. Effect `anchor`s must name a component that the option adds or that always exists.
 - Layout limits per district: 4 services/modules in `storefront` (2 elsewhere), 3 databases, 2 queues. At most 6 districts and 5 vendors in any run. Only use the ids below.
-- Voice: dry, precise, a little wry, like margin notes from a senior architect. Real software names in labels. Spanish is Mexican Spanish, natural, not a word-for-word copy; keep technical terms people actually use (runway, rollback, lock-in, sharding).
+- Voice: dry, precise, a little wry, like margin notes from a senior architect. Real software names in labels. Spanish is neutral Latin American Spanish (no Mexican-only words like *atorar*, *chico* for small, *mayoreo*), natural, not a word-for-word copy; keep technical terms people actually use (runway, rollback, lock-in, sharding).
 
 ## The campaign arc and its ids
 
