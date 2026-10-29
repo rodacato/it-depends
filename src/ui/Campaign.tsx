@@ -337,6 +337,7 @@ export function Campaign({ bridge, session, progress, setProgress, setLocale, da
             key={`review-${chapter.id}`}
             chapter={chapter}
             letter={letter}
+            adr={progress.adrs[chapter.id] ?? emptyAdr()}
             results={results}
             sensei={sensei}
             hasNext={hasNext}
