@@ -10,20 +10,20 @@
       "title": "Alguien tiene que responder por el dinero",
       "concept": "Un caso abierto: escribe y defiende un ADR completo con todo lo que te enseñó este juego de planos.",
       "voice": "Más de sesenta ingenieros, una licencia y un regulador que lee ADRs por gusto.",
-      "briefing": "Cuarto trimestre del año 3. Mercadito tiene licencia y está supervisado, y ahora el regulador quiere que los pagos los opere una unidad responsable y auditable, con nombres y apellidos. El consejo quiere un plan para la próxima sesión, y la Serie B cierra el trimestre siguiente. Cada opción de abajo se puede defender en alguna empresa; tu trabajo es decir por qué es la correcta en esta.",
+      "briefing": "T4 del Año 3. Mercadito tiene licencia y está supervisado, y ahora el regulador quiere que los pagos los opere una unidad responsable y auditable, con nombres y apellidos. El consejo quiere un plan para la próxima sesión, y la Serie B cierra el trimestre siguiente. Cada opción de abajo se puede defender en alguna empresa; tu trabajo es decir por qué es la correcta en esta.",
       "dilemma": "¿Quién opera el dinero de aquí en adelante, y qué le vas a enseñar al regulador para demostrarlo?",
       "disagreement": "Aquí los expertos se dividen en tres. La gente de plataformas dice que la rendición de cuentas necesita una frontera de equipo y datos propios, así que hay que separarlo ya. Los arquitectos evolutivos dicen que los movimientos grandes bajo supervisión son justo como empiezan los incidentes, así que hay que estrangularlo con fitness functions. La gente de SRE dice que el regulador quiere evidencia, no diagramas, así que deja que el presupuesto de error marque el ritmo y mide. Y Wardley preguntaría por qué estás construyendo un commodity. Cada uno tiene razón en algún trimestre de alguna empresa.",
       "readNext": "Un librero de cierre para todo el juego de planos: Nygard para el ADR que acabas de escribir; Richards y Ford, y luego The Hard Parts, para analizar trade-offs; Team Topologies para el equipo que quizá acabas de crear; Building Evolutionary Architectures para las fitness functions que mantienen honesto todo esto; el libro de SRE para los presupuestos de error; Wardley para decidir qué construir y qué comprar; y de vuelta a la carta de la puerta de un solo sentido, donde empezó todo.",
       "options": {
         "platform-team": {
           "title": "Darle pagos a un equipo de plataforma, con servicio y ledger propios",
-          "optimizes": "Un solo dueño que rinde cuentas, un ledger que el auditor puede leer y los pagos fuera del plato de todos los demás.",
+          "optimizes": "Un solo dueño que rinde cuentas, un ledger que el auditor puede leer y los pagos dejan de ser asunto de todos los demás.",
           "costs": "Un trimestre de reorganización y un equipo nuevo en la nómina; si pagos todavía vive en el monolito, también una migración con ventana de corte. Difícil de desandar."
         },
         "strangle-payments": {
           "title": "Sacar del monolito lo que queda de pagos, poco a poco y vigilado por fitness functions",
-          "optimizes": "Nada de big bang bajo supervisión; cada paso chico, probado y reversible.",
-          "costs": "El regulador recibe un roadmap, no una unidad. Dos rutas de código por un rato, y el beneficio llega después de la junta de consejo."
+          "optimizes": "Nada de big bang bajo supervisión; cada paso pequeño, probado y reversible.",
+          "costs": "El regulador recibe un roadmap, no una unidad. Dos rutas de código por un rato, y el beneficio llega después de la reunión del consejo."
         },
         "reliability-freeze": {
           "title": "Atar los cambios de arquitectura al presupuesto de error; invertir en SRE y evidencia",
@@ -65,7 +65,7 @@
       "platformClearOwner": "Con un solo equipo dueño de pagos de punta a punta, el resto de los ingenieros dejan de cargar reglas de pago en la cabeza.",
       "platformAuditTrail": "Un ledger de solo inserción, de un solo equipo, produce las conciliaciones y el historial de cambios que pide un auditor, una vez que se asienta la migración.",
       "platformDiligence": "Los inversionistas valoran un ledger limpio y con dueño como menor riesgo regulatorio, y eso se nota en términos un poco mejores para la ronda.",
-      "strangleNoCutover": "Extracciones chicas y reversibles detrás de una costura de ruteo evitan un corte único y riesgoso; el sistema funciona en cada paso.",
+      "strangleNoCutover": "Extracciones pequeñas y reversibles detrás de una costura de ruteo evitan un corte único y riesgoso; el sistema funciona en cada paso.",
       "strangleSlowTax": "El ruteo, el tráfico en sombra y las verificaciones en paralelo frenan un poco cada cambio de pagos mientras dure el estrangulamiento.",
       "strangleFitnessFunctions": "Las verificaciones automáticas de dependencias, saldos del ledger y latencia cuestan tiempo de ingeniería para construirlas y tiempo de CI para correrlas.",
       "strangleTwoPaths": "Durante varios trimestres unos pagos van por la ruta vieja y otros por la nueva, y las dos tienen que seguir siendo correctas.",
@@ -74,7 +74,7 @@
       "strangleOpenFinding": "Un requisito del regulador respaldado solo por un roadmap se lee como hallazgo abierto en el due diligence, y los términos lo reflejan.",
       "freezeStopsFeatures": "Con el presupuesto de error agotado al arrancar, los cambios estructurales esperan y el foco en confiabilidad deja poca capacidad para el roadmap que aprobó el consejo.",
       "freezeErrorBudgets": "SLOs con presupuestos de error, runbooks y revisiones sin culpables reducen la frecuencia de incidentes al trimestre de aplicarse.",
-      "freezeSreHires": "Un grupo chico de SRE y las herramientas de observabilidad que necesita son una línea real en el presupuesto.",
+      "freezeSreHires": "Un grupo pequeño de SRE y las herramientas de observabilidad que necesita son una línea real en el presupuesto.",
       "freezeQuietHeads": "Sin migraciones en curso mientras dura la pausa, los ingenieros cargan menos piezas en movimiento y bajan los cambios de contexto.",
       "freezeStructureUnchanged": "Las funcionalidades siguen cayendo en la misma estructura compartida, así que la complejidad accidental que la pausa no toca se sigue acumulando.",
       "freezeBigBatch": "Los cambios que se posponen mientras el presupuesto está agotado salen después en lotes más grandes, y los lotes grandes fallan más seguido.",
@@ -83,7 +83,7 @@
       "buyLessToCarry": "Operar una integración exige saber mucho menos que operar un ledger, un flujo de tarjetas y su cumplimiento.",
       "buyIntegrationQuarter": "Integrar, probar y migrar a una plataforma externa igual se lleva casi un trimestre de los equipos que tocan pagos.",
       "buyDataMigration": "Los pagos, reembolsos y disputas históricos hay que migrarlos o conciliarlos entre dos sistemas durante el cambio.",
-      "buyTakeRate": "La plataforma cobra un porcentaje de cada pago, que con el volumen del año 3 supera lo que cuesta el equipo que reemplaza.",
+      "buyTakeRate": "La plataforma cobra un porcentaje de cada pago, que con el volumen del Año 3 supera lo que cuesta el equipo que reemplaza.",
       "buyLockIn": "A los dos trimestres, el contrato, los datos y la integración hacen caro irse, y los términos de renovación lo reflejan.",
       "buyRetireOwnService": "Retirar un servicio y un ledger propios exige migrar sus saldos y reubicar a quienes los operaban: la puerta del capítulo 1 sí era de un solo sentido.",
       "buyMarginDiligence": "Los inversionistas leen la comisión de un proveedor sobre cada pago como margen bruto más bajo para siempre, y ajustan el precio de la ronda.",

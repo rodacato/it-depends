@@ -26,7 +26,7 @@
         "coordinate-transactions": {
           "title": "Dos bases de datos, un commit en dos fases",
           "optimizes": "Almacenamiento separado que aún confirma como una sola transacción.",
-          "costs": "Latencia en cada pedido y un coordinador que bloquea ambas bases cuando cualquiera de las dos se atora."
+          "costs": "Latencia en cada pedido y un coordinador que bloquea ambas bases cuando cualquiera de las dos se atasca."
         }
       },
       "events": {
@@ -34,7 +34,7 @@
         "reservoir-dry": "Martes, 19:40. El Postgres compartido se queda sin conexiones. Checkout, catálogo y pagos a vendedores hacen la misma fila."
       },
       "inspections": {
-        "shared-reservoir": "Inspección de obra: el embalse compartido sigue siendo el más ocupado de la ciudad. Cuarenta tablas, cinco equipos, la mayoría sin dueño. Hay tres migraciones formadas para la ventana del jueves."
+        "shared-reservoir": "Inspección de obra: el embalse compartido sigue siendo el más ocupado de la ciudad. Cuarenta tablas, cinco equipos, la mayoría sin dueño. Hay tres migraciones en fila para la ventana del jueves."
       },
       "review": {
         "who-owns-truth": "¿Dónde vive ahora la verdad sobre un pedido, y qué consistencia le prometiste al resto del sistema?",
@@ -56,7 +56,7 @@
       "scaleBiggerBox": "Un primario más grande y una réplica casi duplican la factura de la base de datos, que aun así es menor que la infraestructura de un servicio nuevo.",
       "scaleStaleReads": "Las réplicas asíncronas se atrasan segundos en hora pico; si la página lee de la réplica, algunos clientes no verán el pedido que acaban de hacer.",
       "scaleCouplingGrows": "Con todos los equipos escribiendo en el mismo esquema, renombrar una columna se vuelve negociación, y el acoplamiento crece con cada tabla nueva.",
-      "scaleMigrationQueue": "Los cambios de esquema se forman detrás de una sola ventana de migraciones compartida; la gente gasta tiempo aprendiendo qué tablas de otro equipo no debe tocar.",
+      "scaleMigrationQueue": "Los cambios de esquema hacen fila detrás de una sola ventana de migraciones compartida; la gente gasta tiempo aprendiendo qué tablas de otro equipo no debe tocar.",
       "scaleHeadroom": "Duplicar la capacidad compra cerca de un año de crecimiento al ritmo actual, suficiente para absorber el primer pico que agota las conexiones.",
       "scaleOneAuditTrail": "Una sola base con transacciones reales le da al auditor una historia consistente, sin conciliar almacenes.",
       "splitMigration": "Mover los pedidos a su propia base implica escrituras duales, un backfill y un corte: cerca de un trimestre del tiempo de un equipo.",
@@ -72,7 +72,7 @@
       "txCoordinatorIsCritical": "El coordinador se vuelve infraestructura de la que depende cada pedido, con su propio log, su recuperación y sus formas de fallar.",
       "txInfrastructure": "Una segunda base de datos y un coordinador en alta disponibilidad, pagados desde el primer mes.",
       "txInDoubt": "Si el coordinador falla entre el prepare y el commit, las transacciones quedan en duda con los locks tomados, y alguien de guardia tiene que resolverlas a mano.",
-      "txBlocksInPartition": "El commit en dos fases elige consistencia sobre disponibilidad: cuando un participante va lento, los locks preparados se sostienen y ambas bases se atoran juntas.",
+      "txBlocksInPartition": "El commit en dos fases elige consistencia sobre disponibilidad: cuando un participante va lento, los locks preparados se sostienen y ambas bases se atascan juntas.",
       "txAuditFriendly": "Un commit atómico por pedido en ambas bases es fácil de mostrarle a un auditor.",
       "seriesARunway": "La Serie A agrega cerca de dos años de runway al ritmo de gasto actual.",
       "reservoirDryPeak": "Con unos 2,600 pedidos al día, las conexiones en hora pico superan lo que el Postgres compartido puede atender y las consultas de todos los equipos esperan juntas."

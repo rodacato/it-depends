@@ -88,9 +88,9 @@
       "serviceEatsRunway": "Construir un servicio de pagos, su ledger y sus despliegues se lleva las seis semanas completas para tres personas.",
       "serviceDistributed": "Dos desplegables, una llamada de red, una cola y dos bases de datos: complejidad de sistemas distribuidos desde el día uno.",
       "serviceInfrastructure": "Una segunda base de datos, una cola y sus ambientes, pagados desde el primer mes.",
-      "serviceNewFailureModes": "Las llamadas de red fallan, las colas se atoran, los eventos llegan dos veces. Nuevas formas de fallar antes de que haya tráfico que lo justifique.",
+      "serviceNewFailureModes": "Las llamadas de red fallan, las colas se atascan, los eventos llegan dos veces. Nuevas formas de fallar antes de que haya tráfico que lo justifique.",
       "serviceTwoSystems": "Tres personas cargan ahora dos sistemas en la cabeza, más el contrato entre ellos.",
-      "serviceDelaysLaunch": "El lanzamiento se recorre unas seis semanas: cerca de dos meses de runway sin ingresos.",
+      "serviceDelaysLaunch": "El lanzamiento se retrasa unas seis semanas: cerca de dos meses de runway sin ingresos.",
       "servicePciScope": "Manejar datos de tarjeta directamente mete a la empresa en el alcance de PCI DSS: auditorías, controles y la gente que los opera.",
       "serviceQueuesThroughOutage": "Con ledger propio y una cola, los pedidos se pueden aceptar y liquidar cuando la red se recupere.",
       "outageRefunds": "Una caída de dos horas del procesador un sábado: reembolsos, disculpas, un poco de confianza perdida.",
@@ -104,7 +104,7 @@
       "serviceAuditScope": "Un ledger propio y manejar tarjetas directamente nos meten completos en el alcance de la auditoría: revisiones de acceso, manejo de llaves y evidencia de conciliación son nuestras.",
       "serviceBlackFridayBuffer": "La cola payment-events absorbe la ráfaga del checkout en vez de pasarla directo a la red de tarjetas.",
       "serviceKeyEngineer": "El conocimiento del ledger de la época de tres personas se va con quien lo escribió.",
-      "serviceReservoirDry": "Pagos tiene su propio depósito, así que un Postgres compartido seco no detiene el dinero.",
+      "serviceReservoirDry": "Pagos tiene su propio embalse, así que un Postgres compartido seco no detiene el dinero.",
       "serviceLicenceScope": "Una empresa con licencia que opera su propio ledger debe evidenciar ante el regulador cada control a su alrededor."
     }
   },
