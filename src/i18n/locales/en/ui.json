@@ -96,8 +96,9 @@
     },
     "issued": {
       "kicker": "REV {letter} ISSUED · TIME-LAPSE: {months} MONTHS",
-      "cloudsOne": "One revision cloud. Hover it for the assumption behind it.",
-      "clouds": "{n} revision clouds. Hover any of them for the assumption behind it.",
+      "whatHappened": "WHAT HAPPENED",
+      "byDecision": "your decisions",
+      "byWorld": "the world",
       "news": "SITE LOG",
       "quarterShort": "Q{q}",
       "congestion": "Congestion at {name}. It was always going to be a Friday.",

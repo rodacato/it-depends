@@ -76,7 +76,7 @@
     "reversibility": {
       "hostedShipsFast": "Un checkout alojado es cuestión de días de integración, no de semanas. Fácil de deshacer: siempre puedes construir el tuyo después.",
       "hostedRunsHardPart": "El proveedor se encarga de guardar tarjetas, revisar fraude y cumplir normas, lo difícil de hacer bien con tres personas.",
-      "hostedUxCeiling": "Su página de pago, su flujo. Cada cambio de UX se vuelve un ticket de soporte para alguien más.",
+      "hostedUxCeiling": "Cada cambio de UX en el pago se vuelve un ticket de soporte con el proveedor: su página, su flujo.",
       "hostedFeeScales": "La comisión es un porcentaje de cada pedido. Es barata con 40 pedidos al día y se nota con 400.",
       "hostedOutageIsYours": "Cuando el checkout del proveedor se cae, nadie puede pagar y no hay alternativa a la cual cambiar.",
       "portCostsAWeek": "Un puerto con un solo adaptador cuesta como una semana de una persona antes del lanzamiento, de seis.",

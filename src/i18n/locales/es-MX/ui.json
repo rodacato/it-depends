@@ -96,8 +96,9 @@
     },
     "issued": {
       "kicker": "REV {letter} EMITIDA · TIME-LAPSE: {months} MESES",
-      "cloudsOne": "Una nube de revisión. Pasa el cursor para ver el supuesto detrás.",
-      "clouds": "{n} nubes de revisión. Pasa el cursor por cualquiera para ver el supuesto detrás.",
+      "whatHappened": "QUÉ PASÓ",
+      "byDecision": "tus decisiones",
+      "byWorld": "el mundo",
       "news": "BITÁCORA DE OBRA",
       "quarterShort": "T{q}",
       "congestion": "Congestión en {name}. Iba a ser un viernes, siempre.",

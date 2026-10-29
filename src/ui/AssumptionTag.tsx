@@ -1,5 +1,7 @@
 import { motion } from 'framer-motion';
+import type { DeltaTone } from '../engine/queries';
 import { deltaTone } from '../engine/queries';
+import type { ForceId } from '../engine/schema';
 import type { AppliedEffect } from '../engine/simulate';
 import { sourceById } from '../content';
 import type { I18n } from './i18n';
@@ -19,6 +21,13 @@ export function formatDelta(i18n: I18n, e: AppliedEffect): string {
   const sign = e.delta > 0 ? '+' : '';
   const value = 'context' in e.target && e.target.context === 'ordersPerDay' ? i18n.number(Math.round(e.delta)) : String(e.delta);
   return `${sign}${value}`;
+}
+
+// Up or down on a gauge is not good or bad on its own: cost going up is worse, velocity going up is better.
+export function toneMark(force: ForceId, delta: number): { tone: DeltaTone; text: string } {
+  const tone = deltaTone({ force }, delta);
+  const arrow = tone === 'better' ? '▲' : tone === 'worse' ? '▼' : '';
+  return { tone, text: `${arrow}${Math.abs(Math.round(delta))}` };
 }
 
 interface Props {
