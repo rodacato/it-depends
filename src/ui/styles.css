@@ -240,12 +240,12 @@ button {
 
 .city-labels .delta path {
   fill: var(--blue);
-  stroke: var(--red);
+  stroke: var(--line);
   stroke-width: 1.6;
 }
 
 .city-labels .delta text {
-  fill: var(--red-light);
+  fill: var(--line);
   font-weight: 600;
 }
 
@@ -946,9 +946,15 @@ label.rationale input {
 
 .issued .outcomes .row {
   display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
   justify-content: space-between;
-  gap: 12px;
+  column-gap: 12px;
   font-size: 12px;
+}
+
+.issued .outcomes .row > b {
+  white-space: nowrap;
 }
 
 .issued .outcomes b {
@@ -961,6 +967,7 @@ label.rationale input {
 }
 
 .issued .outcomes .by {
+  margin-left: auto;
   color: var(--graphite);
   white-space: nowrap;
 }
