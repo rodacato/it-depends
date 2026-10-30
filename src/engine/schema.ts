@@ -219,6 +219,8 @@ export const SourceSchema = z.object({
   id: Id,
   authors: z.string().min(1),
   title: z.string().min(1),
+  // Only for the course's own sources: published works keep the title they are cited by.
+  titleKey: TextKey.optional(),
   year: z.number().int(),
   url: z.string().url().optional(),
   // Localized one-line note on what the source contributes; a text key.
