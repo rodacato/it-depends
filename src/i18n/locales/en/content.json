@@ -108,6 +108,9 @@
       "serviceLicenceScope": "A licensed company that runs its own ledger must evidence every control around it to the regulator."
     }
   },
+  "sourceTitles": {
+    "model": "Simulation model estimates"
+  },
   "sources": {
     "fsa": "Architecture characteristics, trade-off analysis, and why everything in architecture is a trade-off.",
     "hardParts": "Granularity, data ownership and the forces that pull services apart or together.",

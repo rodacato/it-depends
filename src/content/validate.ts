@@ -52,7 +52,10 @@ export function checkCampaign(campaign: Campaign, locales: LocaleBundle[]): stri
   duplicates(campaign.sources.map((s) => s.id)).forEach((d) => problems.push(`duplicate source id ${d}`));
   duplicates(campaign.chapters.map((c) => c.id)).forEach((d) => problems.push(`duplicate chapter id ${d}`));
   duplicates([...campaign.chapters.flatMap((c) => c.events.map((e) => e.id))]).forEach((d) => problems.push(`duplicate event id ${d}`));
-  for (const s of campaign.sources) requireText(s.note, `source ${s.id}`);
+  for (const s of campaign.sources) {
+    requireText(s.note, `source ${s.id}`);
+    if (s.titleKey) requireText(s.titleKey, `source ${s.id} title`);
+  }
 
   const { company } = campaign;
   problems.push(...validateTopology(company.initialTopology).map((p) => `initial topology: ${p}`));

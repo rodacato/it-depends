@@ -17,7 +17,7 @@
   {"id": "fowler-debt-quadrant", "authors": "Martin Fowler", "title": "Technical Debt Quadrant", "year": 2009, "url": "https://martinfowler.com/bliki/TechnicalDebtQuadrant.html", "note": "sources.debtQuadrant"},
   {"id": "cunningham-debt", "authors": "Ward Cunningham", "title": "The WyCash Portfolio Management System (OOPSLA experience report)", "year": 1992, "note": "sources.cunningham"},
   {"id": "pci-dss", "authors": "PCI Security Standards Council", "title": "Payment Card Industry Data Security Standard v4.0.1", "year": 2024, "url": "https://www.pcisecuritystandards.org/document_library/", "note": "sources.pciDss"},
-  {"id": "model", "authors": "It Depends course authors", "title": "Simulation model estimates", "year": 2026, "note": "sources.model"},
+  {"id": "model", "authors": "It Depends course authors", "title": "Simulation model estimates", "titleKey": "sourceTitles.model", "year": 2026, "note": "sources.model"},
   {"id": "accelerate", "authors": "Nicole Forsgren, Jez Humble, Gene Kim", "title": "Accelerate", "year": 2018, "note": "sources.accelerate"},
   {"id": "fowler-microservice-premium", "authors": "Martin Fowler", "title": "MicroservicePremium", "year": 2015, "url": "https://martinfowler.com/bliki/MicroservicePremium.html", "note": "sources.microservicePremium"},
   {"id": "richardson-patterns", "authors": "Chris Richardson", "title": "Microservices Patterns", "year": 2018, "note": "sources.richardson"},

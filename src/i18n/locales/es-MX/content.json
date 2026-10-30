@@ -108,6 +108,9 @@
       "serviceLicenceScope": "Una empresa con licencia que opera su propio ledger debe evidenciar ante el regulador cada control a su alrededor."
     }
   },
+  "sourceTitles": {
+    "model": "Estimaciones del modelo de simulación"
+  },
   "sources": {
     "fsa": "Características de arquitectura, análisis de trade-offs y por qué todo en arquitectura es un trade-off.",
     "hardParts": "Granularidad, propiedad de los datos y las fuerzas que separan o juntan servicios.",
