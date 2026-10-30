@@ -201,6 +201,15 @@ button {
 
 .city-labels text {
   fill: var(--line);
+  /* A halo of paper colour, so linework passing underneath never strikes through the lettering. */
+  paint-order: stroke;
+  stroke: var(--blue);
+  stroke-width: 3.5px;
+  stroke-linejoin: round;
+}
+
+.city-labels .stamp {
+  letter-spacing: 0.08em;
 }
 
 .city-labels .name {

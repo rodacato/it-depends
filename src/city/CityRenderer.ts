@@ -430,12 +430,13 @@ function offsetPolyline(points: readonly Point[], d: number): Polyline {
   });
 }
 
-function drawBuilding(g: Graphics, b: BuildingShape, floors: number, pen: number, color: number): void {
+function drawBuilding(g: Graphics, b: BuildingShape, rising: number, pen: number, color: number): void {
   const f = b.footprint;
   if (pen < 1) {
     strokeLine(g, polylinePrefix(rectPolyline(f), pen), 1.3, INK.line, 1);
     return;
   }
+  const floors = Math.min(rising, b.maxFloors);
   const H = Math.max(0, floors) * FLOOR_HEIGHT;
   strokeMany(g, dashPolyline(rectPolyline(f), 3, 3), 0.8, INK.line, 0.35);
   // Front face and roof are filled with ground colour so buildings behind are occluded, like ink on paper.
@@ -446,6 +447,7 @@ function drawBuilding(g: Graphics, b: BuildingShape, floors: number, pen: number
   for (let i = 1; i < floors; i++) strokeLine(g, [[f.x, f.y + f.h - i * FLOOR_HEIGHT], [f.x + f.w, f.y + f.h - i * FLOOR_HEIGHT]], 0.7, color, 0.55);
   strokeLine(g, rectPolyline({ x: f.x + 5, y: f.y - H + 5, w: f.w - 10, h: f.h - 10 }), 0.7, color, 0.5);
   strokeLine(g, rectPolyline({ x: f.x + f.w * 0.62, y: f.y - H + f.h * 0.22, w: f.w * 0.2, h: f.h * 0.22 }), 0.7, color, 0.6);
+  if (rising > b.maxFloors + 0.01) drawBreak(g, f.x, f.y + f.h - H + 4, f.w, color);
   if (b.kind === 'module') {
     const y = f.y - H + f.h / 2;
     strokeLine(g, [[f.x - 12, y], [f.x, y]], 1.2, color, 1);
@@ -453,7 +455,16 @@ function drawBuilding(g: Graphics, b: BuildingShape, floors: number, pen: number
   }
 }
 
+// The drafting break line: the building is taller than the drawing has room for.
+function drawBreak(g: Graphics, x: number, y: number, w: number, color: number): void {
+  g.rect(x + 1, y - 2, w - 2, 5).fill(INK.blue);
+  for (const dy of [-2, 3]) {
+    strokeLine(g, [[x - 3, y + dy], [x + w * 0.42, y + dy], [x + w * 0.48, y + dy - 4], [x + w * 0.54, y + dy + 4], [x + w * 0.6, y + dy], [x + w + 3, y + dy]], 0.9, color, 0.9);
+  }
+}
+
 function drawReservoir(g: Graphics, r: ReservoirShape, k: number, color: number): void {
+  if (k >= 1) g.ellipse(r.cx, r.cy, r.rx, r.ry).fill(INK.blue);
   strokeLine(g, polylinePrefix(ellipsePolyline(r.cx, r.cy, r.rx, r.ry), k), 1.4, color, 1);
   if (k < 1) return;
   strokeLine(g, ellipsePolyline(r.cx, r.cy, r.rx - 6, r.ry - 5), 0.7, color, 0.6);
@@ -487,7 +498,7 @@ function drawVendor(g: Graphics, v: VendorShape, k: number): void {
     }
     strokeLine(g, [[sx, sy], [ex, ey]], 0.6, INK.line, 0.32);
   }
-  drawBuilding(g, { id: v.id, kind: 'service', footprint: v.footprint, floors: v.floors }, v.floors, 1, INK.line);
+  drawBuilding(g, { id: v.id, kind: 'service', footprint: v.footprint, floors: v.floors, maxFloors: v.floors }, v.floors, 1, INK.line);
 }
 
 // Dashed pencil linework for what an option would add; removals are struck through.
@@ -505,7 +516,7 @@ function drawPreview(g: Graphics, current: CityModel, preview: CityModel): void 
   for (const b of preview.buildings) {
     if (has(current.buildings, b.id)) continue;
     const f = b.footprint;
-    const H = b.floors * FLOOR_HEIGHT;
+    const H = Math.min(b.floors, b.maxFloors) * FLOOR_HEIGHT;
     dashed(rectPolyline({ x: f.x, y: f.y + f.h - H, w: f.w, h: H }));
     dashed(rectPolyline({ x: f.x, y: f.y - H, w: f.w, h: f.h }));
   }
