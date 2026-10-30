@@ -1,5 +1,5 @@
 import type { CityFrame } from '../city/CityRenderer';
-import type { Point, Rect } from '../city/geometry';
+import type { Rect } from '../city/geometry';
 import type { CityModel, SlotOrder } from '../city/layout';
 import { modelFor } from '../city/layout';
 import type { ChangeSet, ChapterWindow, DelayedConsequence } from '../engine/queries';
@@ -14,11 +14,10 @@ export interface CloudMark {
   letter: string;
 }
 
-export interface LeaderMark {
+// A consequence that landed on this sheet from an earlier revision, one per component and revision.
+export interface LateChange {
   id: string;
   componentId: string;
-  from: Point;
-  to: Point;
   revision: string;
   effects: AppliedEffect[];
 }
@@ -26,7 +25,7 @@ export interface LeaderMark {
 export interface ChapterScene {
   models: CityModel[];
   clouds: CloudMark[];
-  leaders: LeaderMark[];
+  lateChanges: LateChange[];
   changes: ChangeSet;
   late: DelayedConsequence[];
   // Components that newly congested during this window: the only ones lettered "at capacity".
@@ -35,16 +34,11 @@ export interface ChapterScene {
 
 // Clouds mark what this revision changed; growth and congestion already show as height and red traffic.
 const MAX_CLOUDS = 4;
-const MAX_LEADERS = 3;
+const MAX_LATE_CHANGES = 3;
 
-// Title block revision rows live at fixed sheet coordinates; leader lines point at them.
-export const TITLE_BLOCK = { x: 1000, y: 618, w: 384, h: 246, tableTop: 722, rowHeight: 13 } as const;
+export const TITLE_BLOCK = { x: 1000, y: 618, w: 384, h: 246 } as const;
 
-export function revisionRowPoint(index: number): Point {
-  return [TITLE_BLOCK.x - 2, TITLE_BLOCK.tableTop + TITLE_BLOCK.rowHeight / 2 + index * TITLE_BLOCK.rowHeight];
-}
-
-export function buildScene(timeline: Timeline, window: ChapterWindow, order: SlotOrder, revisionIndex: (letter: string) => number): ChapterScene {
+export function buildScene(timeline: Timeline, window: ChapterWindow, order: SlotOrder): ChapterScene {
   const models: CityModel[] = [];
   for (let q = window.start; q <= window.end; q++) models.push(modelFor(snapshotAt(timeline, q), order));
   const final = models[models.length - 1]!;
@@ -78,27 +72,19 @@ export function buildScene(timeline: Timeline, window: ChapterWindow, order: Slo
     const key = `${d.effect.anchor ?? 'site'}|${d.revision}`;
     byAnchor.set(key, [...(byAnchor.get(key) ?? []), d]);
   }
-  const leaders: LeaderMark[] = [];
+  const lateChanges: LateChange[] = [];
   for (const [key, items] of byAnchor) {
-    if (leaders.length >= MAX_LEADERS) break;
+    if (lateChanges.length >= MAX_LATE_CHANGES) break;
     const [anchor, revision] = key.split('|') as [string, string];
-    const rect = final.bounds[anchor];
-    if (!rect) continue;
-    leaders.push({
-      id: `leader-${key}`,
-      componentId: anchor,
-      from: [rect.x + rect.w + 6, rect.y + rect.h / 2],
-      to: revisionRowPoint(revisionIndex(revision)),
-      revision,
-      effects: items.map((i) => i.effect),
-    });
+    if (!final.bounds[anchor]) continue;
+    lateChanges.push({ id: `late-${key}`, componentId: anchor, revision, effects: items.map((i) => i.effect) });
   }
   const congested = timeline.snapshots
     .filter((s) => s.quarter > window.start && s.quarter <= window.end)
     .flatMap((s) => s.incidents)
     .filter((i) => i.kind === 'congestion' && i.anchor)
     .map((i) => i.anchor!);
-  return { models, clouds, leaders, changes, late, congested };
+  return { models, clouds, lateChanges, changes, late, congested };
 }
 
 export type Playhead = { kind: 'start' } | { kind: 'end' } | { kind: 'playing'; state: TimelapseState };
@@ -107,7 +93,7 @@ export function composeFrame(scene: ChapterScene, playhead: Playhead, preview: C
   const first = scene.models[0]!;
   const last = scene.models[scene.models.length - 1]!;
   if (playhead.kind === 'start') {
-    return { base: first, target: first, growth: 1, clouds: [], leaders: [], preview, highlight, trafficSpeed: 1, crackProgress: 1 };
+    return { base: first, target: first, growth: 1, clouds: [], preview, highlight, trafficSpeed: 1, crackProgress: 1 };
   }
   if (playhead.kind === 'end') {
     return {
@@ -115,7 +101,6 @@ export function composeFrame(scene: ChapterScene, playhead: Playhead, preview: C
       target: last,
       growth: 1,
       clouds: scene.clouds.map((c) => ({ id: c.id, rect: c.rect, progress: 1 })),
-      leaders: scene.leaders.map((l) => ({ id: l.id, from: l.from, to: l.to, progress: 1 })),
       preview: null,
       highlight,
       trafficSpeed: 1,
@@ -128,7 +113,6 @@ export function composeFrame(scene: ChapterScene, playhead: Playhead, preview: C
     target: scene.models[s.segment + 1] ?? last,
     growth: s.growth,
     clouds: scene.clouds.map((c, i) => ({ id: c.id, rect: c.rect, progress: s.clouds[i] ?? 0 })),
-    leaders: scene.leaders.map((l, i) => ({ id: l.id, from: l.from, to: l.to, progress: s.leaders[i] ?? 0 })),
     preview: null,
     highlight: null,
     trafficSpeed: s.trafficSpeed,

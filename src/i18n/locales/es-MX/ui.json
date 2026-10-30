@@ -102,7 +102,7 @@
       "news": "BITÁCORA DE OBRA",
       "quarterShort": "T{q}",
       "congestion": "Congestión en {name}. Iba a ser un viernes, siempre.",
-      "late": "Llegó tarde, desde la Rev {rev}: un cambio en {name}. Sigue la línea roja.",
+      "late": "Llegó tarde, desde la Rev {rev}: un cambio en {name}.",
       "writeAdr": "Escribir el ADR",
       "inspection": "Inspección de obra",
       "more": "+{n} entradas más en la bitácora."

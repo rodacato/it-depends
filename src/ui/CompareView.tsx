@@ -35,15 +35,13 @@ export function CompareView({ chapter, letter, original, alternate, seed, untilQ
   const right = useMemo(() => simulate(campaign, alternate, { seed, untilQuarter }), [alternate, seed, untilQuarter]);
   // One shared slot order, so both cities put the same building on the same lot.
   const order = useMemo(() => slotOrder([...left.snapshots, ...right.snapshots].map((s) => s.topology)), [left, right]);
-  const idx = (tl: Timeline) => (l: string) => Math.max(0, snapshotAt(tl, window.end).revisions.findIndex((r) => r.letter === l));
-  const leftScene = useMemo(() => buildScene(left, window, order, idx(left)), [left, order]); // eslint-disable-line react-hooks/exhaustive-deps
-  const rightScene = useMemo(() => buildScene(right, window, order, idx(right)), [right, order]); // eslint-disable-line react-hooks/exhaustive-deps
+  const leftScene = useMemo(() => buildScene(left, window, order), [left, order]); // eslint-disable-line react-hooks/exhaustive-deps
+  const rightScene = useMemo(() => buildScene(right, window, order), [right, order]); // eslint-disable-line react-hooks/exhaustive-deps
   const clouds = Math.max(leftScene.clouds.length, rightScene.clouds.length);
-  const leaders = Math.max(leftScene.leaders.length, rightScene.leaders.length);
   const quarters = window.end - window.start;
-  const duration = timelapseDuration(clouds, leaders);
+  const duration = timelapseDuration(clouds);
   const ms = useClock(!reducedMotion, run, duration);
-  const state = reducedMotion ? finalState(quarters, clouds, leaders) : timelapseAt(ms, quarters, clouds, leaders);
+  const state = reducedMotion ? finalState(quarters, clouds) : timelapseAt(ms, quarters, clouds);
   const playhead: Playhead = state.done ? { kind: 'end' } : { kind: 'playing', state };
   const rowsFor = (tl: Timeline, mark: string): RevisionRow[] =>
     snapshotAt(tl, window.end).revisions.map((r) => ({

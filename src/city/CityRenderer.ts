@@ -25,20 +25,12 @@ export interface CloudSpec {
   progress: number;
 }
 
-export interface LeaderSpec {
-  id: string;
-  from: Point;
-  to: Point;
-  progress: number;
-}
-
 export interface CityFrame {
   base: CityModel;
   target: CityModel;
   // 0..1 from base to target: floors rise, new linework is drawn with a pen.
   growth: number;
   clouds: CloudSpec[];
-  leaders: LeaderSpec[];
   preview: CityModel | null;
   highlight: string | null;
   // Time-lapse fast-forward multiplier for traffic.
@@ -331,14 +323,7 @@ export class CityRenderer {
 
     for (const cloud of frame.clouds) {
       const path = revisionCloud(cloud.rect, hashString(cloud.id));
-      strokeLine(o, polylinePrefix(path, easeOutCubic(cloud.progress)), 1.8, INK.red, 1);
-    }
-    for (const leader of frame.leaders) {
-      const line: Polyline = [leader.from, leader.to];
-      const drawn = polylinePrefix(line, easeOutCubic(leader.progress));
-      strokeLine(o, drawn, 1.2, INK.red, 1);
-      if (leader.progress > 0) o.circle(leader.from[0], leader.from[1], 2.5).fill(INK.red);
-      if (leader.progress >= 1) drawArrowHead(o, leader.from, leader.to);
+      strokeLine(o, polylinePrefix(path, easeOutCubic(cloud.progress)), 1.6, INK.line, 0.95);
     }
     if (frame.highlight) {
       const b = target.bounds[frame.highlight];
@@ -382,16 +367,6 @@ function strokeMany(g: Graphics, lines: readonly (readonly Point[])[], width: nu
     any = true;
   }
   if (any) g.stroke({ width, color, alpha, cap: 'butt', join: 'miter' });
-}
-
-function drawArrowHead(g: Graphics, from: Point, to: Point): void {
-  const a = Math.atan2(to[1] - from[1], to[0] - from[0]);
-  const s = 7;
-  strokeLine(g, [
-    [to[0] - Math.cos(a - 0.45) * s, to[1] - Math.sin(a - 0.45) * s],
-    to,
-    [to[0] - Math.cos(a + 0.45) * s, to[1] - Math.sin(a + 0.45) * s],
-  ], 1.4, INK.red, 1);
 }
 
 function drawLink(g: Graphics, l: LinkShape, k: number): void {

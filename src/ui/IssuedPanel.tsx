@@ -88,7 +88,7 @@ export function IssuedPanel({ campaign, chapter, optionId, rationale, letter, mo
                   {i.kind === 'event' && i.eventId ? eventText(i.eventId) : t('ui.issued.congestion', { name: name(i.anchor ?? '') })}
                 </li>
               ))}
-              {scene.leaders.map((l) => (
+              {scene.lateChanges.map((l) => (
                 <li key={l.id} className="late">
                   {t('ui.issued.late', { rev: l.revision, name: name(l.componentId) })}
                 </li>

@@ -102,7 +102,7 @@
       "news": "SITE LOG",
       "quarterShort": "Q{q}",
       "congestion": "Congestion at {name}. It was always going to be a Friday.",
-      "late": "Arrived late, from Rev {rev}: a change at {name}. Follow the red line.",
+      "late": "Arrived late, from Rev {rev}: a change at {name}.",
       "writeAdr": "Write the ADR",
       "inspection": "Site inspection",
       "more": "+{n} more entries in the site log."
