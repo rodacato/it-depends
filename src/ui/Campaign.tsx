@@ -77,8 +77,7 @@ export function Campaign({ bridge, session, progress, setProgress, setLocale, da
   );
   const order = useMemo(() => slotOrder(timeline.snapshots.map((s) => s.topology)), [timeline]);
   const revisions = snapshotAt(timeline, window.end).revisions;
-  const letterIndex = (letter: string) => Math.max(0, revisions.findIndex((r) => r.letter === letter));
-  const scene = useMemo(() => buildScene(timeline, window, order, letterIndex), [timeline, window.start, window.end, order]); // eslint-disable-line react-hooks/exhaustive-deps
+  const scene = useMemo(() => buildScene(timeline, window, order), [timeline, window.start, window.end, order]); // eslint-disable-line react-hooks/exhaustive-deps
   const letter = decision ? (revisions.find((r) => r.chapterId === chapter.id)?.letter ?? 'A') : revisionLetter(revisions.length);
 
   const rows: RevisionRow[] = revisions.map((r) => ({
@@ -111,10 +110,10 @@ export function Campaign({ bridge, session, progress, setProgress, setLocale, da
 
   // Time-lapse clock.
   const quarters = window.end - window.start;
-  const duration = timelapseDuration(scene.clouds.length, scene.leaders.length);
+  const duration = timelapseDuration(scene.clouds.length);
   const playing = phase === 'timelapse' && !reduced;
   const ms = useClock(playing, `${chapter.id}-${progress.decisions.length}-${letter}`, duration);
-  const tl = reduced ? finalState(quarters, scene.clouds.length, scene.leaders.length) : timelapseAt(ms, quarters, scene.clouds.length, scene.leaders.length);
+  const tl = reduced ? finalState(quarters, scene.clouds.length) : timelapseAt(ms, quarters, scene.clouds.length);
   useEffect(() => {
     if (phase === 'timelapse' && (reduced || tl.done)) goPhase('consequences');
   }, [phase, reduced, tl.done]); // eslint-disable-line react-hooks/exhaustive-deps

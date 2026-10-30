@@ -108,7 +108,7 @@ export interface CityModel {
   vendors: VendorShape[];
   links: LinkShape[];
   cracks: CrackShape[];
-  // Bounding box per component, for revision clouds, hover and leader lines.
+  // Bounding box per component, for revision clouds and hover.
   bounds: Record<string, Rect>;
   stress: Record<string, number>;
   kinds: Record<string, string>;
