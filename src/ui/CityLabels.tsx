@@ -86,7 +86,7 @@ export function CityLabels({ preview, base, target, growth, clouds, cloudProgres
       )}
       {clouds.map((c, i) =>
         (cloudProgress[i] ?? 0) >= 1 ? (
-          <g key={c.id} className="delta" transform={`translate(${c.rect.x + c.rect.w + 14}, ${c.rect.y - 8})`}>
+          <g key={c.id} className="delta" transform={`translate(${c.rect.x + c.rect.w - 8}, ${c.rect.y - 10})`}>
             <path d="M0,-12 L11,8 L-11,8 Z" />
             <text x={0} y={5} textAnchor="middle" className="lbl" fontSize={12}>
               {c.letter}

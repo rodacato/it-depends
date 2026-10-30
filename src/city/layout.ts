@@ -271,6 +271,8 @@ interface DistrictPlan {
 }
 
 const BASIN_CELL = BASIN_RY * 2 + 4 + STORE_LABEL;
+// A row never needs more than the tallest building, so a lone row sits under the title instead of sinking to the bottom.
+const MAX_ROW = 2 + 12 * FLOOR_HEIGHT + SERVICE_H + PAD_LABEL;
 const DEPOT_CELL = DEPOT_H + 4 + STORE_LABEL;
 
 // Pads take up to two columns. Databases, then queues, stack in columns on the right, or sit in a row underneath when those columns would squeeze the pads.
@@ -289,7 +291,7 @@ function planDistrict(d: Rect, padCount: number, basins: number, depots: number)
   const below = heights.length > 0 && padCount > 0 && !side ? BASIN_CELL + 6 : 0;
   const padsW = side ? inner.w - sideW : inner.w;
   const rows = Math.max(1, Math.ceil(padCount / cols));
-  const rowH = (inner.h - below) / rows;
+  const rowH = Math.min(MAX_ROW, (inner.h - below) / rows);
   const cellW = (padsW - (cols - 1) * GAP) / cols;
   const pads: PadCell[] = Array.from({ length: padCount }, (_, i) => {
     const top = inner.y + Math.floor(i / cols) * rowH;
