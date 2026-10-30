@@ -2,6 +2,8 @@ import type { Camera } from '../city/CityRenderer';
 import { CITY_VIEW } from '../city/CityRenderer';
 import type { CityModel } from '../city/layout';
 import { CLIENT_GATE, SHEET } from '../city/layout';
+import type { LabelSlot } from '../city/labels';
+import { wrapLabel } from '../city/labels';
 import type { CloudMark } from './scene';
 import { useI18n } from './i18n';
 
@@ -24,8 +26,13 @@ interface Props {
 export function CityLabels({ preview, base, target, growth, clouds, cloudProgress, hovered, onHover, onSelect, interactive, camera, congested }: Props) {
   const { t, has } = useI18n();
   const name = (id: string) => (has(`components.${id}.name`) ? t(`components.${id}.name`) : id);
-  const clip = (s: string) => (s.length > 30 ? `${s.slice(0, 29)}…` : s);
-  const role = (id: string, kind: string) => clip(has(`components.${id}.role`) ? t(`components.${id}.role`) : t(`kinds.${kind}`));
+  const role = (id: string, kind: string) => (has(`components.${id}.role`) ? t(`components.${id}.role`) : t(`kinds.${kind}`));
+  const districtName = (id: string) => (has(`districts.${id}`) ? t(`districts.${id}`) : id);
+  // Measured advance of the spaced capitals; a narrow district drops the "district" prefix rather than spill.
+  const districtTitle = (id: string, width: number) => {
+    const full = t('ui.city.district', { name: districtName(id) });
+    return full.length * 8 <= width - 20 ? full : districtName(id);
+  };
   const isNew = (id: string) => !(id in base.bounds);
   const shown = (id: string) => !isNew(id) || growth > 0.45;
   const isNewDistrict = (id: string) => !base.districts.some((d) => d.id === id);
@@ -39,15 +46,15 @@ export function CityLabels({ preview, base, target, growth, clouds, cloudProgres
       </defs>
       <g clipPath={camera.scale !== 1 ? 'url(#city-view)' : undefined}>
       <g transform={`translate(${camera.x} ${camera.y}) scale(${camera.scale})`}>
-      <text x={CLIENT_GATE[0] + 8} y={CLIENT_GATE[1] - 16} className="lbl" fontSize={13}>
+      <text transform={`translate(${CLIENT_GATE[0] + 14} ${CLIENT_GATE[1] - 12}) rotate(-90)`} className="lbl" fontSize={13}>
         {name('clients')}
       </text>
-      <text x={CLIENT_GATE[0] + 8} y={CLIENT_GATE[1] + 26} className="mono dim" fontSize={9.5}>
+      <text transform={`translate(${CLIENT_GATE[0] + 28} ${CLIENT_GATE[1] - 12}) rotate(-90)`} className="mono dim" fontSize={9.5}>
         {t('ui.city.publicRoad')}
       </text>
       {target.districts.map((d) => (
         <text key={d.id} x={d.rect.x + 12} y={d.rect.y + 18} className={`lbl spaced dim ${isNewDistrict(d.id) && growth < 0.4 ? 'lettering' : ''}`} fontSize={12}>
-          {t('ui.city.district', { name: has(`districts.${d.id}`) ? t(`districts.${d.id}`) : d.id })}
+          {districtTitle(d.id, d.rect.w)}
         </text>
       ))}
       {target.vendors.map((v) => (
@@ -56,33 +63,25 @@ export function CityLabels({ preview, base, target, growth, clouds, cloudProgres
         </text>
       ))}
       {preview &&
-        Object.entries(preview.anchors)
-          .filter(([id]) => !(id in target.anchors))
-          .map(([id, [x, y]]) => (
+        Object.entries(preview.labels)
+          .filter(([id]) => !(id in target.labels))
+          .map(([id, slot]) => (
             <g key={`p-${id}`} className="proposed">
-              <text x={x} y={y} className="lbl" fontSize={14}>
-                {name(id)}
-              </text>
-              <text x={x} y={y + 13} className="mono" fontSize={9}>
-                {t('ui.city.proposed')}
-              </text>
+              <Label slot={slot} name={name(id)} role={t('ui.city.proposed')} />
             </g>
           ))}
-      {Object.entries(target.anchors).map(([id, [x, y]]) =>
+      {Object.entries(target.labels).map(([id, slot]) =>
         shown(id) ? (
           <g key={id} className={isNew(id) && growth < 0.75 ? 'lettering' : ''}>
-            <text x={x} y={y} className="lbl name" fontSize={15}>
-              {name(id)}
-            </text>
-            <text x={x} y={y + 13} className="mono dim" fontSize={9.5}>
-              {role(id, target.kinds[id] ?? 'service')}
-            </text>
-            {(target.stress[id] ?? 0) >= 1 && congested.includes(id) && (
-              <text x={x} y={y + 26} className="mono red" fontSize={9.5}>
-                {t('ui.city.atCapacity')}
-              </text>
-            )}
+            <Label slot={slot} name={name(id)} role={role(id, target.kinds[id] ?? 'service')} />
           </g>
+        ) : null,
+      )}
+      {Object.entries(target.stamps).map(([id, [x, y]]) =>
+        shown(id) && (target.stress[id] ?? 0) >= 1 && congested.includes(id) ? (
+          <text key={`cap-${id}`} x={x} y={y} className="mono red stamp" fontSize={9}>
+            {t('ui.city.atCapacity')}
+          </text>
         ) : null,
       )}
       {clouds.map((c, i) =>
@@ -121,5 +120,27 @@ export function CityLabels({ preview, base, target, growth, clouds, cloudProgres
       </g>
       </g>
     </svg>
+  );
+}
+
+function Label({ slot, name, role }: { slot: LabelSlot; name: string; role: string }) {
+  const lines = wrapLabel(name, role, slot);
+  return (
+    <>
+      <text x={slot.x} y={slot.y} className="lbl name" fontSize={15}>
+        {lines.name.map((l, i) => (
+          <tspan key={i} x={slot.x} dy={i === 0 ? 0 : 16}>
+            {l}
+          </tspan>
+        ))}
+      </text>
+      <text x={slot.x} y={slot.y} className="mono dim" fontSize={9.5}>
+        {lines.role.map((l, i) => (
+          <tspan key={i} x={slot.x} y={slot.y + lines.roleOffsets[i]!}>
+            {l}
+          </tspan>
+        ))}
+      </text>
+    </>
   );
 }

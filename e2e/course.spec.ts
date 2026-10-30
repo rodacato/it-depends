@@ -44,6 +44,7 @@ for (const w of walks) {
           await page.getByTestId('issue').click();
           await expect(page.getByTestId('issued')).toBeVisible();
           await expect(page.getByTestId(`rev-${letter}`)).toBeVisible();
+          await expect(page.getByTestId('briefing')).toHaveCount(0);
           await page.screenshot({ path: `${SHOTS}/course/walk-${w.walk}-sheet-${sheet}.png` });
 
           await page.getByTestId('write-adr').click();
